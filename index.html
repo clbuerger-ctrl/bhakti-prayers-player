@@ -3,20 +3,25 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Bhakti Prayers Player V1.4</title>
+<title>Bhakti Prayers Player V1.5</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gentium+Book+Plus:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#1a1410;--gold:#c9a36a;--text:#f3e6d0;--muted:#b7a48c;--card:#2a211b}
 *{box-sizing:border-box}
-body{margin:0;font-family:Georgia,serif;background:var(--bg);color:var(--text)}
+body{margin:0;font-family:"Source Sans 3",Calibri,sans-serif;background:var(--bg);color:var(--text)}
 header{padding:14px 16px 8px;text-align:center}
-h1{margin:0;color:var(--gold);font-weight:normal;font-size:1.55rem}
+h1{margin:0;color:var(--gold);font-weight:normal;font-size:1.55rem;font-family:"Gentium Book Plus",Georgia,serif}
 h1 .ver{font-size:.62em;color:var(--muted);font-weight:normal;margin-left:.35em}
 .sub{color:var(--muted);margin:6px auto 0;font-size:.92rem;max-width:42rem;line-height:1.4}
+.legend{color:var(--muted);margin:8px auto 0;font-size:.82rem;max-width:42rem;line-height:1.45}
+.legend b{color:var(--gold);font-weight:600}
 .bar{position:sticky;top:0;background:var(--bg);border-bottom:1px solid #3d2f26;padding:8px 12px;z-index:20}
 .now{min-height:1.2em;padding:2px 0 6px}
 audio{width:100%;height:36px}
 .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
-button{background:#4a372b;color:var(--text);border:1px solid #6b5340;border-radius:7px;padding:8px 12px;min-height:40px}
+button{background:#4a372b;color:var(--text);border:1px solid #6b5340;border-radius:7px;padding:8px 12px;min-height:40px;font-family:"Source Sans 3",sans-serif}
 button.gold{background:#8b6914;border-color:var(--gold)}
 button.on{background:#8b6914;border-color:var(--gold)}
 .list{margin:10px 12px;display:grid;gap:8px}
@@ -30,12 +35,12 @@ button.on{background:#8b6914;border-color:var(--gold)}
 #ytBox.on{display:block}
 #ytBox iframe{width:100%;height:100%;border:0}
 .panel{background:var(--card);border:1px solid #6b5340;border-radius:12px;max-height:62vh;overflow:auto;padding:10px 14px}
-.line{padding:10px 6px;border-radius:6px;cursor:pointer}
-.line .nr{display:block;color:var(--gold);font-size:.78rem;margin-bottom:2px}
-.line .ch{display:none;font-family:Consolas,Menlo,monospace;color:#e8c27a;font-size:.88rem;letter-spacing:.04em;white-space:pre-wrap;margin:0 0 2px}
+.line{padding:12px 6px;border-radius:6px;cursor:pointer}
+.line .nr{display:block;color:var(--gold);font-size:.78rem;margin-bottom:4px;font-family:"Source Sans 3",sans-serif}
+.line .ch{display:none;font-family:"Source Sans 3",Consolas,sans-serif;color:#e8c27a;font-size:.95rem;letter-spacing:.05em;white-space:pre-wrap;margin:0 0 4px}
 body.show-ch .line .ch{display:block}
-.line .sa{display:block;line-height:1.45}
-.line .de{display:none;color:var(--muted);font-size:.92rem;margin-top:6px;line-height:1.4}
+.line .sa{display:block;font-family:"Gentium Book Plus","Noto Serif",Georgia,serif;font-size:1.32rem;line-height:1.72;letter-spacing:.015em;font-weight:400}
+.line .de{display:none;color:var(--muted);font-size:.95rem;margin-top:8px;line-height:1.45;font-family:"Source Sans 3",sans-serif}
 body.show-de .line .de{display:block}
 .line.on{background:#4a372b}
 .hint{color:var(--muted);font-size:.85rem;margin:0 12px 16px}
@@ -44,8 +49,9 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:.85rem}
 </head>
 <body>
 <header>
-  <h1>Bhakti Prayers Player <span class="ver">V1.4</span></h1>
+  <h1>Bhakti Prayers Player <span class="ver">V1.5</span></h1>
   <p class="sub">Datei oder YouTube zum Hören, Sanskrit zum Mitsingen. Übersetzung und Akkorde nur auf Knopf.</p>
+  <p class="legend"><b>ā ī ū</b> lang halten &nbsp;·&nbsp; <b>ṃ ṅ ñ ṇ</b> nasal &nbsp;·&nbsp; <b>ś ṣ</b> weiches / hartes sch &nbsp;·&nbsp; <b>ṛ</b> ri</p>
 </header>
 <div class="bar">
   <div class="now" id="now">Einen Gesang wählen</div>
@@ -66,6 +72,7 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:.85rem}
 <footer>Mukunda Mala: Dropbox Mix 12.12.2022. Andere Stücke: YouTube oder Archiv.</footer>
 <script src="prayers.js"></script>
 <script src="chords.js"></script>
+<script src="iast.js"></script>
 <script>
 var i=-1, line=0, showDe=false, showCh=false;
 var a=document.getElementById("a");
