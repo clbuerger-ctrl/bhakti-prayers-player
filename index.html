@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Bhakti Prayers Player V1.10</title>
+<title>Bhakti Prayers Player V1.11</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gentium+Book+Plus:ital,wght@0,400;0,700;1,400;1,700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
@@ -41,7 +41,7 @@ button.on{background:#8b6914;border-color:var(--gold)}
 .line .nr{display:block;color:var(--gold);font-size:.88rem;margin-bottom:6px;font-family:"Source Sans 3",sans-serif;letter-spacing:.04em}
 .line .ch{display:none;font-family:"Source Sans 3",Consolas,sans-serif;color:#f0d089;font-size:1.12rem;letter-spacing:.08em;white-space:pre-wrap;margin:0 0 6px;font-weight:600}
 body.show-ch .line .ch{display:block}
-.line .sa{display:block;font-family:"Gentium Book Plus","Noto Serif",Georgia,serif;font-size:1.62rem;line-height:1.9;letter-spacing:.03em;font-weight:700;color:var(--lyric);text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased}
+.line .sa{display:block;font-family:"Gentium Book Plus","Noto Serif",Georgia,serif;font-size:1.62rem;line-height:1.9;letter-spacing:.03em;font-weight:700;color:var(--lyric);text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;white-space:pre-wrap}
 .line .de{display:none;color:#ead9c0;font-size:1.14rem;margin-top:10px;line-height:1.6;font-family:"Source Sans 3",sans-serif;font-weight:400}
 body.show-de .line .de{display:block}
 .line.on{background:#3d2c22}.line.on .sa{color:#fff}
@@ -52,7 +52,7 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:.85rem}
 </head>
 <body>
 <header>
-  <h1>Bhakti Prayers Player <span class="ver">V1.10</span></h1>
+  <h1>Bhakti Prayers Player <span class="ver">V1.11</span></h1>
   <p class="sub" id="sub"></p>
   <p class="legend" id="legend"></p>
 </header>
@@ -83,6 +83,7 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:.85rem}
 <script src="mukunda-chords.js"></script>
 <script src="lang-en.js"></script>
 <script src="govinda.js"></script>
+<script src="kavacham.js"></script>
 <script>
 var i=-1, line=0, showDe=false, showCh=false, lang="de";
 var a=document.getElementById("a");
