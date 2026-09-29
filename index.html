@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Bhakti Prayers Player</title>
-<!-- [Grok.com] Eigenes Projekt, getrennt vom Tadatmya Vedanta Player. -->
+<!-- [Grok.com] Mukunda Mala spielt über YouTube (Bhakti Marga Music). -->
 <style>
 :root{--bg:#1a1410;--gold:#c9a36a;--text:#f3e6d0;--muted:#b7a48c;--card:#2a211b}
 *{box-sizing:border-box}
@@ -15,6 +15,9 @@ h1{margin:0;color:var(--gold);font-weight:normal;font-size:1.7rem}
 .bar{position:sticky;top:0;background:var(--bg);border-bottom:1px solid #3d2f26;padding:8px 12px 12px;z-index:20}
 .now{min-height:1.3em;padding:4px 0}
 audio{width:100%;height:36px}
+#ytBox{display:none;width:100%;max-width:42rem;margin:8px auto 0;aspect-ratio:16/9;background:#000;border-radius:8px;overflow:hidden}
+#ytBox.on{display:block}
+#ytBox iframe{width:100%;height:100%;border:0}
 .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
 button{background:#4a372b;color:var(--text);border:1px solid #6b5340;border-radius:7px;padding:8px 12px;min-height:40px}
 button.gold{background:#8b6914;border-color:var(--gold)}
@@ -23,7 +26,7 @@ button.gold{background:#8b6914;border-color:var(--gold)}
 .item{text-align:left;padding:12px;background:transparent;width:100%}
 .item.active{background:#4a372b;color:var(--gold)}
 .quelle{display:block;color:var(--muted);font-size:.78rem;margin-top:4px}
-.panel{margin:12px;background:var(--card);border:1px solid #6b5340;border-radius:12px;max-height:62vh;overflow:auto;padding:12px 16px}
+.panel{margin:12px;background:var(--card);border:1px solid #6b5340;border-radius:12px;max-height:52vh;overflow:auto;padding:12px 16px}
 .line{padding:8px 6px;border-radius:6px;cursor:pointer}
 .line .sa{display:block}
 .line .de{display:block;color:var(--muted);font-size:.9rem;margin-top:2px}
@@ -41,6 +44,7 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:.85rem}
 <div class="bar">
   <div class="now" id="now">Einen Gesang wählen</div>
   <audio id="a" controls preload="none" playsinline></audio>
+  <div id="ytBox"><iframe id="yt" title="YouTube" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
   <div class="row">
     <button type="button" onclick="prevLine()">Vorherige Zeile</button>
     <button type="button" class="gold" onclick="nextLine()">Nächste Zeile</button>
@@ -54,6 +58,8 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:.85rem}
 <script>
 var i=-1, line=0;
 var a=document.getElementById("a");
+var ytBox=document.getElementById("ytBox");
+var yt=document.getElementById("yt");
 function paintList(){
   var box=document.getElementById("list");
   box.innerHTML="";
@@ -84,8 +90,20 @@ function play(idx){
   var P=PRAYERS[i];
   document.getElementById("now").textContent=P.titel;
   document.getElementById("hint").textContent=P.hinweis;
-  a.src=P.audio;
-  a.play().catch(function(){});
+  a.pause();
+  a.removeAttribute("src");
+  a.load();
+  if(P.youtube){
+    a.style.display="none";
+    ytBox.classList.add("on");
+    yt.src="https://www.youtube.com/embed/"+P.youtube+"?rel=0&modestbranding=1";
+  } else {
+    ytBox.classList.remove("on");
+    yt.src="";
+    a.style.display="block";
+    a.src=P.audio;
+    a.play().catch(function(){});
+  }
   paintList(); paintLyrics();
 }
 function nextLine(){ if(i<0) return; line=Math.min(line+1, PRAYERS[i].zeilen.length-1); paintLyrics(); }
