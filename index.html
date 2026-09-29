@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Bhakti Prayers Player V1.14</title>
+<title>Bhakti Prayers Player V1.15</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gentium+Book+Plus:ital,wght@0,400;0,700;1,400;1,700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
@@ -38,7 +38,7 @@ button.on{background:#8b6914;border-color:var(--gold)}
 #ytBox iframe{width:100%;height:100%;border:0}
 .panel{background:var(--card);border:1px solid #6b5340;border-radius:12px;max-height:62vh;overflow:auto;padding:10px 12px}
 .stanza{padding:6px 8px 8px;border-radius:8px;cursor:pointer;margin:0 0 4px}
-.stanza .nr{display:block;color:var(--gold);font-size:.72rem;margin:0 0 2px;letter-spacing:.04em}
+.stanza .nr{display:none}
 .rowline{margin:0}
 .rowline .sa{display:block;font-family:"Gentium Book Plus","Noto Serif",Georgia,serif;font-size:1.18rem;line-height:1.28;letter-spacing:.01em;font-weight:600;color:var(--lyric);white-space:pre-wrap}
 .rowline .ch{display:none;font-family:"Source Sans 3",Consolas,sans-serif;color:#e8c57a;font-size:.72rem;line-height:1.15;letter-spacing:.06em;white-space:pre-wrap;margin:1px 0 3px;font-weight:500}
@@ -54,7 +54,7 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:.85rem}
 </head>
 <body>
 <header>
-  <h1>Bhakti Prayers Player <span class="ver">V1.14</span></h1>
+  <h1>Bhakti Prayers Player <span class="ver">V1.15</span></h1>
   <p class="sub" id="sub"></p>
   <p class="legend" id="legend"></p>
 </header>
@@ -211,7 +211,6 @@ function paintList(){
     var st=songState(P.id);
     var extra="";
     if(st.time>=5) extra=" · weiter ab "+Math.floor(st.time/60)+":"+String(Math.floor(st.time%60)).padStart(2,"0");
-    else if(st.line>0) extra=" · Strophe "+stanzaKey((P.zeilen[st.line]||{}).nr);
     b.innerHTML=P.titel+"<span class='quelle'>"+P.autor+" · "+P.quelle+extra+"</span>";
     b.onclick=function(){ play(idx, true); };
     box.appendChild(b);
@@ -229,7 +228,7 @@ function paintLyrics(){
       var ch=z.ch?"<span class='ch'>"+z.ch+"</span>":"";
       return "<div class='rowline' data-n='"+n+"'><span class='sa'>"+z.sa+"</span>"+ch+"<span class='de'>"+lineText(z)+"</span></div>";
     }).join("");
-    return "<div class='stanza"+(on?" on":"")+"' data-start='"+g.start+"'><span class='nr'>"+g.label+"</span>"+rows+"</div>";
+    return "<div class='stanza"+(on?" on":"")+"' data-start='"+g.start+"'>"+rows+"</div>";
   }).join("");
   var on=box.querySelector(".stanza.on");
   if(on) on.scrollIntoView({block:"nearest",behavior:"smooth"});
