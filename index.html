@@ -4,62 +4,71 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Bhakti Prayers Player</title>
-<!-- [Grok.com] Mukunda Mala spielt über YouTube (Bhakti Marga Music). -->
+<!-- [Grok.com] YouTube + Mitlesen. Übersetzung nur nach Knopf. -->
 <style>
 :root{--bg:#1a1410;--gold:#c9a36a;--text:#f3e6d0;--muted:#b7a48c;--card:#2a211b}
 *{box-sizing:border-box}
 body{margin:0;font-family:Georgia,serif;background:var(--bg);color:var(--text)}
-header{padding:16px;text-align:center}
-h1{margin:0;color:var(--gold);font-weight:normal;font-size:1.7rem}
-.sub{color:var(--muted);margin-top:8px;font-size:.95rem;max-width:40rem;margin-left:auto;margin-right:auto;line-height:1.45}
-.bar{position:sticky;top:0;background:var(--bg);border-bottom:1px solid #3d2f26;padding:8px 12px 12px;z-index:20}
-.now{min-height:1.3em;padding:4px 0}
+header{padding:14px 16px 8px;text-align:center}
+h1{margin:0;color:var(--gold);font-weight:normal;font-size:1.55rem}
+.sub{color:var(--muted);margin:6px auto 0;font-size:.92rem;max-width:42rem;line-height:1.4}
+.bar{position:sticky;top:0;background:var(--bg);border-bottom:1px solid #3d2f26;padding:8px 12px;z-index:20}
+.now{min-height:1.2em;padding:2px 0 6px}
 audio{width:100%;height:36px}
-#ytBox{display:none;width:100%;max-width:42rem;margin:8px auto 0;aspect-ratio:16/9;background:#000;border-radius:8px;overflow:hidden}
-#ytBox.on{display:block}
-#ytBox iframe{width:100%;height:100%;border:0}
 .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
 button{background:#4a372b;color:var(--text);border:1px solid #6b5340;border-radius:7px;padding:8px 12px;min-height:40px}
 button.gold{background:#8b6914;border-color:var(--gold)}
-.list{margin:12px;display:grid;gap:8px}
+button.on{background:#8b6914;border-color:var(--gold)}
+.list{margin:10px 12px;display:grid;gap:8px}
 @media(min-width:800px){.list{grid-template-columns:1fr 1fr 1fr}}
-.item{text-align:left;padding:12px;background:transparent;width:100%}
+.item{text-align:left;padding:10px;background:transparent;width:100%}
 .item.active{background:#4a372b;color:var(--gold)}
-.quelle{display:block;color:var(--muted);font-size:.78rem;margin-top:4px}
-.panel{margin:12px;background:var(--card);border:1px solid #6b5340;border-radius:12px;max-height:52vh;overflow:auto;padding:12px 16px}
-.line{padding:8px 6px;border-radius:6px;cursor:pointer}
-.line .sa{display:block}
-.line .de{display:block;color:var(--muted);font-size:.9rem;margin-top:2px}
-.line.on{background:#4a372b;color:var(--gold)}
+.quelle{display:block;color:var(--muted);font-size:.76rem;margin-top:4px}
+.stage{margin:10px 12px;display:grid;gap:10px}
+@media(min-width:900px){.stage.has-yt{grid-template-columns:minmax(240px,38%) 1fr}}
+#ytBox{display:none;width:100%;aspect-ratio:16/9;background:#000;border-radius:8px;overflow:hidden}
+#ytBox.on{display:block}
+#ytBox iframe{width:100%;height:100%;border:0}
+.panel{background:var(--card);border:1px solid #6b5340;border-radius:12px;max-height:62vh;overflow:auto;padding:10px 14px}
+.line{padding:10px 6px;border-radius:6px;cursor:pointer}
+.line .nr{display:block;color:var(--gold);font-size:.78rem;margin-bottom:2px}
+.line .sa{display:block;line-height:1.45}
+.line .de{display:none;color:var(--muted);font-size:.92rem;margin-top:6px;line-height:1.4}
+body.show-de .line .de{display:block}
+.line.on{background:#4a372b}
 .line.on .de{color:#e4d2b4}
 .hint{color:var(--muted);font-size:.85rem;margin:0 12px 16px}
-footer{text-align:center;padding:20px;color:var(--muted);font-size:.85rem}
+footer{text-align:center;padding:18px;color:var(--muted);font-size:.85rem}
 </style>
 </head>
 <body>
 <header>
   <h1>Bhakti Prayers Player</h1>
-  <p class="sub">Gesänge zum Mitlesen und Lernen. Eigenes Projekt — nicht der Tadatmya-Vedanta-Player.</p>
+  <p class="sub">YouTube zum Hören, Sanskrit zum Mitsingen. Übersetzung nur, wenn du sie anschaltest.</p>
 </header>
 <div class="bar">
   <div class="now" id="now">Einen Gesang wählen</div>
   <audio id="a" controls preload="none" playsinline></audio>
-  <div id="ytBox"><iframe id="yt" title="YouTube" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
   <div class="row">
     <button type="button" onclick="prevLine()">Vorherige Zeile</button>
     <button type="button" class="gold" onclick="nextLine()">Nächste Zeile</button>
+    <button type="button" id="btnDe" onclick="toggleDe()">Übersetzung aus</button>
   </div>
 </div>
 <div class="list" id="list"></div>
 <p class="hint" id="hint"></p>
-<div class="panel" id="lyrics"></div>
-<footer>Persönliches Lernen. Quellen jeweils unter dem Titel.</footer>
+<div class="stage" id="stage">
+  <div id="ytBox"><iframe id="yt" title="YouTube" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+  <div class="panel" id="lyrics"></div>
+</div>
+<footer>Persönliches Lernen. Quellen unter dem Titel. Übersetzung ist eine Lernhilfe, nicht das Heft.</footer>
 <script src="prayers.js"></script>
 <script>
-var i=-1, line=0;
+var i=-1, line=0, showDe=false;
 var a=document.getElementById("a");
 var ytBox=document.getElementById("ytBox");
 var yt=document.getElementById("yt");
+var stage=document.getElementById("stage");
 function paintList(){
   var box=document.getElementById("list");
   box.innerHTML="";
@@ -77,7 +86,9 @@ function paintLyrics(){
   var box=document.getElementById("lyrics");
   if(!P){ box.innerHTML=""; return; }
   box.innerHTML=P.zeilen.map(function(z,n){
-    return "<div class='line"+(n===line?" on":"")+"' data-n='"+n+"'><span class='sa'>"+z.sa+"</span><span class='de'>"+z.de+"</span></div>";
+    var nr=z.nr||z.de||("Zeile "+(n+1));
+    var de=z.ue||"";
+    return "<div class='line"+(n===line?" on":"")+"' data-n='"+n+"'><span class='nr'>"+nr+"</span><span class='sa'>"+z.sa+"</span><span class='de'>"+de+"</span></div>";
   }).join("");
   var on=box.querySelector(".line.on");
   if(on) on.scrollIntoView({block:"center",behavior:"smooth"});
@@ -89,16 +100,18 @@ function play(idx){
   i=idx; line=0;
   var P=PRAYERS[i];
   document.getElementById("now").textContent=P.titel;
-  document.getElementById("hint").textContent=P.hinweis;
+  document.getElementById("hint").textContent=P.hinweis||"";
   a.pause();
   a.removeAttribute("src");
   a.load();
   if(P.youtube){
     a.style.display="none";
     ytBox.classList.add("on");
+    stage.classList.add("has-yt");
     yt.src="https://www.youtube.com/embed/"+P.youtube+"?rel=0&modestbranding=1";
   } else {
     ytBox.classList.remove("on");
+    stage.classList.remove("has-yt");
     yt.src="";
     a.style.display="block";
     a.src=P.audio;
@@ -108,6 +121,15 @@ function play(idx){
 }
 function nextLine(){ if(i<0) return; line=Math.min(line+1, PRAYERS[i].zeilen.length-1); paintLyrics(); }
 function prevLine(){ if(i<0) return; line=Math.max(line-1, 0); paintLyrics(); }
+function toggleDe(){
+  showDe=!showDe;
+  document.body.classList.toggle("show-de", showDe);
+  var b=document.getElementById("btnDe");
+  b.textContent=showDe?"Übersetzung an":"Übersetzung aus";
+  b.classList.toggle("on", showDe);
+  try{ localStorage.setItem("bpp-de", showDe?"1":"0"); }catch(e){}
+}
+try{ if(localStorage.getItem("bpp-de")==="1") toggleDe(); }catch(e){}
 paintList();
 </script>
 </body>
