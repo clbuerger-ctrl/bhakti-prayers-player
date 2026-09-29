@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Bhakti Prayers Player V1.9</title>
+<title>Bhakti Prayers Player V1.10</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Gentium+Book+Plus:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Gentium+Book+Plus:ital,wght@0,400;0,700;1,400;1,700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#1a1410;--gold:#c9a36a;--text:#f3e6d0;--muted:#b7a48c;--card:#2a211b}
+:root{--bg:#1a1410;--gold:#c9a36a;--text:#fff6e8;--muted:#d7c4a8;--card:#241c16;--lyric:#fffaf0}
 *{box-sizing:border-box}
 body{margin:0;font-family:"Source Sans 3",Calibri,sans-serif;background:var(--bg);color:var(--text)}
 header{padding:14px 16px 8px;text-align:center}
@@ -36,22 +36,23 @@ button.on{background:#8b6914;border-color:var(--gold)}
 #ytBox{display:none;width:100%;aspect-ratio:16/9;background:#000;border-radius:8px;overflow:hidden}
 #ytBox.on{display:block}
 #ytBox iframe{width:100%;height:100%;border:0}
-.panel{background:var(--card);border:1px solid #6b5340;border-radius:12px;max-height:62vh;overflow:auto;padding:10px 14px}
-.line{padding:12px 6px;border-radius:6px;cursor:pointer}
-.line .nr{display:block;color:var(--gold);font-size:.78rem;margin-bottom:4px;font-family:"Source Sans 3",sans-serif}
-.line .ch{display:none;font-family:"Source Sans 3",Consolas,sans-serif;color:#e8c27a;font-size:.95rem;letter-spacing:.05em;white-space:pre-wrap;margin:0 0 4px}
+.panel{background:var(--card);border:1px solid #6b5340;border-radius:12px;max-height:62vh;overflow:auto;padding:14px 18px}
+.line{padding:16px 10px;border-radius:8px;cursor:pointer}
+.line .nr{display:block;color:var(--gold);font-size:.88rem;margin-bottom:6px;font-family:"Source Sans 3",sans-serif;letter-spacing:.04em}
+.line .ch{display:none;font-family:"Source Sans 3",Consolas,sans-serif;color:#f0d089;font-size:1.12rem;letter-spacing:.08em;white-space:pre-wrap;margin:0 0 6px;font-weight:600}
 body.show-ch .line .ch{display:block}
-.line .sa{display:block;font-family:"Gentium Book Plus","Noto Serif",Georgia,serif;font-size:1.32rem;line-height:1.72;letter-spacing:.015em;font-weight:400}
-.line .de{display:none;color:var(--muted);font-size:.95rem;margin-top:8px;line-height:1.45;font-family:"Source Sans 3",sans-serif}
+.line .sa{display:block;font-family:"Gentium Book Plus","Noto Serif",Georgia,serif;font-size:1.62rem;line-height:1.9;letter-spacing:.03em;font-weight:700;color:var(--lyric);text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased}
+.line .de{display:none;color:#ead9c0;font-size:1.14rem;margin-top:10px;line-height:1.6;font-family:"Source Sans 3",sans-serif;font-weight:400}
 body.show-de .line .de{display:block}
-.line.on{background:#4a372b}
+.line.on{background:#3d2c22}.line.on .sa{color:#fff}
 .hint{color:var(--muted);font-size:.85rem;margin:0 12px 16px}
 footer{text-align:center;padding:18px;color:var(--muted);font-size:.85rem}
+@media(max-width:700px){.line .sa{font-size:1.42rem;line-height:1.85}.line .de{font-size:1.08rem}.line{padding:14px 8px}}
 </style>
 </head>
 <body>
 <header>
-  <h1>Bhakti Prayers Player <span class="ver">V1.9</span></h1>
+  <h1>Bhakti Prayers Player <span class="ver">V1.10</span></h1>
   <p class="sub" id="sub"></p>
   <p class="legend" id="legend"></p>
 </header>
