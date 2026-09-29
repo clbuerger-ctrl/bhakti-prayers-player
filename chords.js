@@ -1,12 +1,14 @@
 /* [Grok.com] Akkorde + Tonquellen */
 (function(){
   function byId(id){ return PRAYERS.find(function(p){ return p.id===id; }); }
+  var DROPBOX_FOLDER = "https://www.dropbox.com/scl/fo/9jrivp0fkl4bfo9t0dejx/AAaWhfo8FVeG_XB4CKwSWqQ/";
+  var DROPBOX_KEY = "rlkey=s8lox2d2652b2i133h1jjty3k&dl=1";
   var m=byId("mukunda");
   if(m){
-    m.audio="audio/mukunda-mala.mp3";
+    m.audio=DROPBOX_FOLDER+"2022-12-12-Mix-BhaktiMargaPrayers-43-MukundaMalaStotram.mp3?"+DROPBOX_KEY;
     m.preferFile=true;
-    m.quelle="Bhakti Marga Mix 12.12.2022 · Heft";
-    m.hinweis="Ton: 2022-12-12 Mix Mukunda Mala Stotram. Fehlt audio/mukunda-mala.mp3, fällt der Player auf YouTube zurück.";
+    m.quelle="Bhakti Marga Mix 12.12.2022 · Dropbox · Heft";
+    m.hinweis="Ton aus dem Dropbox-Ordner 05 Prayers Bhajan Vedic Chants. Fehlt der Ton, fällt der Player auf YouTube zurück.";
   }
   var n=byId("narasimha");
   if(n){
