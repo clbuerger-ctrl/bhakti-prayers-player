@@ -1,6 +1,13 @@
-/* [Grok.com] Akkorde: Prathana with chords, Daily Prayer Edition 05-04-2024 */
+/* [Grok.com] Akkorde + Tonquellen */
 (function(){
   function byId(id){ return PRAYERS.find(function(p){ return p.id===id; }); }
+  var m=byId("mukunda");
+  if(m){
+    m.audio="audio/mukunda-mala.mp3";
+    m.preferFile=true;
+    m.quelle="Bhakti Marga Mix 12.12.2022 · Heft";
+    m.hinweis="Ton: 2022-12-12 Mix Mukunda Mala Stotram. Fehlt audio/mukunda-mala.mp3, fällt der Player auf YouTube zurück.";
+  }
   var n=byId("narasimha");
   if(n){
     n.titel="Shri Nrisimha Prayer";
