@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Bhakti Prayers Player V1.6</title>
+<title>Bhakti Prayers Player V1.7</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gentium+Book+Plus:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
@@ -49,7 +49,7 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:.85rem}
 </head>
 <body>
 <header>
-  <h1>Bhakti Prayers Player <span class="ver">V1.6</span></h1>
+  <h1>Bhakti Prayers Player <span class="ver">V1.7</span></h1>
   <p class="sub">Datei oder YouTube zum Hören, Sanskrit zum Mitsingen. Übersetzung und Akkorde nur auf Knopf. Tasten: N nächste Zeile, V vorherige.</p>
   <p class="legend"><b>ā ī ū</b> lang halten &nbsp;·&nbsp; <b>ṃ ṅ ñ ṇ</b> nasal &nbsp;·&nbsp; <b>ś ṣ</b> weiches / hartes sch &nbsp;·&nbsp; <b>ṛ</b> ri</p>
 </header>
@@ -69,10 +69,11 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:.85rem}
   <div id="ytBox"><iframe id="yt" title="YouTube" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
   <div class="panel" id="lyrics"></div>
 </div>
-<footer>Mukunda Mala: Dropbox Mix 12.12.2022. Andere Stücke: YouTube oder Archiv.</footer>
+<footer>Mukunda Mala: Dropbox Mix 12.12.2022. Akkorde aus dem Chords-Heft.</footer>
 <script src="prayers.js"></script>
 <script src="chords.js"></script>
 <script src="iast.js"></script>
+<script src="mukunda-chords.js"></script>
 <script>
 var i=-1, line=0, showDe=false, showCh=false;
 var a=document.getElementById("a");
