@@ -4,7 +4,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Bhakti Prayers Player V1.1</title>
-<!-- [Grok.com] Akkorde aus Prathana with chords, nur auf Knopf. -->
 <style>
 :root{--bg:#1a1410;--gold:#c9a36a;--text:#f3e6d0;--muted:#b7a48c;--card:#2a211b}
 *{box-sizing:border-box}
@@ -39,7 +38,6 @@ body.show-ch .line .ch{display:block}
 .line .de{display:none;color:var(--muted);font-size:.92rem;margin-top:6px;line-height:1.4}
 body.show-de .line .de{display:block}
 .line.on{background:#4a372b}
-.line.on .de{color:#e4d2b4}
 .hint{color:var(--muted);font-size:.85rem;margin:0 12px 16px}
 footer{text-align:center;padding:18px;color:var(--muted);font-size:.85rem}
 </style>
@@ -47,7 +45,7 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:.85rem}
 <body>
 <header>
   <h1>Bhakti Prayers Player <span class="ver">V1.1</span></h1>
-  <p class="sub">YouTube zum Hören, Sanskrit zum Mitsingen. Übersetzung und Akkorde nur auf Knopf — Akkorde aus dem Prathana-Musikerheft.</p>
+  <p class="sub">YouTube zum Hören, Sanskrit zum Mitsingen. Übersetzung und Akkorde nur auf Knopf.</p>
 </header>
 <div class="bar">
   <div class="now" id="now">Einen Gesang wählen</div>
@@ -65,8 +63,9 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:.85rem}
   <div id="ytBox"><iframe id="yt" title="YouTube" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
   <div class="panel" id="lyrics"></div>
 </div>
-<footer>Persönliches Lernen. Akkorde: Prathana with chords, Daily Prayer Edition. Mukunda Mala hat im Heft keine Akkorde.</footer>
+<footer>Akkorde: Prathana with chords, Daily Prayer Edition. Mukunda Mala hat im Heft keine Akkorde.</footer>
 <script src="prayers.js"></script>
+<script src="chords.js"></script>
 <script>
 var i=-1, line=0, showDe=false, showCh=false;
 var a=document.getElementById("a");
