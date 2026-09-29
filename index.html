@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Bhakti Prayers Player V1.2</title>
+<title>Bhakti Prayers Player V1.3</title>
 <style>
 :root{--bg:#1a1410;--gold:#c9a36a;--text:#f3e6d0;--muted:#b7a48c;--card:#2a211b}
 *{box-sizing:border-box}
@@ -44,8 +44,8 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:.85rem}
 </head>
 <body>
 <header>
-  <h1>Bhakti Prayers Player <span class="ver">V1.2</span></h1>
-  <p class="sub">YouTube zum Hören, Sanskrit zum Mitsingen. Übersetzung und Akkorde nur auf Knopf.</p>
+  <h1>Bhakti Prayers Player <span class="ver">V1.3</span></h1>
+  <p class="sub">Datei oder YouTube zum Hören, Sanskrit zum Mitsingen. Übersetzung und Akkorde nur auf Knopf.</p>
 </header>
 <div class="bar">
   <div class="now" id="now">Einen Gesang wählen</div>
@@ -63,7 +63,7 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:.85rem}
   <div id="ytBox"><iframe id="yt" title="YouTube" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
   <div class="panel" id="lyrics"></div>
 </div>
-<footer>Akkorde: Prathana with chords, Daily Prayer Edition. Mukunda Mala hat im Heft keine Akkorde.</footer>
+<footer>Mukunda Mala: Mix 12.12.2022. Andere Stücke: YouTube oder Archiv.</footer>
 <script src="prayers.js"></script>
 <script src="chords.js"></script>
 <script>
@@ -99,6 +99,23 @@ function paintLyrics(){
     el.onclick=function(){ line=parseInt(el.getAttribute("data-n"),10); paintLyrics(); };
   });
 }
+function showYt(P){
+  a.style.display="none";
+  ytBox.classList.add("on");
+  stage.classList.add("has-yt");
+  yt.src="https://www.youtube.com/embed/"+P.youtube+"?rel=0&modestbranding=1";
+}
+function showFile(P){
+  ytBox.classList.remove("on");
+  stage.classList.remove("has-yt");
+  yt.src="";
+  a.style.display="block";
+  a.onerror=function(){
+    if(P.youtube) showYt(P);
+  };
+  a.src=P.audio;
+  a.play().catch(function(){});
+}
 function play(idx){
   i=idx; line=0;
   var P=PRAYERS[i];
@@ -107,19 +124,9 @@ function play(idx){
   a.pause();
   a.removeAttribute("src");
   a.load();
-  if(P.youtube){
-    a.style.display="none";
-    ytBox.classList.add("on");
-    stage.classList.add("has-yt");
-    yt.src="https://www.youtube.com/embed/"+P.youtube+"?rel=0&modestbranding=1";
-  } else {
-    ytBox.classList.remove("on");
-    stage.classList.remove("has-yt");
-    yt.src="";
-    a.style.display="block";
-    a.src=P.audio;
-    a.play().catch(function(){});
-  }
+  if(P.preferFile && P.audio) showFile(P);
+  else if(P.youtube) showYt(P);
+  else if(P.audio) showFile(P);
   paintList(); paintLyrics();
 }
 function nextLine(){ if(i<0) return; line=Math.min(line+1, PRAYERS[i].zeilen.length-1); paintLyrics(); }
