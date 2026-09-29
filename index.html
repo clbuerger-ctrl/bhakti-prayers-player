@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Bhakti Prayers Player V1.0</title>
-<!-- [Grok.com] YouTube + Mitlesen. Übersetzung nur nach Knopf. -->
+<title>Bhakti Prayers Player V1.1</title>
+<!-- [Grok.com] Akkorde aus Prathana with chords, nur auf Knopf. -->
 <style>
 :root{--bg:#1a1410;--gold:#c9a36a;--text:#f3e6d0;--muted:#b7a48c;--card:#2a211b}
 *{box-sizing:border-box}
@@ -33,6 +33,8 @@ button.on{background:#8b6914;border-color:var(--gold)}
 .panel{background:var(--card);border:1px solid #6b5340;border-radius:12px;max-height:62vh;overflow:auto;padding:10px 14px}
 .line{padding:10px 6px;border-radius:6px;cursor:pointer}
 .line .nr{display:block;color:var(--gold);font-size:.78rem;margin-bottom:2px}
+.line .ch{display:none;font-family:Consolas,Menlo,monospace;color:#e8c27a;font-size:.88rem;letter-spacing:.04em;white-space:pre-wrap;margin:0 0 2px}
+body.show-ch .line .ch{display:block}
 .line .sa{display:block;line-height:1.45}
 .line .de{display:none;color:var(--muted);font-size:.92rem;margin-top:6px;line-height:1.4}
 body.show-de .line .de{display:block}
@@ -44,8 +46,8 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:.85rem}
 </head>
 <body>
 <header>
-  <h1>Bhakti Prayers Player <span class="ver">V1.0</span></h1>
-  <p class="sub">YouTube zum Hören, Sanskrit zum Mitsingen. Übersetzung nur, wenn du sie anschaltest.</p>
+  <h1>Bhakti Prayers Player <span class="ver">V1.1</span></h1>
+  <p class="sub">YouTube zum Hören, Sanskrit zum Mitsingen. Übersetzung und Akkorde nur auf Knopf — Akkorde aus dem Prathana-Musikerheft.</p>
 </header>
 <div class="bar">
   <div class="now" id="now">Einen Gesang wählen</div>
@@ -54,6 +56,7 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:.85rem}
     <button type="button" onclick="prevLine()">Vorherige Zeile</button>
     <button type="button" class="gold" onclick="nextLine()">Nächste Zeile</button>
     <button type="button" id="btnDe" onclick="toggleDe()">Übersetzung aus</button>
+    <button type="button" id="btnCh" onclick="toggleCh()">Akkorde aus</button>
   </div>
 </div>
 <div class="list" id="list"></div>
@@ -62,10 +65,10 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:.85rem}
   <div id="ytBox"><iframe id="yt" title="YouTube" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
   <div class="panel" id="lyrics"></div>
 </div>
-<footer>Persönliches Lernen. Quellen unter dem Titel. Übersetzung ist eine Lernhilfe, nicht das Heft.</footer>
+<footer>Persönliches Lernen. Akkorde: Prathana with chords, Daily Prayer Edition. Mukunda Mala hat im Heft keine Akkorde.</footer>
 <script src="prayers.js"></script>
 <script>
-var i=-1, line=0, showDe=false;
+var i=-1, line=0, showDe=false, showCh=false;
 var a=document.getElementById("a");
 var ytBox=document.getElementById("ytBox");
 var yt=document.getElementById("yt");
@@ -87,9 +90,9 @@ function paintLyrics(){
   var box=document.getElementById("lyrics");
   if(!P){ box.innerHTML=""; return; }
   box.innerHTML=P.zeilen.map(function(z,n){
-    var nr=z.nr||z.de||("Zeile "+(n+1));
-    var de=z.ue||"";
-    return "<div class='line"+(n===line?" on":"")+"' data-n='"+n+"'><span class='nr'>"+nr+"</span><span class='sa'>"+z.sa+"</span><span class='de'>"+de+"</span></div>";
+    var nr=z.nr||("Zeile "+(n+1));
+    var ch=z.ch?"<span class='ch'>"+z.ch+"</span>":"";
+    return "<div class='line"+(n===line?" on":"")+"' data-n='"+n+"'><span class='nr'>"+nr+"</span>"+ch+"<span class='sa'>"+z.sa+"</span><span class='de'>"+(z.ue||"")+"</span></div>";
   }).join("");
   var on=box.querySelector(".line.on");
   if(on) on.scrollIntoView({block:"center",behavior:"smooth"});
@@ -130,7 +133,16 @@ function toggleDe(){
   b.classList.toggle("on", showDe);
   try{ localStorage.setItem("bpp-de", showDe?"1":"0"); }catch(e){}
 }
+function toggleCh(){
+  showCh=!showCh;
+  document.body.classList.toggle("show-ch", showCh);
+  var b=document.getElementById("btnCh");
+  b.textContent=showCh?"Akkorde an":"Akkorde aus";
+  b.classList.toggle("on", showCh);
+  try{ localStorage.setItem("bpp-ch", showCh?"1":"0"); }catch(e){}
+}
 try{ if(localStorage.getItem("bpp-de")==="1") toggleDe(); }catch(e){}
+try{ if(localStorage.getItem("bpp-ch")==="1") toggleCh(); }catch(e){}
 paintList();
 </script>
 </body>
