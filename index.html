@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Bhakti Prayers Player V1.5</title>
+<title>Bhakti Prayers Player V1.6</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gentium+Book+Plus:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
@@ -49,16 +49,16 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:.85rem}
 </head>
 <body>
 <header>
-  <h1>Bhakti Prayers Player <span class="ver">V1.5</span></h1>
-  <p class="sub">Datei oder YouTube zum Hören, Sanskrit zum Mitsingen. Übersetzung und Akkorde nur auf Knopf.</p>
+  <h1>Bhakti Prayers Player <span class="ver">V1.6</span></h1>
+  <p class="sub">Datei oder YouTube zum Hören, Sanskrit zum Mitsingen. Übersetzung und Akkorde nur auf Knopf. Tasten: N nächste Zeile, V vorherige.</p>
   <p class="legend"><b>ā ī ū</b> lang halten &nbsp;·&nbsp; <b>ṃ ṅ ñ ṇ</b> nasal &nbsp;·&nbsp; <b>ś ṣ</b> weiches / hartes sch &nbsp;·&nbsp; <b>ṛ</b> ri</p>
 </header>
 <div class="bar">
   <div class="now" id="now">Einen Gesang wählen</div>
   <audio id="a" controls preload="none" playsinline></audio>
   <div class="row">
-    <button type="button" onclick="prevLine()">Vorherige Zeile</button>
-    <button type="button" class="gold" onclick="nextLine()">Nächste Zeile</button>
+    <button type="button" onclick="prevLine()">Vorherige Zeile (V)</button>
+    <button type="button" class="gold" onclick="nextLine()">Nächste Zeile (N)</button>
     <button type="button" id="btnDe" onclick="toggleDe()">Übersetzung aus</button>
     <button type="button" id="btnCh" onclick="toggleCh()">Akkorde aus</button>
   </div>
@@ -154,6 +154,14 @@ function toggleCh(){
   b.classList.toggle("on", showCh);
   try{ localStorage.setItem("bpp-ch", showCh?"1":"0"); }catch(e){}
 }
+document.addEventListener("keydown", function(e){
+  if(e.ctrlKey || e.altKey || e.metaKey) return;
+  var t=e.target;
+  if(t && (t.tagName==="INPUT" || t.tagName==="TEXTAREA" || t.isContentEditable)) return;
+  var k=e.key.toLowerCase();
+  if(k==="n"){ e.preventDefault(); nextLine(); }
+  if(k==="v"){ e.preventDefault(); prevLine(); }
+});
 try{ if(localStorage.getItem("bpp-de")==="1") toggleDe(); }catch(e){}
 try{ if(localStorage.getItem("bpp-ch")==="1") toggleCh(); }catch(e){}
 paintList();
