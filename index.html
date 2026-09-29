@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Bhakti Prayers Player V1.11</title>
+<title>Bhakti Prayers Player V1.12</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gentium+Book+Plus:ital,wght@0,400;0,700;1,400;1,700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
@@ -52,7 +52,7 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:.85rem}
 </head>
 <body>
 <header>
-  <h1>Bhakti Prayers Player <span class="ver">V1.11</span></h1>
+  <h1>Bhakti Prayers Player <span class="ver">V1.12</span></h1>
   <p class="sub" id="sub"></p>
   <p class="legend" id="legend"></p>
 </header>
@@ -174,7 +174,8 @@ function showYt(P){
   a.style.display="none";
   ytBox.classList.add("on");
   stage.classList.add("has-yt");
-  yt.src="https://www.youtube.com/embed/"+P.youtube+"?rel=0&modestbranding=1";
+  var start=P.youtubeStart?("&start="+P.youtubeStart):"";
+  yt.src="https://www.youtube.com/embed/"+P.youtube+"?rel=0&modestbranding=1"+start;
 }
 function showFile(P){
   ytBox.classList.remove("on");
