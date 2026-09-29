@@ -1,6 +1,20 @@
-/* [Grok.com] The Govinda Prayer — Brahma-samhita, Heft mit Akkorden */
+/* [Grok.com] The Govinda Prayer — Dropbox-Ton + Heft-Akkorde */
 (function(){
-  if(PRAYERS.some(function(p){ return p.id==="govinda"; })) return;
+  var DROPBOX_FOLDER = "https://www.dropbox.com/scl/fo/9jrivp0fkl4bfo9t0dejx/AAaWhfo8FVeG_XB4CKwSWqQ/";
+  var DROPBOX_KEY = "rlkey=s8lox2d2652b2i133h1jjty3k&dl=1";
+  var audio = DROPBOX_FOLDER + encodeURIComponent("Govinda Prayer (prabhu) 3.mp3") + "?" + DROPBOX_KEY;
+  var g = PRAYERS.find(function(p){ return p.id==="govinda"; });
+  if(g){
+    g.audio = audio;
+    g.preferFile = true;
+    g.youtube = "3tMcSlnV_rc";
+    g.youtubeStart = 5;
+    g.quelle = "Dropbox · Govinda Prayer (prabhu) 3.mp3";
+    g.hinweis = "Ton aus dem Dropbox-Ordner 05 Prayers. Fehlt der Ton, fällt der Player auf YouTube zurück.";
+    g.hinweisDe = "Ton aus dem Dropbox-Ordner 05 Prayers. Fehlt der Ton, fällt der Player auf YouTube zurück.";
+    g.hinweisEn = "Audio from the Dropbox prayers folder. If the file fails, the player falls back to YouTube.";
+    return;
+  }
   var Rch = "D     G     D     C     D";
   var Rsa = "govindam ādi-puruṣaṃ tam ahaṃ bhajāmi";
   function v(n, ch, sa, ue, en){
@@ -10,12 +24,14 @@
     id: "govinda",
     titel: "The Govinda Prayer",
     autor: "Brahma-saṃhitā · Bhakti Marga Morning Prayers",
+    audio: audio,
+    preferFile: true,
     youtube: "3tMcSlnV_rc",
     youtubeStart: 5,
-    quelle: "YouTube 3tMcSlnV_rc · Heft S. 10",
-    hinweis: "Aus der Brahma-saṃhitā. Video startet bei 0:05. Akkorde D D7 G, Refrain D G D / C D.",
-    hinweisDe: "Aus der Brahma-saṃhitā. Video startet bei 0:05. Akkorde D D7 G, Refrain D G D / C D.",
-    hinweisEn: "From the Brahma-samhita. Video starts at 0:05. Chords D D7 G, refrain D G D / C D.",
+    quelle: "Dropbox · Govinda Prayer (prabhu) 3.mp3",
+    hinweis: "Ton aus dem Dropbox-Ordner 05 Prayers. Fehlt der Ton, fällt der Player auf YouTube zurück.",
+    hinweisDe: "Ton aus dem Dropbox-Ordner 05 Prayers. Fehlt der Ton, fällt der Player auf YouTube zurück.",
+    hinweisEn: "Audio from the Dropbox prayers folder. If the file fails, the player falls back to YouTube.",
     zeilen: [
       v("1a","D", "īśvaraḥ paramaḥ kṛṣṇaḥ", "Krishna ist der höchste Herr.", "Krishna is the Supreme Lord."),
       v("1b","D7+", "sac-cid-ānanda-vigrahaḥ", "Seine Gestalt ist Sein, Bewusstsein, Glück.", "His form is being, consciousness and bliss."),
