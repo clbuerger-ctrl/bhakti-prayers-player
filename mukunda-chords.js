@@ -52,3 +52,11 @@
   m.quelle = "Bhakti Marga Mix 12.12.2022 · Dropbox · Chords-Heft";
   m.hinweis = "Akkorde aus Mukunda Mala Stotram_chords.pdf. Heft setzt Griffe über Versblöcke. Knopf Akkorde.";
 })();
+(function(){
+  var k = PRAYERS.find(function(p){ return p.id==="kavacham"; });
+  if(!k) return;
+  var loop = "Dm   Bb    C     Dm";
+  k.zeilen.forEach(function(z){
+    if(!z.ch) z.ch = loop;
+  });
+})();
