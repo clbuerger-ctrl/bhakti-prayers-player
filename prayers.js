@@ -1,15 +1,14 @@
-/* [Grok.com] BhaktiPrayersPlayer — eigenes Repo, getrennt vom TV-Player.
-   Ton: frei angebotene Aufnahmen vom Internet Archive (Lernen).
-   Text: überlieferte Stotras, Umschrift.
+/* [Grok.com] BhaktiPrayersPlayer — eigenes Repo.
+   Mukunda Mala: offizielle Aufnahme Bhakti Marga Music (YouTube).
 */
 window.PRAYERS = [
   {
     id: "mukunda",
     titel: "Mukunda Mala Stotram",
-    autor: "Kulashekhara Alvar",
-    audio: "https://archive.org/download/MukundamalaStotram/MukundaMala_64kb.mp3",
-    quelle: "Internet Archive — Dr. Anjaneyulu Goli",
-    hinweis: "Vollständiger Gesang. Die Zeilen folgen der üblichen Verszählung, noch ohne Sekundenmarken.",
+    autor: "Kulashekhara Alvar · gesungen von Bhakti Marga Music",
+    youtube: "aDg6I2Bcx-g",
+    quelle: "YouTube — Prathana Evening Prayers (Bhakti Event GmbH, 2023)",
+    hinweis: "Offizielle Aufnahme. Text zum Mitlesen; Zeilen per Tipp oder Taste weiterschieben.",
     zeilen: [
       { sa: "ghushyate yasya nagare ranga-yatra dine dine", de: "In dessen Stadt Tag für Tag der Umzug zum Rangam ertönt —" },
       { sa: "tam aham shirasa vande rajanam kulasekharam", de: "den König Kulashekhara verehre ich mit geneigtem Haupt." },
