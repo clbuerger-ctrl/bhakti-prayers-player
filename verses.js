@@ -39,8 +39,34 @@
     /* [Grok-Bot] V1.36: Heft notiert Akkorde nur bei Strophe 1, alle Strophen 1–15 haben dieselbe Melodie, daher gleiche Akkorde */
     var first=s.zeilen.filter(function(z){ return /^1[a-d]$/.test(z.nr); }).map(function(z){ return z.ch; });
     s.zeilen.forEach(function(z){ var m=String(z.nr).match(/^(\d+)([a-d])$/); if(m && !z.ch) z.ch=first[m[2].charCodeAt(0)-97]||""; });
+    if(!s.youtube){ s.youtube="VlqY4h-B6X8"; s.youtubeStart=0; } /* [Grok-Bot] V1.36: Bhakti Marga Music, damit etwas abspielt */
     s.hinweisDe="Strophen wie im Heft Prathana with chords, Seite 9. Übersetzung bisher nur für Strophe 1 und den Schluss.";
     s.hinweisEn="Stanzas as in the Prathana with chords booklet, page 9. Translation so far only for stanza 1 and the closing.";
+  }
+
+  /* [Grok-Bot] V1.36: Govinda Prayer vollständig wie im Heft (28 Strophen, Seite 10–11); bisher fehlten 18 Strophen */
+  var g=byId("govinda");
+  if(g){
+    var NEU={"7": "panthās tu koṭi-śata-vatsara-sampragamyo | vāyor athāpi manaso muni-puṅgavānām | so ’py asti yat-prapada-sīmny avicintya-tattve", "8": "eko ’py asau racayituṃ jagad-aṇḍa-koṭiṃ | yac-chaktir asti jagad-aṇḍa-cayā yad-antaḥ | aṇḍāntara-stha-paramāṇu-cayāntara-stham", "9": "yad-bhāva-bhāvita-dhiyo manujās tathaiva | samprāpya rūpa-mahimāsana-yāna-bhūṣāḥ | sūktair yam eva nigama-prathitaiḥ stuvanti", "10": "ānanda-cinmaya-rasa-pratibhāvitābhis | tābhir ya eva nija-rūpatayā kalābhiḥ | goloka eva nivasaty akhilātma-bhūto", "13": "yasya prabhā prabhavato jagad-aṇḍa-koṭi- | koṭiṣv aśeṣa-vasudhādi-vibhūti-bhinnam | tad brahma niṣkalam anantam aśeṣa-bhūtaṃ", "14": "māyā hi yasya jagad-aṇḍa-śatāni sūte | traiguṇya-tad-viṣaya-veda-vitāyamānā | sattvāvalambi-para-sattvaṃ viśuddha-sattvaṃ", "15": "ānanda-cinmaya-rasātmatayā manaḥsu | yaḥ prāṇināṃ pratiphalan smaratām upetya | līlāyitena bhuvanāni jayaty ajasraṃ", "18": "kṣīraṃ yathā dadhi vikāra-viśeṣa-yogāt | sañjāyate na hi tataḥ pṛthag asti hetoḥ | yaḥ śambhutām api tathā samupaiti kāryād", "19": "dīpārcir eva hi daśāntaram abhyupetya | dīpāyate vivṛta-hetu-samāna-dharmā | yas tādṛg eva hi ca viṣṇutayā vibhāti", "20": "yaḥ kāraṇārṇava-jale bhajati sma yoga- | nidrām ananta-jagad-aṇḍa-sa-roma-kūpaḥ | ādhāra-śaktim avalambya parāṃ sva-mūrtiṃ", "21": "yasyaika-niśvasita-kālam athāvalambya | jīvanti loma-bilajā jagad-aṇḍa-nāthāḥ | viṣṇur mahān sa iha yasya kalā-viśeṣo", "22": "bhāsvān yathāśma-śakaleṣu nijeṣu tejaḥ | svīyaṃ kiyat prakaṭayaty api tadvad atra | brahmā ya eṣa jagad-aṇḍa-vidhāna-kartā", "23": "yat-pāda-pallava-yugaṃ vinidhāya kumbha- | dvandve praṇāma-samaye sa gaṇādhirājaḥ | vighnān vihantum alam asya jagat-trayasya", "24": "agnir mahī gaganam ambu marud diśaś ca | kālas tathātma-manasīti jagat-trayāṇi | yasmād bhavanti vibhavanti viśanti yaṃ ca", "25": "yac-cakṣur eṣa savitā sakala-grahāṇāṃ | rājā samasta-sura-mūrtir aśeṣa-tejāḥ | yasyājñayā bhramati sambhṛta-kāla-cakro", "26": "dharmo ’tha pāpa-nicayaḥ śrutayas tapāṃsi | brahmādi-kīṭa-patagāvadhayaś ca jīvāḥ | yad-datta-mātra-vibhava-prakaṭa-prabhāvā", "27": "yas tv indra-gopam athavendram aho sva-karma- | bandhānurūpa-phala-bhājanam ātanoti | karmāṇi nirdahati kintu ca bhakti-bhājāṃ", "28": "yaṃ krodha-kāma-sahaja-praṇayādi-bhīti- | vātsalya-moha-guru-gaurava-sevya-bhāvaiḥ | sañcintya tasya sadṛśīṃ tanum āpur ete"};
+    var MAP={"1":1,"2":2,"3":3,"4":4,"5":5,"6":6,"7":11,"8":12,"9":16,"10":17};
+    var old=g.zeilen, alt={}, pre=[], post=[], ref=null, cur=null;
+    old.forEach(function(z){
+      if(/^Refrain/.test(z.nr)){ if(!ref) ref=z; return; }
+      var m=String(z.nr).match(/^(\d+)([a-d]?)$/);
+      if(m && MAP[m[1]]!=null && m[1]!=="1"){ alt[MAP[m[1]]]=z; return; }
+      if(/^1[a-d]$/.test(z.nr)) pre.push(z); else post.push(z);
+    });
+    var CH=(alt[2]&&alt[2].ch)||"D    D7+    D7    G";
+    function R(){ return { nr:"Refrain", ch:ref.ch, sa:ref.sa, ue:ref.ue, en:ref.en }; }
+    var out=pre.slice(); out.push(R());
+    for(var k=2;k<=28;k++){
+      var z=alt[k];
+      if(z) out.push({ nr:String(k), ch:z.ch, sa:z.sa, ue:z.ue, en:z.en });
+      else out.push({ nr:String(k), ch:CH, sa:NEU[String(k)], ue:"", en:"" });
+      out.push(R());
+    }
+    post.forEach(function(z){ out.push(z); }); out.push(R());
+    g.zeilen=out;
   }
 
   var n=byId("narasimha");
