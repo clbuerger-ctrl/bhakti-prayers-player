@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Bhakti Prayers Player V1.29</title>
+<title>Bhakti Prayers Player V1.30</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gentium+Book+Plus:ital,wght@0,400;0,700;1,400;1,700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
@@ -50,21 +50,17 @@ body.show-de .rowline .de{display:block}
 .stanza.on .sa{color:#fff}
 .hint{color:var(--muted);font-size:.85rem;margin:0 12px 16px}
 footer{text-align:center;padding:18px;color:var(--muted);font-size:.85rem}
-@media(min-width:900px){
-  #lyrics{column-count:2;column-gap:14px}
-  .rowline .sa{font-size:1.04rem;line-height:1.22}
-}
-@media(min-width:1280px){
-  .stage:not(.has-yt) #lyrics{column-count:3;column-gap:16px}
-  .stage:not(.has-yt) .rowline .sa{font-size:.98rem;line-height:1.2}
-  .stage:not(.has-yt) .head .ch{font-size:.7rem}
-}
+#lyrics{column-count:1;column-gap:16px}
+#lyrics.cols-2{column-count:2}
+#lyrics.cols-3{column-count:3}
+#lyrics.cols-2 .rowline .sa,#lyrics.cols-3 .rowline .sa{font-size:1rem;line-height:1.2}
+#lyrics.cols-3 .head .ch{font-size:.7rem}
 @media(max-width:700px){.rowline .sa{font-size:1.08rem;line-height:1.26}.head .ch{font-size:.72rem}}
 </style>
 </head>
 <body tabindex="0">
 <header>
-  <h1>Bhakti Prayers Player <span class="ver">V1.29</span></h1>
+  <h1>Bhakti Prayers Player <span class="ver">V1.30</span></h1>
   <p class="sub" id="sub"></p>
   <p class="legend" id="legend"></p>
 </header>
@@ -109,7 +105,7 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:.85rem}
 <script src="kavacham.js?v=29"></script>
 <script src="morning-prayers.js"></script>
 <script src="transpose.js"></script>
-<script src="autoscroll.js?v=29"></script>
+<script src="autoscroll.js?v=30"></script>
 <script>
 var i=-1, line=0, showDe=false, showCh=false, lang="de", pendingSeek=0, lastSave=0, ytOn=false, ytPlaying=false, steps=0, autoScroll=false, scrollTempo=1;
 var a=document.getElementById("a");
@@ -118,7 +114,7 @@ var yt=document.getElementById("yt");
 var stage=document.getElementById("stage");
 var UI={
   de:{
-    sub:"Play / Pause oder Leertaste. N und V eine Strophe. Bei 2. Mridanga-Tempo nochmals N — Auto merkt beide Tempi.",
+    sub:"Play / Pause oder Leertaste. N und V eine Strophe. Lyrics 1 / 2 / 3 Spalten je nach Platz.",
     legend:"ā ī ū lang halten  ·  ṃ ṅ ñ ṇ nasal  ·  ś ṣ weiches / hartes sch  ·  ṛ ri",
     now:"Einen Gesang wählen",
     play:"Play",
@@ -132,7 +128,7 @@ var UI={
     foot:"Akkorde: Heft Sri Vitthal Dham. Ton aus Dropbox, wo vorhanden."
   },
   en:{
-    sub:"Play / Pause or Space. N and V one stanza. At 2nd mridanga speed press N again — Auto stores both tempi.",
+    sub:"Play / Pause or Space. N and V one stanza. Lyrics 1 / 2 / 3 columns by available width.",
     legend:"ā ī ū hold long  ·  ṃ ṅ ñ ṇ nasal  ·  ś ṣ soft / hard sh  ·  ṛ ri",
     now:"Choose a prayer",
     play:"Play",
@@ -214,6 +210,14 @@ function setLang(l){
   persistNow();
   applyUI(); paintList(); paintLyrics();
 }
+function layoutLyrics(){
+  var box=document.getElementById("lyrics");
+  if(!box) return;
+  var w=box.clientWidth||0;
+  box.classList.remove("cols-2","cols-3");
+  if(w>=860) box.classList.add("cols-3");
+  else if(w>=520) box.classList.add("cols-2");
+}
 function lineText(z){
   if(lang==="en") return z.en||z.ue||"";
   return z.ue||z.en||"";
@@ -293,7 +297,7 @@ function paintLyrics(){
     }).join("");
     return "<div class='stanza"+(on?" on":"")+"' data-start='"+g.start+"'>"+head+rows+"</div>";
   }).join("");
-  pinStanza();
+  layoutLyrics(); pinStanza();
   box.querySelectorAll(".stanza").forEach(function(el){
     el.onclick=function(){ line=parseInt(el.getAttribute("data-start"),10); persistNow(); paintLyrics(); syncAutoFromLine(); };
   });
@@ -311,6 +315,7 @@ function showYt(P, startSec){
   yt.src="https://www.youtube.com/embed/"+P.youtube+"?rel=0&modestbranding=1&enablejsapi=1"+(start?("&start="+start):"");
   markPlayOrigin();
   syncPlayBtn();
+  setTimeout(layoutLyrics, 50);
 }
 function showFile(P){
   ytOn=false; ytPlaying=false;
@@ -322,6 +327,7 @@ function showFile(P){
   a.src=P.audio;
   markPlayOrigin();
   a.play().then(syncPlayBtn).catch(function(){ syncPlayBtn(); });
+  setTimeout(layoutLyrics, 50);
 }
 function togglePlay(){
   if(i<0) return;
@@ -431,11 +437,14 @@ a.addEventListener("ended", function(){
 document.addEventListener("visibilitychange", function(){ if(document.hidden) persistNow(); });
 window.addEventListener("pagehide", persistNow);
 document.addEventListener("keydown", onKey);
+window.addEventListener("resize", layoutLyrics);
+try{ new ResizeObserver(layoutLyrics).observe(document.getElementById("lyrics")); }catch(e){}
 try{ if(localStorage.getItem("bpp-lang")==="en") lang="en"; }catch(e){}
 try{ if(localStorage.getItem("bpp-de")==="1"){ showDe=true; document.body.classList.add("show-de"); } }catch(e){}
 try{ if(localStorage.getItem("bpp-ch")==="1"){ showCh=true; document.body.classList.add("show-ch"); } }catch(e){}
 applyUI();
 paintList();
+layoutLyrics();
 (function resumeLast(){
   var m=loadMem();
   if(!m.lastId) return;
