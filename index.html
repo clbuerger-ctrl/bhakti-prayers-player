@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Bhakti Prayers Player V1.24</title>
+<title>Bhakti Prayers Player V1.25</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gentium+Book+Plus:ital,wght@0,400;0,700;1,400;1,700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
@@ -55,7 +55,7 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:.85rem}
 </head>
 <body tabindex="0">
 <header>
-  <h1>Bhakti Prayers Player <span class="ver">V1.24</span></h1>
+  <h1>Bhakti Prayers Player <span class="ver">V1.25</span></h1>
   <p class="sub" id="sub"></p>
   <p class="legend" id="legend"></p>
 </header>
@@ -109,7 +109,7 @@ var yt=document.getElementById("yt");
 var stage=document.getElementById("stage");
 var UI={
   de:{
-    sub:"Play / Pause oder Leertaste. N und V eine Strophe. Auto folgt dem Tempo der Aufnahme. Scroll − / + gleicht an.",
+    sub:"Play / Pause oder Leertaste. N und V eine Strophe. Auto folgt dem Tempo der Aufnahme. Scroll − / + gleicht an und bleibt je Song gespeichert.",
     legend:"ā ī ū lang halten  ·  ṃ ṅ ñ ṇ nasal  ·  ś ṣ weiches / hartes sch  ·  ṛ ri",
     now:"Einen Gesang wählen",
     play:"Play",
@@ -123,7 +123,7 @@ var UI={
     foot:"Akkorde: Heft Sri Vitthal Dham. Ton aus Dropbox, wo vorhanden."
   },
   en:{
-    sub:"Play / Pause or Space. N and V one stanza. Auto follows the recording. Scroll − / + to align.",
+    sub:"Play / Pause or Space. N and V one stanza. Auto follows the recording. Scroll − / + is stored per song.",
     legend:"ā ī ū hold long  ·  ṃ ṅ ñ ṇ nasal  ·  ś ṣ soft / hard sh  ·  ṛ ri",
     now:"Choose a prayer",
     play:"Play",
@@ -163,6 +163,7 @@ function persistNow(){
   var t=0;
   try{ if(a.src && isFinite(a.currentTime)) t=a.currentTime; }catch(e){}
   putSong(P.id, { line:line, time:t, showDe:showDe, showCh:showCh, lang:lang, steps:steps, autoScroll:autoScroll, scrollTempo:scrollTempo });
+  rememberTempo();
 }
 function isPlaying(){
   if(ytOn) return ytPlaying;
@@ -254,6 +255,8 @@ function paintList(){
     var st=songState(P.id);
     var extra="";
     if(st.time>=5) extra=" · weiter ab "+Math.floor(st.time/60)+":"+String(Math.floor(st.time%60)).padStart(2,"0");
+    var tm=tempoMap()[P.id];
+    if(tm && tm.tempo && Math.abs(tm.tempo-1)>0.001) extra+=" · Scroll ×"+Number(tm.tempo).toFixed(2);
     b.innerHTML=P.titel+"<span class='quelle'>"+P.autor+" · "+P.quelle+extra+"</span>";
     b.onclick=function(){ play(idx, true); };
     box.appendChild(b);
@@ -329,6 +332,7 @@ function play(idx, resume){
   steps=(typeof st.steps==="number")?st.steps:0;
   autoScroll=!!st.autoScroll;
   scrollTempo=(typeof st.scrollTempo==="number" && st.scrollTempo>0.3)?st.scrollTempo:1;
+  restoreTempo(P.id);
   pendingSeek=st.time||0;
   if(P.zeilen.length && pendingSeek && a.duration && pendingSeek>a.duration-4) pendingSeek=0;
   document.getElementById("now").textContent=P.titel;
@@ -340,6 +344,7 @@ function play(idx, resume){
   else if(P.youtube) showYt(P, pendingSeek||P.youtubeStart);
   else if(P.audio) showFile(P);
   putSong(P.id, { line:line, time:pendingSeek||0, showDe:showDe, showCh:showCh, lang:lang, steps:steps, autoScroll:autoScroll, scrollTempo:scrollTempo });
+  rememberTempo();
   paintList(); paintLyrics(); syncPlayBtn(); applyUI();
   try{ document.body.focus(); }catch(e){}
 }
