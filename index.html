@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Bhakti Prayers Player V1.21</title>
+<title>Bhakti Prayers Player V1.22</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gentium+Book+Plus:ital,wght@0,400;0,700;1,400;1,700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
@@ -55,7 +55,7 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:.85rem}
 </head>
 <body tabindex="0">
 <header>
-  <h1>Bhakti Prayers Player <span class="ver">V1.21</span></h1>
+  <h1>Bhakti Prayers Player <span class="ver">V1.22</span></h1>
   <p class="sub" id="sub"></p>
   <p class="legend" id="legend"></p>
 </header>
@@ -88,6 +88,7 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:.85rem}
 <script src="lang-en.js"></script>
 <script src="govinda.js?v=14"></script>
 <script src="kavacham.js"></script>
+<script src="morning-prayers.js"></script>
 <script>
 var i=-1, line=0, showDe=false, showCh=false, lang="de", pendingSeek=0, lastSave=0, ytOn=false, ytPlaying=false;
 var a=document.getElementById("a");
@@ -107,7 +108,7 @@ var UI={
     trOn:"Übersetzung an",
     chOff:"Akkorde aus",
     chOn:"Akkorde an",
-    foot:"Mukunda Mala: Dropbox Mix 12.12.2022. Akkorde aus dem Chords-Heft."
+    foot:"Akkorde: Heft Bhakta Das V6 und Chords-Heft. Ton aus Dropbox, wo vorhanden."
   },
   en:{
     sub:"Play / Pause or Space. N next stanza, V previous. After YouTube, click the lyrics once.",
@@ -121,7 +122,7 @@ var UI={
     trOn:"Translation on",
     chOff:"Chords off",
     chOn:"Chords on",
-    foot:"Mukunda Mala: Dropbox mix 12 Dec 2022. Chords from the chord booklet."
+    foot:"Chords: Bhakta Das booklet V6 and the chord booklet. Audio from Dropbox where available."
   }
 };
 function loadMem(){
