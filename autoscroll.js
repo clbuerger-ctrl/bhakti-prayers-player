@@ -1,5 +1,5 @@
-/* [Grok.com] Auto-Scroll: Datei, YouTube oder Uhr */
-var ytTime=null, ytDur=null, playOrigin=Date.now();
+/* [Grok.com] Auto-Scroll: Datei, YouTube oder Uhr. N/V gibt den Takt. */
+var ytTime=null, ytDur=null, playOrigin=Date.now(), holdLineUntil=0;
 function tempoMap(){
   try{ return JSON.parse(localStorage.getItem("bpp-tempo")||"{}"); }catch(e){ return {}; }
 }
@@ -63,9 +63,32 @@ function songProgress(){
   if(dur<8) dur=est;
   return { t:t, dur:dur, gs:gs, n:n };
 }
+function syncAutoFromLine(){
+  holdLineUntil=Date.now()+1600;
+  if(!autoScroll || i<0) return;
+  var p=songProgress();
+  if(!p) return;
+  var n=currentGroupIndex();
+  if(n<=0){
+    markPlayOrigin();
+    rememberTempo();
+    applyUI();
+    return;
+  }
+  if(p.t<1.2) return;
+  var tempo=(n*p.dur)/(p.t*p.n);
+  if(tempo<0.5) tempo=0.5;
+  if(tempo>1.8) tempo=1.8;
+  scrollTempo=Math.round(tempo*100)/100;
+  rememberTempo();
+  persistNow();
+  applyUI();
+  paintList();
+}
 function autoLineFromTime(){
   if(!autoScroll || i<0) return;
   if(!isPlaying()) return;
+  if(Date.now()<holdLineUntil) return;
   var p=songProgress();
   if(!p) return;
   var pos=(p.t/p.dur)*scrollTempo;
@@ -86,9 +109,6 @@ window.addEventListener("message", function(e){
   if(d.event==="infoDelivery" && d.info){
     if(typeof d.info.currentTime==="number") ytTime=d.info.currentTime;
     if(typeof d.info.duration==="number") ytDur=d.info.duration;
-  }
-  if(typeof d.info==="number" && d.event==="command"){
-    /* ignore */
   }
 });
 setInterval(function(){
