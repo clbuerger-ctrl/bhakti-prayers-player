@@ -36,6 +36,9 @@
       { n:"15", lines:[ L("śrī kṛṣṇa acyuta ananta mukunda śauri"), L("rādhā manohara janārdana cakrapāne"), L("nāmāni divya munai-yurna niśam vadanti"), L("brāhmi muhūrta samaye tava suprabhātam") ] },
       { n:"Schluss ", lines:[ L("śrī kṛṣṇa suprabhātam","D",4), L("ye pathanti aharniśam",""), L("bhūri kṛtān mahā pāpān","G",5), L("śrī kṛṣṇar-graha hetukam","D") ] }
     ]);
+    /* [Grok-Bot] V1.36: Heft notiert Akkorde nur bei Strophe 1, alle Strophen 1–15 haben dieselbe Melodie, daher gleiche Akkorde */
+    var first=s.zeilen.filter(function(z){ return /^1[a-d]$/.test(z.nr); }).map(function(z){ return z.ch; });
+    s.zeilen.forEach(function(z){ var m=String(z.nr).match(/^(\d+)([a-d])$/); if(m && !z.ch) z.ch=first[m[2].charCodeAt(0)-97]||""; });
     s.hinweisDe="Strophen wie im Heft Prathana with chords, Seite 9. Übersetzung bisher nur für Strophe 1 und den Schluss.";
     s.hinweisEn="Stanzas as in the Prathana with chords booklet, page 9. Translation so far only for stanza 1 and the closing.";
   }
