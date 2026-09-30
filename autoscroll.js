@@ -1,18 +1,32 @@
-/* [Grok.com] Auto-Scroll: Datei, YouTube oder Uhr. N/V gibt den Takt. */
+/* [Grok.com] Auto-Scroll: 1. und 2. Tempo, N als Takt, Strophe oben */
 var ytTime=null, ytDur=null, playOrigin=Date.now(), holdLineUntil=0;
+var scrollTempo2=0, splitTime=-1, splitIdx=-1;
 function tempoMap(){
   try{ return JSON.parse(localStorage.getItem("bpp-tempo")||"{}"); }catch(e){ return {}; }
 }
 function rememberTempo(){
   if(i<0 || !PRAYERS[i]) return;
   var m=tempoMap();
-  m[PRAYERS[i].id]={ tempo:scrollTempo, auto:!!autoScroll, at:Date.now() };
+  m[PRAYERS[i].id]={
+    tempo:scrollTempo,
+    tempo2:scrollTempo2,
+    splitTime:splitTime,
+    splitIdx:splitIdx,
+    auto:!!autoScroll,
+    at:Date.now()
+  };
   try{ localStorage.setItem("bpp-tempo", JSON.stringify(m)); }catch(e){}
 }
 function restoreTempo(id){
   var t=tempoMap()[id];
-  if(!t) return false;
+  if(!t){
+    scrollTempo2=0; splitTime=-1; splitIdx=-1;
+    return false;
+  }
   if(typeof t.tempo==="number" && t.tempo>=0.5 && t.tempo<=1.8) scrollTempo=t.tempo;
+  scrollTempo2=(typeof t.tempo2==="number" && t.tempo2>=0.5)?t.tempo2:0;
+  splitTime=(typeof t.splitTime==="number")?t.splitTime:-1;
+  splitIdx=(typeof t.splitIdx==="number")?t.splitIdx:-1;
   autoScroll=!!t.auto;
   return true;
 }
@@ -29,9 +43,18 @@ function toggleAuto(){
   persistNow(); applyUI();
 }
 function shiftScroll(d){
-  scrollTempo=Math.round((scrollTempo+d)*100)/100;
-  if(scrollTempo<0.5) scrollTempo=0.5;
-  if(scrollTempo>1.8) scrollTempo=1.8;
+  var p=songProgress();
+  var inSecond=p && splitTime>=0 && p.t>=splitTime;
+  if(inSecond || scrollTempo2){
+    if(!scrollTempo2) scrollTempo2=scrollTempo;
+    scrollTempo2=Math.round((scrollTempo2+d)*100)/100;
+    if(scrollTempo2<0.5) scrollTempo2=0.5;
+    if(scrollTempo2>2.2) scrollTempo2=2.2;
+  } else {
+    scrollTempo=Math.round((scrollTempo+d)*100)/100;
+    if(scrollTempo<0.5) scrollTempo=0.5;
+    if(scrollTempo>1.8) scrollTempo=1.8;
+  }
   rememberTempo();
   persistNow(); applyUI();
 }
@@ -63,6 +86,12 @@ function songProgress(){
   if(dur<8) dur=est;
   return { t:t, dur:dur, gs:gs, n:n };
 }
+function tempoLabel(){
+  if(scrollTempo2 && splitTime>=0){
+    return "×"+scrollTempo.toFixed(2)+" → ×"+scrollTempo2.toFixed(2);
+  }
+  return "×"+scrollTempo.toFixed(2);
+}
 function syncAutoFromLine(){
   holdLineUntil=Date.now()+1600;
   if(!autoScroll || i<0) return;
@@ -78,12 +107,57 @@ function syncAutoFromLine(){
   if(p.t<1.2) return;
   var tempo=(n*p.dur)/(p.t*p.n);
   if(tempo<0.5) tempo=0.5;
-  if(tempo>1.8) tempo=1.8;
-  scrollTempo=Math.round(tempo*100)/100;
+  if(tempo>2.2) tempo=2.2;
+  tempo=Math.round(tempo*100)/100;
+  if(splitTime<0 && tempo>scrollTempo*1.12 && n>=2){
+    splitTime=p.t;
+    splitIdx=n;
+    scrollTempo2=tempo;
+  } else if(splitTime>=0 && p.t>=splitTime){
+    scrollTempo2=tempo;
+    if(splitIdx<0) splitIdx=n;
+  } else {
+    scrollTempo=tempo;
+  }
   rememberTempo();
   persistNow();
   applyUI();
   paintList();
+}
+function stanzaFromProgress(p){
+  var n=p.n;
+  if(splitTime>=0 && scrollTempo2 && p.t>=splitTime){
+    var leftT=Math.max(p.dur-splitTime, 1);
+    var leftN=Math.max(n-Math.max(splitIdx,0), 1);
+    var frac=((p.t-splitTime)/leftT)*scrollTempo2;
+    if(frac>0.999) frac=0.999;
+    if(frac<0) frac=0;
+    var k=Math.max(splitIdx,0)+Math.floor(frac*leftN);
+    if(k>n-1) k=n-1;
+    return k;
+  }
+  var pos=(p.t/p.dur)*scrollTempo;
+  if(pos>0.999) pos=0.999;
+  if(pos<0) pos=0;
+  var k=Math.floor(pos*n);
+  if(k>n-1) k=n-1;
+  if(k<0) k=0;
+  return k;
+}
+function pinStanza(){
+  var panel=document.getElementById("lyrics");
+  if(!panel) return;
+  var on=panel.querySelector(".stanza.on");
+  if(!on) return;
+  var nxt=on.nextElementSibling;
+  var pr=panel.getBoundingClientRect();
+  var r=on.getBoundingClientRect();
+  var nearBottom=r.bottom>pr.bottom-64;
+  if(nxt && nearBottom){
+    nxt.scrollIntoView({block:"start", behavior:"smooth"});
+  } else {
+    on.scrollIntoView({block:"start", behavior:"smooth"});
+  }
 }
 function autoLineFromTime(){
   if(!autoScroll || i<0) return;
@@ -91,13 +165,8 @@ function autoLineFromTime(){
   if(Date.now()<holdLineUntil) return;
   var p=songProgress();
   if(!p) return;
-  var pos=(p.t/p.dur)*scrollTempo;
-  if(pos>0.999) pos=0.999;
-  if(pos<0) pos=0;
-  var n=Math.floor(pos*p.n);
-  if(n>p.n-1) n=p.n-1;
-  if(n<0) n=0;
-  var start=p.gs[n]?p.gs[n].start:0;
+  var k=stanzaFromProgress(p);
+  var start=p.gs[k]?p.gs[k].start:0;
   if(start!==line){ line=start; paintLyrics(); }
 }
 window.addEventListener("message", function(e){
