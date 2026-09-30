@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Bhakti Prayers Player V1.18</title>
+<title>Bhakti Prayers Player V1.19</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gentium+Book+Plus:ital,wght@0,400;0,700;1,400;1,700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
@@ -53,9 +53,9 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:.85rem}
 @media(max-width:700px){.rowline .sa{font-size:1.08rem;line-height:1.26}.head .ch{font-size:.72rem}}
 </style>
 </head>
-<body>
+<body tabindex="0">
 <header>
-  <h1>Bhakti Prayers Player <span class="ver">V1.18</span></h1>
+  <h1>Bhakti Prayers Player <span class="ver">V1.19</span></h1>
   <p class="sub" id="sub"></p>
   <p class="legend" id="legend"></p>
 </header>
@@ -95,7 +95,7 @@ var yt=document.getElementById("yt");
 var stage=document.getElementById("stage");
 var UI={
   de:{
-    sub:"Datei oder YouTube zum Hören, Sanskrit zum Mitsingen. Strophe anklicken: Akkorde neben der Verszahl. Tasten N / V.",
+    sub:"Datei oder YouTube zum Hören, Sanskrit zum Mitsingen. N nächste Strophe, V vorherige. Nach YouTube einmal in den Text klicken, dann greifen die Tasten.",
     legend:"ā ī ū lang halten  ·  ṃ ṅ ñ ṇ nasal  ·  ś ṣ weiches / hartes sch  ·  ṛ ri",
     now:"Einen Gesang wählen",
     prev:"Vorherige Strophe (V)",
@@ -107,7 +107,7 @@ var UI={
     foot:"Mukunda Mala: Dropbox Mix 12.12.2022. Akkorde aus dem Chords-Heft."
   },
   en:{
-    sub:"File or YouTube to listen, Sanskrit to chant. Click a stanza: chords sit on the verse-number line. Keys N / V.",
+    sub:"File or YouTube to listen, Sanskrit to chant. N next stanza, V previous. After YouTube, click the lyrics once so the keys work.",
     legend:"ā ī ū hold long  ·  ṃ ṅ ñ ṇ nasal  ·  ś ṣ soft / hard sh  ·  ṛ ri",
     now:"Choose a prayer",
     prev:"Previous stanza (V)",
@@ -202,13 +202,13 @@ function stanzaGroups(P){
   });
   return groups;
 }
-function currentGroup(){
-  if(i<0) return null;
+function currentGroupIndex(){
+  if(i<0) return -1;
   var gs=stanzaGroups(PRAYERS[i]);
   for(var g=0;g<gs.length;g++){
-    if(gs[g].idx.indexOf(line)>=0) return gs[g];
+    if(gs[g].idx.indexOf(line)>=0) return g;
   }
-  return gs[0]||null;
+  return 0;
 }
 function paintList(){
   var box=document.getElementById("list");
@@ -288,20 +288,19 @@ function play(idx, resume){
   else if(P.audio) showFile(P);
   putSong(P.id, { line:line, time:pendingSeek||0, showDe:showDe, showCh:showCh, lang:lang });
   paintList(); paintLyrics();
+  try{ document.body.focus(); }catch(e){}
 }
 function nextLine(){
   if(i<0) return;
   var gs=stanzaGroups(PRAYERS[i]);
-  var g=currentGroup();
-  var n=gs.indexOf(g);
-  if(n<gs.length-1) line=gs[n+1].start;
+  var n=currentGroupIndex();
+  if(n>=0 && n<gs.length-1) line=gs[n+1].start;
   persistNow(); paintLyrics();
 }
 function prevLine(){
   if(i<0) return;
   var gs=stanzaGroups(PRAYERS[i]);
-  var g=currentGroup();
-  var n=gs.indexOf(g);
+  var n=currentGroupIndex();
   if(n>0) line=gs[n-1].start;
   persistNow(); paintLyrics();
 }
@@ -318,6 +317,15 @@ function toggleCh(){
   applyUI();
   try{ localStorage.setItem("bpp-ch", showCh?"1":"0"); }catch(e){}
   persistNow();
+}
+function onKey(e){
+  if(e.ctrlKey || e.altKey || e.metaKey) return;
+  var t=e.target;
+  if(t && (t.tagName==="INPUT" || t.tagName==="TEXTAREA" || t.isContentEditable)) return;
+  var code=e.code||"";
+  var k=(e.key||"").toLowerCase();
+  if(code==="KeyN" || k==="n"){ e.preventDefault(); nextLine(); }
+  if(code==="KeyV" || k==="v"){ e.preventDefault(); prevLine(); }
 }
 a.addEventListener("loadedmetadata", function(){
   if(pendingSeek>=3 && isFinite(a.duration) && pendingSeek<a.duration-4){
@@ -337,14 +345,9 @@ a.addEventListener("ended", function(){
 });
 document.addEventListener("visibilitychange", function(){ if(document.hidden) persistNow(); });
 window.addEventListener("pagehide", persistNow);
-document.addEventListener("keydown", function(e){
-  if(e.ctrlKey || e.altKey || e.metaKey) return;
-  var t=e.target;
-  if(t && (t.tagName==="INPUT" || t.tagName==="TEXTAREA" || t.isContentEditable)) return;
-  var k=e.key.toLowerCase();
-  if(k==="n"){ e.preventDefault(); nextLine(); }
-  if(k==="v"){ e.preventDefault(); prevLine(); }
-});
+document.addEventListener("keydown", onKey, true);
+window.addEventListener("keydown", onKey);
+document.getElementById("lyrics").addEventListener("click", function(){ try{ document.body.focus(); }catch(e){} });
 try{ if(localStorage.getItem("bpp-lang")==="en") lang="en"; }catch(e){}
 try{ if(localStorage.getItem("bpp-de")==="1"){ showDe=true; document.body.classList.add("show-de"); } }catch(e){}
 try{ if(localStorage.getItem("bpp-ch")==="1"){ showCh=true; document.body.classList.add("show-ch"); } }catch(e){}
