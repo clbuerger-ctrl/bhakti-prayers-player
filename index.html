@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Bhakti Prayers Player V1.20</title>
+<title>Bhakti Prayers Player V1.21</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gentium+Book+Plus:ital,wght@0,400;0,700;1,400;1,700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
@@ -55,7 +55,7 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:.85rem}
 </head>
 <body tabindex="0">
 <header>
-  <h1>Bhakti Prayers Player <span class="ver">V1.20</span></h1>
+  <h1>Bhakti Prayers Player <span class="ver">V1.21</span></h1>
   <p class="sub" id="sub"></p>
   <p class="legend" id="legend"></p>
 </header>
@@ -63,8 +63,9 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:.85rem}
   <div class="now" id="now"></div>
   <audio id="a" controls preload="none" playsinline></audio>
   <div class="row">
+    <button type="button" class="gold" id="btnPlay" onclick="togglePlay()"></button>
     <button type="button" id="btnPrev" onclick="prevLine()"></button>
-    <button type="button" class="gold" id="btnNext" onclick="nextLine()"></button>
+    <button type="button" id="btnNext" onclick="nextLine()"></button>
     <button type="button" id="btnDe" onclick="toggleDe()"></button>
     <button type="button" id="btnCh" onclick="toggleCh()"></button>
     <div class="lang">
@@ -88,16 +89,18 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:.85rem}
 <script src="govinda.js?v=14"></script>
 <script src="kavacham.js"></script>
 <script>
-var i=-1, line=0, showDe=false, showCh=false, lang="de", pendingSeek=0, lastSave=0;
+var i=-1, line=0, showDe=false, showCh=false, lang="de", pendingSeek=0, lastSave=0, ytOn=false, ytPlaying=false;
 var a=document.getElementById("a");
 var ytBox=document.getElementById("ytBox");
 var yt=document.getElementById("yt");
 var stage=document.getElementById("stage");
 var UI={
   de:{
-    sub:"Datei oder YouTube zum Hören, Sanskrit zum Mitsingen. N nächste Strophe, V vorherige. Nach YouTube einmal in den Text klicken, dann greifen die Tasten.",
+    sub:"Play / Pause oder Leertaste. N nächste Strophe, V vorherige. Nach YouTube einmal in den Text klicken.",
     legend:"ā ī ū lang halten  ·  ṃ ṅ ñ ṇ nasal  ·  ś ṣ weiches / hartes sch  ·  ṛ ri",
     now:"Einen Gesang wählen",
+    play:"Play",
+    pause:"Pause",
     prev:"Vorherige Strophe (V)",
     next:"Nächste Strophe (N)",
     trOff:"Übersetzung aus",
@@ -107,9 +110,11 @@ var UI={
     foot:"Mukunda Mala: Dropbox Mix 12.12.2022. Akkorde aus dem Chords-Heft."
   },
   en:{
-    sub:"File or YouTube to listen, Sanskrit to chant. N next stanza, V previous. After YouTube, click the lyrics once so the keys work.",
+    sub:"Play / Pause or Space. N next stanza, V previous. After YouTube, click the lyrics once.",
     legend:"ā ī ū hold long  ·  ṃ ṅ ñ ṇ nasal  ·  ś ṣ soft / hard sh  ·  ṛ ri",
     now:"Choose a prayer",
+    play:"Play",
+    pause:"Pause",
     prev:"Previous stanza (V)",
     next:"Next stanza (N)",
     trOff:"Translation off",
@@ -146,6 +151,17 @@ function persistNow(){
   try{ if(a.src && isFinite(a.currentTime)) t=a.currentTime; }catch(e){}
   putSong(P.id, { line:line, time:t, showDe:showDe, showCh:showCh, lang:lang });
 }
+function isPlaying(){
+  if(ytOn) return ytPlaying;
+  return !!(a.src && !a.paused && !a.ended);
+}
+function syncPlayBtn(){
+  var u=UI[lang];
+  var b=document.getElementById("btnPlay");
+  var on=isPlaying();
+  b.textContent=on?u.pause:u.play;
+  b.classList.toggle("on", on);
+}
 function applyUI(){
   var u=UI[lang];
   document.documentElement.lang=lang;
@@ -158,6 +174,7 @@ function applyUI(){
   document.getElementById("btnLangDe").classList.toggle("on", lang==="de");
   document.getElementById("btnLangEn").classList.toggle("on", lang==="en");
   document.getElementById("foot").textContent=u.foot;
+  syncPlayBtn();
   if(i<0) document.getElementById("now").textContent=u.now;
   else {
     var P=PRAYERS[i];
@@ -252,14 +269,23 @@ function paintLyrics(){
     el.onclick=function(){ line=parseInt(el.getAttribute("data-start"),10); persistNow(); paintLyrics(); };
   });
 }
+function ytCmd(fn){
+  try{
+    yt.contentWindow.postMessage(JSON.stringify({event:"command",func:fn,args:[]}),"*");
+  }catch(e){}
+}
 function showYt(P, startSec){
+  a.pause();
   a.style.display="none";
+  ytOn=true; ytPlaying=true;
   ytBox.classList.add("on");
   stage.classList.add("has-yt");
   var start=Math.floor(startSec||P.youtubeStart||0);
-  yt.src="https://www.youtube.com/embed/"+P.youtube+"?rel=0&modestbranding=1"+(start?("&start="+start):"");
+  yt.src="https://www.youtube.com/embed/"+P.youtube+"?rel=0&modestbranding=1&enablejsapi=1"+(start?("&start="+start):"");
+  syncPlayBtn();
 }
 function showFile(P){
+  ytOn=false; ytPlaying=false;
   ytBox.classList.remove("on");
   stage.classList.remove("has-yt");
   yt.src="";
@@ -268,7 +294,22 @@ function showFile(P){
     if(P.youtube) showYt(P, pendingSeek||P.youtubeStart);
   };
   a.src=P.audio;
-  a.play().catch(function(){});
+  a.play().then(syncPlayBtn).catch(function(){ syncPlayBtn(); });
+}
+function togglePlay(){
+  if(i<0) return;
+  if(ytOn){
+    if(ytPlaying){ ytCmd("pauseVideo"); ytPlaying=false; }
+    else { ytCmd("playVideo"); ytPlaying=true; }
+    syncPlayBtn();
+    return;
+  }
+  if(!a.src){
+    var P=PRAYERS[i];
+    if(P && P.audio){ showFile(P); return; }
+  }
+  if(a.paused) a.play().then(syncPlayBtn).catch(function(){ syncPlayBtn(); });
+  else { a.pause(); persistNow(); syncPlayBtn(); }
 }
 function play(idx, resume){
   persistNow();
@@ -287,7 +328,7 @@ function play(idx, resume){
   else if(P.youtube) showYt(P, pendingSeek||P.youtubeStart);
   else if(P.audio) showFile(P);
   putSong(P.id, { line:line, time:pendingSeek||0, showDe:showDe, showCh:showCh, lang:lang });
-  paintList(); paintLyrics();
+  paintList(); paintLyrics(); syncPlayBtn();
   try{ document.body.focus(); }catch(e){}
 }
 function nextLine(){
@@ -324,6 +365,7 @@ function onKey(e){
   if(t && (t.tagName==="INPUT" || t.tagName==="TEXTAREA" || t.isContentEditable)) return;
   var code=e.code||"";
   var k=(e.key||"").toLowerCase();
+  if(code==="Space" || k===" "){ e.preventDefault(); togglePlay(); return; }
   if(code==="KeyN" || k==="n"){ e.preventDefault(); nextLine(); }
   if(code==="KeyV" || k==="v"){ e.preventDefault(); prevLine(); }
 }
@@ -331,17 +373,21 @@ a.addEventListener("loadedmetadata", function(){
   if(pendingSeek>=3 && isFinite(a.duration) && pendingSeek<a.duration-4){
     try{ a.currentTime=pendingSeek; }catch(e){}
   }
+  syncPlayBtn();
 });
+a.addEventListener("play", syncPlayBtn);
+a.addEventListener("playing", syncPlayBtn);
+a.addEventListener("pause", function(){ persistNow(); syncPlayBtn(); });
 a.addEventListener("timeupdate", function(){
   var now=Date.now();
   if(now-lastSave<2500) return;
   lastSave=now;
   persistNow();
 });
-a.addEventListener("pause", persistNow);
 a.addEventListener("ended", function(){
   if(i<0) return;
   putSong(PRAYERS[i].id, { time:0 });
+  syncPlayBtn();
 });
 document.addEventListener("visibilitychange", function(){ if(document.hidden) persistNow(); });
 window.addEventListener("pagehide", persistNow);
