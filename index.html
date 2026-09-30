@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Bhakti Prayers Player V1.26</title>
+<title>Bhakti Prayers Player V1.27</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gentium+Book+Plus:ital,wght@0,400;0,700;1,400;1,700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
@@ -55,7 +55,7 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:.85rem}
 </head>
 <body tabindex="0">
 <header>
-  <h1>Bhakti Prayers Player <span class="ver">V1.26</span></h1>
+  <h1>Bhakti Prayers Player <span class="ver">V1.27</span></h1>
   <p class="sub" id="sub"></p>
   <p class="legend" id="legend"></p>
 </header>
@@ -100,7 +100,7 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:.85rem}
 <script src="kavacham.js"></script>
 <script src="morning-prayers.js"></script>
 <script src="transpose.js"></script>
-<script src="autoscroll.js?v=26"></script>
+<script src="autoscroll.js?v=27"></script>
 <script>
 var i=-1, line=0, showDe=false, showCh=false, lang="de", pendingSeek=0, lastSave=0, ytOn=false, ytPlaying=false, steps=0, autoScroll=false, scrollTempo=1;
 var a=document.getElementById("a");
@@ -109,7 +109,7 @@ var yt=document.getElementById("yt");
 var stage=document.getElementById("stage");
 var UI={
   de:{
-    sub:"Play / Pause oder Leertaste. N und V eine Strophe. Auto folgt dem Tempo der Aufnahme. Scroll − / + bleibt je Song gespeichert.",
+    sub:"Play / Pause oder Leertaste. N und V eine Strophe — auch bei Auto. N im Gesang setzt das Scrolltempo.",
     legend:"ā ī ū lang halten  ·  ṃ ṅ ñ ṇ nasal  ·  ś ṣ weiches / hartes sch  ·  ṛ ri",
     now:"Einen Gesang wählen",
     play:"Play",
@@ -123,7 +123,7 @@ var UI={
     foot:"Akkorde: Heft Sri Vitthal Dham. Ton aus Dropbox, wo vorhanden."
   },
   en:{
-    sub:"Play / Pause or Space. N and V one stanza. Auto follows the recording. Scroll − / + is stored per song.",
+    sub:"Play / Pause or Space. N and V one stanza, also during Auto. N during singing sets the scroll tempo.",
     legend:"ā ī ū hold long  ·  ṃ ṅ ñ ṇ nasal  ·  ś ṣ soft / hard sh  ·  ṛ ri",
     now:"Choose a prayer",
     play:"Play",
@@ -286,7 +286,7 @@ function paintLyrics(){
   var on=box.querySelector(".stanza.on");
   if(on) on.scrollIntoView({block:"nearest",behavior:"smooth"});
   box.querySelectorAll(".stanza").forEach(function(el){
-    el.onclick=function(){ line=parseInt(el.getAttribute("data-start"),10); persistNow(); paintLyrics(); };
+    el.onclick=function(){ line=parseInt(el.getAttribute("data-start"),10); persistNow(); paintLyrics(); syncAutoFromLine(); };
   });
 }
 function ytCmd(fn){
@@ -357,6 +357,7 @@ function nextLine(){
   var n=currentGroupIndex();
   if(n>=0 && n<gs.length-1) line=gs[n+1].start;
   persistNow(); paintLyrics();
+  syncAutoFromLine();
 }
 function prevLine(){
   if(i<0) return;
@@ -364,6 +365,7 @@ function prevLine(){
   var n=currentGroupIndex();
   if(n>0) line=gs[n-1].start;
   persistNow(); paintLyrics();
+  syncAutoFromLine();
 }
 function shiftSteps(d, reset){
   if(reset) steps=0; else steps+=d;
