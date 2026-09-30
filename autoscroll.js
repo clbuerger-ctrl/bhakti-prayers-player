@@ -1,12 +1,30 @@
-/* [Grok.com] Auto-Scroll folgt der Aufnahmelänge */
+/* [Grok.com] Auto-Scroll und Tempo je Song merken */
+function tempoMap(){
+  try{ return JSON.parse(localStorage.getItem("bpp-tempo")||"{}"); }catch(e){ return {}; }
+}
+function rememberTempo(){
+  if(i<0 || !PRAYERS[i]) return;
+  var m=tempoMap();
+  m[PRAYERS[i].id]={ tempo:scrollTempo, auto:!!autoScroll, at:Date.now() };
+  try{ localStorage.setItem("bpp-tempo", JSON.stringify(m)); }catch(e){}
+}
+function restoreTempo(id){
+  var t=tempoMap()[id];
+  if(!t) return false;
+  if(typeof t.tempo==="number" && t.tempo>=0.5 && t.tempo<=1.8) scrollTempo=t.tempo;
+  autoScroll=!!t.auto;
+  return true;
+}
 function toggleAuto(){
   autoScroll=!autoScroll;
+  rememberTempo();
   persistNow(); applyUI();
 }
 function shiftScroll(d){
   scrollTempo=Math.round((scrollTempo+d)*100)/100;
   if(scrollTempo<0.5) scrollTempo=0.5;
   if(scrollTempo>1.8) scrollTempo=1.8;
+  rememberTempo();
   persistNow(); applyUI();
 }
 function autoLineFromTime(){
