@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Bhakti Prayers Player V1.17</title>
+<title>Bhakti Prayers Player V1.18</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gentium+Book+Plus:ital,wght@0,400;0,700;1,400;1,700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
@@ -55,7 +55,7 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:.85rem}
 </head>
 <body>
 <header>
-  <h1>Bhakti Prayers Player <span class="ver">V1.17</span></h1>
+  <h1>Bhakti Prayers Player <span class="ver">V1.18</span></h1>
   <p class="sub" id="sub"></p>
   <p class="legend" id="legend"></p>
 </header>
@@ -177,10 +177,18 @@ function lineText(z){
 function stanzaKey(nr){
   nr=String(nr||"");
   if(/^Refrain/i.test(nr)) return "Refrain";
-  var m=nr.match(/^(\d+)/);
+  var m=nr.match(/(\d+)/);
   if(m) return m[1];
-  m=nr.match(/^([^\s\d]+)/);
+  m=nr.match(/^([^\s]+)/);
   return m?m[1]:nr;
+}
+function uniqueChords(list){
+  var out=[], last="";
+  list.forEach(function(c){
+    var t=String(c).replace(/\s+/g," ").trim();
+    if(t && t!==last){ out.push(t); last=t; }
+  });
+  return out;
 }
 function stanzaGroups(P){
   var groups=[], cur=null;
@@ -227,6 +235,7 @@ function paintLyrics(){
     var verse=/^\d+$/.test(g.key)?g.key:"";
     var chs=[];
     g.idx.forEach(function(n){ if(P.zeilen[n].ch) chs.push(P.zeilen[n].ch); });
+    chs=uniqueChords(chs);
     var head="";
     if(verse || chs.length){
       head="<div class='head'>"+(verse?"<span class='vn'>"+verse+"</span>":"")+(chs.length?"<span class='ch'>"+chs.join("   ")+"</span>":"")+"</div>";
