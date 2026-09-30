@@ -3,9 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Bhakti Prayers Player V1.34</title>
+<title>Bhakti Prayers Player V1.35</title>
 <!-- [Grok-Bot] V1.32: aktuelle Strophe deutlich markiert; N/V bleiben bei Auto stehen; Tasten N/V/Leertaste gehen auch nach Klick ins YouTube-Video -->
 <!-- [Grok-Bot] V1.33: Govinda-Refrain wird mit der Strophe davor angezeigt und gescrollt; fehlender Refrain nach Strophe 4 ergänzt -->
+<!-- [Grok-Bot] V1.35: kompakte Buttons in zwei Gruppen, kleineres YouTube-Fenster, höhere Lyrics-Fläche -->
 <!-- [Grok-Bot] V1.34: Suprabhatam und Nrsimha Prayer strophenweise wie im Prathana-Heft (verses.js), fehlende Strophen ergaenzt -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -61,11 +62,25 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:.85rem}
 #lyrics.cols-2 .rowline .sa,#lyrics.cols-3 .rowline .sa{font-size:1rem;line-height:1.2}
 #lyrics.cols-3 .head .ch{font-size:.7rem}
 @media(max-width:700px){.rowline .sa{font-size:1.08rem;line-height:1.26}.head .ch{font-size:.72rem}}
+/* [Grok-Bot] V1.35: kompakte Bedienleiste (Buttons etwa halb so groß) und kleineres YouTube, mehr Platz für die Lyrics */
+.bar{padding:4px 8px}
+.now{padding:0 0 3px;font-size:.9rem}
+audio{height:30px}
+.row{gap:4px;margin-top:4px}
+.bar button{padding:3px 7px;min-height:26px;font-size:.8rem;border-radius:6px}
+.lang{gap:3px}
+.lang button{min-width:32px;padding:3px 6px}
+#xpLab{min-width:3em!important;font-size:.78rem!important}
+#scLab{min-width:2.8em!important;font-size:.75rem!important}
+.bar .sep{width:1px;align-self:stretch;background:#3d2f26;margin:0 2px}
+#ytBox{width:min(100%,300px);justify-self:center}
+@media(min-width:900px){.stage.has-yt{grid-template-columns:minmax(200px,26%) 1fr}#ytBox{width:100%}}
+.panel{max-height:78vh}
 </style>
 </head>
 <body tabindex="0">
 <header>
-  <h1>Bhakti Prayers Player <span class="ver">V1.34</span></h1>
+  <h1>Bhakti Prayers Player <span class="ver">V1.35</span></h1>
   <p class="sub" id="sub"></p>
   <p class="legend" id="legend"></p>
 </header>
@@ -76,18 +91,19 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:.85rem}
     <button type="button" class="gold" id="btnPlay" onclick="togglePlay()"></button>
     <button type="button" id="btnPrev" onclick="prevLine()"></button>
     <button type="button" id="btnNext" onclick="nextLine()"></button>
+    <button type="button" id="btnAuto" onclick="toggleAuto()"></button>
+    <button type="button" id="btnScDown" onclick="shiftScroll(-0.05)">−</button>
+    <span id="scLab" style="min-width:3.2em;text-align:center;color:#e8c57a;font-size:.85rem"></span>
+    <button type="button" id="btnScUp" onclick="shiftScroll(0.05)">+</button>
+    <span class="sep"></span>
     <button type="button" id="btnDe" onclick="toggleDe()"></button>
     <button type="button" id="btnCh" onclick="toggleCh()"></button>
     <span id="xpBox" style="display:flex;gap:4px;align-items:center">
-      <button type="button" id="btnXpDown" onclick="shiftSteps(-1)">−</button>
+      <button type="button" id="btnXpDown" onclick="shiftSteps(-1)">♭</button>
       <span id="xpLab" style="min-width:4.4em;text-align:center;color:#e8c57a;font-size:.9rem"></span>
-      <button type="button" id="btnXpUp" onclick="shiftSteps(1)">+</button>
+      <button type="button" id="btnXpUp" onclick="shiftSteps(1)">♯</button>
       <button type="button" id="btnXpZero" onclick="shiftSteps(0,true)">0</button>
     </span>
-    <button type="button" id="btnAuto" onclick="toggleAuto()"></button>
-    <button type="button" id="btnScDown" onclick="shiftScroll(-0.05)">Scroll −</button>
-    <span id="scLab" style="min-width:3.2em;text-align:center;color:#e8c57a;font-size:.85rem"></span>
-    <button type="button" id="btnScUp" onclick="shiftScroll(0.05)">Scroll +</button>
     <div class="lang">
       <button type="button" id="btnLangDe" onclick="setLang('de')">DE</button>
       <button type="button" id="btnLangEn" onclick="setLang('en')">EN</button>
@@ -111,7 +127,7 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:.85rem}
 <script src="morning-prayers.js"></script>
 <script src="verses.js?v=34"></script>
 <script src="transpose.js"></script>
-<script src="autoscroll.js?v=34"></script>
+<script src="autoscroll.js?v=35"></script>
 <script>
 var i=-1, line=0, showDe=false, showCh=false, lang="de", pendingSeek=0, lastSave=0, ytOn=false, ytPlaying=false, steps=0, autoScroll=false, scrollTempo=1;
 var a=document.getElementById("a");
@@ -125,12 +141,12 @@ var UI={
     now:"Einen Gesang wählen",
     play:"Play",
     pause:"Pause",
-    prev:"Vorherige Strophe (V)",
-    next:"Nächste Strophe (N)",
-    trOff:"Übersetzung aus",
-    trOn:"Übersetzung an",
-    chOff:"Akkorde aus",
-    chOn:"Akkorde an",
+    prev:"◀ V",
+    next:"N ▶",
+    trOff:"Übers. aus",
+    trOn:"Übers. an",
+    chOff:"Akk. aus",
+    chOn:"Akk. an",
     foot:"Akkorde: Heft Sri Vitthal Dham. Ton aus Dropbox, wo vorhanden."
   },
   en:{
@@ -139,10 +155,10 @@ var UI={
     now:"Choose a prayer",
     play:"Play",
     pause:"Pause",
-    prev:"Previous stanza (V)",
-    next:"Next stanza (N)",
-    trOff:"Translation off",
-    trOn:"Translation on",
+    prev:"◀ V",
+    next:"N ▶",
+    trOff:"Transl. off",
+    trOn:"Transl. on",
     chOff:"Chords off",
     chOn:"Chords on",
     foot:"Chords: Sri Vitthal Dham booklet. Audio from Dropbox where available."
