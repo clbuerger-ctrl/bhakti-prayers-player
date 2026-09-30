@@ -1,6 +1,8 @@
 /* [Grok.com] Auto-Scroll: 1. und 2. Tempo, N als Takt, Strophe oben */
 var ytTime=null, ytDur=null, playOrigin=Date.now(), holdLineUntil=0;
 var scrollTempo2=0, splitTime=-1, splitIdx=-1;
+/* [Grok-Bot] V1.32: manualShift = Versatz in Strophen, den N/V bei Auto gesetzt haben (sonst sprang Auto zurück) */
+var manualShift=0;
 function tempoMap(){
   try{ return JSON.parse(localStorage.getItem("bpp-tempo")||"{}"); }catch(e){ return {}; }
 }
@@ -99,12 +101,13 @@ function syncAutoFromLine(){
   if(!p) return;
   var n=currentGroupIndex();
   if(n<=0){
+    manualShift=0; /* [Grok-Bot] V1.32 */
     markPlayOrigin();
     rememberTempo();
     applyUI();
     return;
   }
-  if(p.t<1.2) return;
+  if(p.t<1.2){ keepManual(p,n); return; }
   var tempo=(n*p.dur)/(p.t*p.n);
   if(tempo<0.5) tempo=0.5;
   if(tempo>2.2) tempo=2.2;
@@ -119,10 +122,17 @@ function syncAutoFromLine(){
   } else {
     scrollTempo=tempo;
   }
+  keepManual(p,n);
   rememberTempo();
   persistNow();
   applyUI();
   paintList();
+}
+/* [Grok-Bot] V1.32: gewählte Strophe bleibt, Auto läuft von dort weiter */
+function keepManual(p,n){
+  manualShift=0;
+  var k=stanzaFromProgress(p);
+  manualShift=n-k;
 }
 function stanzaFromProgress(p){
   var n=p.n;
@@ -165,7 +175,9 @@ function autoLineFromTime(){
   if(Date.now()<holdLineUntil) return;
   var p=songProgress();
   if(!p) return;
-  var k=stanzaFromProgress(p);
+  var k=stanzaFromProgress(p)+manualShift; /* [Grok-Bot] V1.32 */
+  if(k<0) k=0;
+  if(k>p.n-1) k=p.n-1;
   var start=p.gs[k]?p.gs[k].start:0;
   if(start!==line){ line=start; paintLyrics(); }
 }
