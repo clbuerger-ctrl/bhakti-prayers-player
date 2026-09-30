@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Bhakti Prayers Player V1.22</title>
+<title>Bhakti Prayers Player V1.23</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gentium+Book+Plus:ital,wght@0,400;0,700;1,400;1,700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
@@ -55,7 +55,7 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:.85rem}
 </head>
 <body tabindex="0">
 <header>
-  <h1>Bhakti Prayers Player <span class="ver">V1.22</span></h1>
+  <h1>Bhakti Prayers Player <span class="ver">V1.23</span></h1>
   <p class="sub" id="sub"></p>
   <p class="legend" id="legend"></p>
 </header>
@@ -68,6 +68,12 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:.85rem}
     <button type="button" id="btnNext" onclick="nextLine()"></button>
     <button type="button" id="btnDe" onclick="toggleDe()"></button>
     <button type="button" id="btnCh" onclick="toggleCh()"></button>
+    <span id="xpBox" style="display:flex;gap:4px;align-items:center">
+      <button type="button" id="btnXpDown" onclick="shiftSteps(-1)">−</button>
+      <span id="xpLab" style="min-width:4.4em;text-align:center;color:#e8c57a;font-size:.9rem"></span>
+      <button type="button" id="btnXpUp" onclick="shiftSteps(1)">+</button>
+      <button type="button" id="btnXpZero" onclick="shiftSteps(0,true)">0</button>
+    </span>
     <div class="lang">
       <button type="button" id="btnLangDe" onclick="setLang('de')">DE</button>
       <button type="button" id="btnLangEn" onclick="setLang('en')">EN</button>
@@ -89,15 +95,16 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:.85rem}
 <script src="govinda.js?v=14"></script>
 <script src="kavacham.js"></script>
 <script src="morning-prayers.js"></script>
+<script src="transpose.js"></script>
 <script>
-var i=-1, line=0, showDe=false, showCh=false, lang="de", pendingSeek=0, lastSave=0, ytOn=false, ytPlaying=false;
+var i=-1, line=0, showDe=false, showCh=false, lang="de", pendingSeek=0, lastSave=0, ytOn=false, ytPlaying=false, steps=0;
 var a=document.getElementById("a");
 var ytBox=document.getElementById("ytBox");
 var yt=document.getElementById("yt");
 var stage=document.getElementById("stage");
 var UI={
   de:{
-    sub:"Play / Pause oder Leertaste. N nächste Strophe, V vorherige. Nach YouTube einmal in den Text klicken.",
+    sub:"Play / Pause oder Leertaste. − / + transponiert die Akkorde des Stücks. N und V Strophen.",
     legend:"ā ī ū lang halten  ·  ṃ ṅ ñ ṇ nasal  ·  ś ṣ weiches / hartes sch  ·  ṛ ri",
     now:"Einen Gesang wählen",
     play:"Play",
@@ -108,10 +115,10 @@ var UI={
     trOn:"Übersetzung an",
     chOff:"Akkorde aus",
     chOn:"Akkorde an",
-    foot:"Akkorde: Heft Bhakta Das V6 und Chords-Heft. Ton aus Dropbox, wo vorhanden."
+    foot:"Akkorde: Heft Sri Vitthal Dham. Ton aus Dropbox, wo vorhanden."
   },
   en:{
-    sub:"Play / Pause or Space. N next stanza, V previous. After YouTube, click the lyrics once.",
+    sub:"Play / Pause or Space. − / + transpose this song. N and V change stanza.",
     legend:"ā ī ū hold long  ·  ṃ ṅ ñ ṇ nasal  ·  ś ṣ soft / hard sh  ·  ṛ ri",
     now:"Choose a prayer",
     play:"Play",
@@ -122,7 +129,7 @@ var UI={
     trOn:"Translation on",
     chOff:"Chords off",
     chOn:"Chords on",
-    foot:"Chords: Bhakta Das booklet V6 and the chord booklet. Audio from Dropbox where available."
+    foot:"Chords: Sri Vitthal Dham booklet. Audio from Dropbox where available."
   }
 };
 function loadMem(){
@@ -150,7 +157,7 @@ function persistNow(){
   var P=PRAYERS[i];
   var t=0;
   try{ if(a.src && isFinite(a.currentTime)) t=a.currentTime; }catch(e){}
-  putSong(P.id, { line:line, time:t, showDe:showDe, showCh:showCh, lang:lang });
+  putSong(P.id, { line:line, time:t, showDe:showDe, showCh:showCh, lang:lang, steps:steps });
 }
 function isPlaying(){
   if(ytOn) return ytPlaying;
@@ -172,6 +179,7 @@ function applyUI(){
   document.getElementById("btnNext").textContent=u.next;
   document.getElementById("btnDe").textContent=showDe?u.trOn:u.trOff;
   document.getElementById("btnCh").textContent=showCh?u.chOn:u.chOff;
+  document.getElementById("xpLab").textContent=steps===0?(lang==="de"?"Tonart":"Key"):((steps>0?"+":"")+steps);
   document.getElementById("btnLangDe").classList.toggle("on", lang==="de");
   document.getElementById("btnLangEn").classList.toggle("on", lang==="en");
   document.getElementById("foot").textContent=u.foot;
@@ -252,7 +260,7 @@ function paintLyrics(){
     var on=g.idx.indexOf(line)>=0;
     var verse=/^\d+$/.test(g.key)?g.key:"";
     var chs=[];
-    g.idx.forEach(function(n){ if(P.zeilen[n].ch) chs.push(P.zeilen[n].ch); });
+    g.idx.forEach(function(n){ if(P.zeilen[n].ch) chs.push(shiftChordLine(P.zeilen[n].ch, steps)); });
     chs=uniqueChords(chs);
     var head="";
     if(verse || chs.length){
@@ -318,6 +326,7 @@ function play(idx, resume){
   var P=PRAYERS[i];
   var st=resume?songState(P.id):{};
   line=Math.min(st.line||0, Math.max(0, P.zeilen.length-1));
+  steps=(typeof st.steps==="number")?st.steps:0;
   pendingSeek=st.time||0;
   if(P.zeilen.length && pendingSeek && a.duration && pendingSeek>a.duration-4) pendingSeek=0;
   document.getElementById("now").textContent=P.titel;
@@ -328,8 +337,8 @@ function play(idx, resume){
   if(P.preferFile && P.audio) showFile(P);
   else if(P.youtube) showYt(P, pendingSeek||P.youtubeStart);
   else if(P.audio) showFile(P);
-  putSong(P.id, { line:line, time:pendingSeek||0, showDe:showDe, showCh:showCh, lang:lang });
-  paintList(); paintLyrics(); syncPlayBtn();
+  putSong(P.id, { line:line, time:pendingSeek||0, showDe:showDe, showCh:showCh, lang:lang, steps:steps });
+  paintList(); paintLyrics(); syncPlayBtn(); applyUI();
   try{ document.body.focus(); }catch(e){}
 }
 function nextLine(){
@@ -345,6 +354,14 @@ function prevLine(){
   var n=currentGroupIndex();
   if(n>0) line=gs[n-1].start;
   persistNow(); paintLyrics();
+}
+function shiftSteps(d, reset){
+  if(reset) steps=0;
+  else steps+=d;
+  if(steps>11) steps-=12;
+  if(steps<-11) steps+=12;
+  if(!showCh){ showCh=true; document.body.classList.add("show-ch"); }
+  persistNow(); applyUI(); paintLyrics();
 }
 function toggleDe(){
   showDe=!showDe;
