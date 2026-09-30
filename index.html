@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Bhakti Prayers Player V1.23</title>
+<title>Bhakti Prayers Player V1.24</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gentium+Book+Plus:ital,wght@0,400;0,700;1,400;1,700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
@@ -55,7 +55,7 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:.85rem}
 </head>
 <body tabindex="0">
 <header>
-  <h1>Bhakti Prayers Player <span class="ver">V1.23</span></h1>
+  <h1>Bhakti Prayers Player <span class="ver">V1.24</span></h1>
   <p class="sub" id="sub"></p>
   <p class="legend" id="legend"></p>
 </header>
@@ -74,6 +74,10 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:.85rem}
       <button type="button" id="btnXpUp" onclick="shiftSteps(1)">+</button>
       <button type="button" id="btnXpZero" onclick="shiftSteps(0,true)">0</button>
     </span>
+    <button type="button" id="btnAuto" onclick="toggleAuto()"></button>
+    <button type="button" id="btnScDown" onclick="shiftScroll(-0.05)">Scroll −</button>
+    <span id="scLab" style="min-width:3.2em;text-align:center;color:#e8c57a;font-size:.85rem"></span>
+    <button type="button" id="btnScUp" onclick="shiftScroll(0.05)">Scroll +</button>
     <div class="lang">
       <button type="button" id="btnLangDe" onclick="setLang('de')">DE</button>
       <button type="button" id="btnLangEn" onclick="setLang('en')">EN</button>
@@ -96,15 +100,16 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:.85rem}
 <script src="kavacham.js"></script>
 <script src="morning-prayers.js"></script>
 <script src="transpose.js"></script>
+<script src="autoscroll.js"></script>
 <script>
-var i=-1, line=0, showDe=false, showCh=false, lang="de", pendingSeek=0, lastSave=0, ytOn=false, ytPlaying=false, steps=0;
+var i=-1, line=0, showDe=false, showCh=false, lang="de", pendingSeek=0, lastSave=0, ytOn=false, ytPlaying=false, steps=0, autoScroll=false, scrollTempo=1;
 var a=document.getElementById("a");
 var ytBox=document.getElementById("ytBox");
 var yt=document.getElementById("yt");
 var stage=document.getElementById("stage");
 var UI={
   de:{
-    sub:"Play / Pause oder Leertaste. − / + transponiert die Akkorde des Stücks. N und V Strophen.",
+    sub:"Play / Pause oder Leertaste. N und V eine Strophe. Auto folgt dem Tempo der Aufnahme. Scroll − / + gleicht an.",
     legend:"ā ī ū lang halten  ·  ṃ ṅ ñ ṇ nasal  ·  ś ṣ weiches / hartes sch  ·  ṛ ri",
     now:"Einen Gesang wählen",
     play:"Play",
@@ -118,7 +123,7 @@ var UI={
     foot:"Akkorde: Heft Sri Vitthal Dham. Ton aus Dropbox, wo vorhanden."
   },
   en:{
-    sub:"Play / Pause or Space. − / + transpose this song. N and V change stanza.",
+    sub:"Play / Pause or Space. N and V one stanza. Auto follows the recording. Scroll − / + to align.",
     legend:"ā ī ū hold long  ·  ṃ ṅ ñ ṇ nasal  ·  ś ṣ soft / hard sh  ·  ṛ ri",
     now:"Choose a prayer",
     play:"Play",
@@ -157,7 +162,7 @@ function persistNow(){
   var P=PRAYERS[i];
   var t=0;
   try{ if(a.src && isFinite(a.currentTime)) t=a.currentTime; }catch(e){}
-  putSong(P.id, { line:line, time:t, showDe:showDe, showCh:showCh, lang:lang, steps:steps });
+  putSong(P.id, { line:line, time:t, showDe:showDe, showCh:showCh, lang:lang, steps:steps, autoScroll:autoScroll, scrollTempo:scrollTempo });
 }
 function isPlaying(){
   if(ytOn) return ytPlaying;
@@ -180,6 +185,9 @@ function applyUI(){
   document.getElementById("btnDe").textContent=showDe?u.trOn:u.trOff;
   document.getElementById("btnCh").textContent=showCh?u.chOn:u.chOff;
   document.getElementById("xpLab").textContent=steps===0?(lang==="de"?"Tonart":"Key"):((steps>0?"+":"")+steps);
+  document.getElementById("btnAuto").textContent=autoScroll?(lang==="de"?"Auto an":"Auto on"):(lang==="de"?"Auto aus":"Auto off");
+  document.getElementById("btnAuto").classList.toggle("on", autoScroll);
+  document.getElementById("scLab").textContent="×"+scrollTempo.toFixed(2);
   document.getElementById("btnLangDe").classList.toggle("on", lang==="de");
   document.getElementById("btnLangEn").classList.toggle("on", lang==="en");
   document.getElementById("foot").textContent=u.foot;
@@ -279,9 +287,7 @@ function paintLyrics(){
   });
 }
 function ytCmd(fn){
-  try{
-    yt.contentWindow.postMessage(JSON.stringify({event:"command",func:fn,args:[]}),"*");
-  }catch(e){}
+  try{ yt.contentWindow.postMessage(JSON.stringify({event:"command",func:fn,args:[]}),"*"); }catch(e){}
 }
 function showYt(P, startSec){
   a.pause();
@@ -299,9 +305,7 @@ function showFile(P){
   stage.classList.remove("has-yt");
   yt.src="";
   a.style.display="block";
-  a.onerror=function(){
-    if(P.youtube) showYt(P, pendingSeek||P.youtubeStart);
-  };
+  a.onerror=function(){ if(P.youtube) showYt(P, pendingSeek||P.youtubeStart); };
   a.src=P.audio;
   a.play().then(syncPlayBtn).catch(function(){ syncPlayBtn(); });
 }
@@ -310,13 +314,9 @@ function togglePlay(){
   if(ytOn){
     if(ytPlaying){ ytCmd("pauseVideo"); ytPlaying=false; }
     else { ytCmd("playVideo"); ytPlaying=true; }
-    syncPlayBtn();
-    return;
+    syncPlayBtn(); return;
   }
-  if(!a.src){
-    var P=PRAYERS[i];
-    if(P && P.audio){ showFile(P); return; }
-  }
+  if(!a.src){ var P=PRAYERS[i]; if(P && P.audio){ showFile(P); return; } }
   if(a.paused) a.play().then(syncPlayBtn).catch(function(){ syncPlayBtn(); });
   else { a.pause(); persistNow(); syncPlayBtn(); }
 }
@@ -327,6 +327,8 @@ function play(idx, resume){
   var st=resume?songState(P.id):{};
   line=Math.min(st.line||0, Math.max(0, P.zeilen.length-1));
   steps=(typeof st.steps==="number")?st.steps:0;
+  autoScroll=!!st.autoScroll;
+  scrollTempo=(typeof st.scrollTempo==="number" && st.scrollTempo>0.3)?st.scrollTempo:1;
   pendingSeek=st.time||0;
   if(P.zeilen.length && pendingSeek && a.duration && pendingSeek>a.duration-4) pendingSeek=0;
   document.getElementById("now").textContent=P.titel;
@@ -337,7 +339,7 @@ function play(idx, resume){
   if(P.preferFile && P.audio) showFile(P);
   else if(P.youtube) showYt(P, pendingSeek||P.youtubeStart);
   else if(P.audio) showFile(P);
-  putSong(P.id, { line:line, time:pendingSeek||0, showDe:showDe, showCh:showCh, lang:lang, steps:steps });
+  putSong(P.id, { line:line, time:pendingSeek||0, showDe:showDe, showCh:showCh, lang:lang, steps:steps, autoScroll:autoScroll, scrollTempo:scrollTempo });
   paintList(); paintLyrics(); syncPlayBtn(); applyUI();
   try{ document.body.focus(); }catch(e){}
 }
@@ -356,8 +358,7 @@ function prevLine(){
   persistNow(); paintLyrics();
 }
 function shiftSteps(d, reset){
-  if(reset) steps=0;
-  else steps+=d;
+  if(reset) steps=0; else steps+=d;
   if(steps>11) steps-=12;
   if(steps<-11) steps+=12;
   if(!showCh){ showCh=true; document.body.classList.add("show-ch"); }
@@ -397,6 +398,7 @@ a.addEventListener("play", syncPlayBtn);
 a.addEventListener("playing", syncPlayBtn);
 a.addEventListener("pause", function(){ persistNow(); syncPlayBtn(); });
 a.addEventListener("timeupdate", function(){
+  autoLineFromTime();
   var now=Date.now();
   if(now-lastSave<2500) return;
   lastSave=now;
@@ -409,9 +411,7 @@ a.addEventListener("ended", function(){
 });
 document.addEventListener("visibilitychange", function(){ if(document.hidden) persistNow(); });
 window.addEventListener("pagehide", persistNow);
-document.addEventListener("keydown", onKey, true);
-window.addEventListener("keydown", onKey);
-document.getElementById("lyrics").addEventListener("click", function(){ try{ document.body.focus(); }catch(e){} });
+document.addEventListener("keydown", onKey);
 try{ if(localStorage.getItem("bpp-lang")==="en") lang="en"; }catch(e){}
 try{ if(localStorage.getItem("bpp-de")==="1"){ showDe=true; document.body.classList.add("show-de"); } }catch(e){}
 try{ if(localStorage.getItem("bpp-ch")==="1"){ showCh=true; document.body.classList.add("show-ch"); } }catch(e){}
