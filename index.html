@@ -3,9 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Bhakti Prayers Player V1.33</title>
+<title>Bhakti Prayers Player V1.34</title>
 <!-- [Grok-Bot] V1.32: aktuelle Strophe deutlich markiert; N/V bleiben bei Auto stehen; Tasten N/V/Leertaste gehen auch nach Klick ins YouTube-Video -->
 <!-- [Grok-Bot] V1.33: Govinda-Refrain wird mit der Strophe davor angezeigt und gescrollt; fehlender Refrain nach Strophe 4 ergänzt -->
+<!-- [Grok-Bot] V1.34: Suprabhatam und Nrsimha Prayer strophenweise wie im Prathana-Heft (verses.js), fehlende Strophen ergaenzt -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gentium+Book+Plus:ital,wght@0,400;0,700;1,400;1,700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
@@ -64,7 +65,7 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:.85rem}
 </head>
 <body tabindex="0">
 <header>
-  <h1>Bhakti Prayers Player <span class="ver">V1.33</span></h1>
+  <h1>Bhakti Prayers Player <span class="ver">V1.34</span></h1>
   <p class="sub" id="sub"></p>
   <p class="legend" id="legend"></p>
 </header>
@@ -108,8 +109,9 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:.85rem}
 <script src="govinda.js?v=15"></script>
 <script src="kavacham.js?v=29"></script>
 <script src="morning-prayers.js"></script>
+<script src="verses.js?v=34"></script>
 <script src="transpose.js"></script>
-<script src="autoscroll.js?v=33"></script>
+<script src="autoscroll.js?v=34"></script>
 <script>
 var i=-1, line=0, showDe=false, showCh=false, lang="de", pendingSeek=0, lastSave=0, ytOn=false, ytPlaying=false, steps=0, autoScroll=false, scrollTempo=1;
 var a=document.getElementById("a");
