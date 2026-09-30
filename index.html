@@ -1,1 +1,484 @@
-__INDEX__
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bhakti Prayers Player V1.36</title>
+<!-- [Grok-Bot] V1.32: aktuelle Strophe deutlich markiert; N/V bleiben bei Auto stehen; Tasten N/V/Leertaste gehen auch nach Klick ins YouTube-Video -->
+<!-- [Grok-Bot] V1.33: Govinda-Refrain wird mit der Strophe davor angezeigt und gescrollt; fehlender Refrain nach Strophe 4 ergänzt -->
+<!-- [Grok-Bot] V1.36: Govinda Prayer vollständig mit allen 28 Strophen wie im Heft; Suprabhatam mit Akkorden in allen Strophen und YouTube-Wiedergabe -->
+<!-- [Grok-Bot] V1.35: kompakte Buttons in zwei Gruppen, kleineres YouTube-Fenster, höhere Lyrics-Fläche -->
+<!-- [Grok-Bot] V1.34: Suprabhatam und Nrsimha Prayer strophenweise wie im Prathana-Heft (verses.js), fehlende Strophen ergaenzt -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gentium+Book+Plus:ital,wght@0,400;0,700;1,400;1,700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#1a1410;--gold:#c9a36a;--text:#fff6e8;--muted:#d7c4a8;--card:#241c16;--lyric:#fffaf0}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Source Sans 3",Calibri,sans-serif;background:var(--bg);color:var(--text)}
+header{padding:14px 16px 8px;text-align:center}
+h1{margin:0;color:var(--gold);font-weight:normal;font-size:1.55rem;font-family:"Gentium Book Plus",Georgia,serif}
+h1 .ver{font-size:.62em;color:var(--muted);font-weight:normal;margin-left:.35em}
+.sub{color:var(--muted);margin:6px auto 0;font-size:.92rem;max-width:42rem;line-height:1.4}
+.legend{color:var(--muted);margin:8px auto 0;font-size:.82rem;max-width:42rem;line-height:1.45}
+.legend b{color:var(--gold);font-weight:600}
+.bar{position:sticky;top:0;background:var(--bg);border-bottom:1px solid #3d2f26;padding:8px 12px;z-index:20}
+.now{min-height:1.2em;padding:2px 0 6px}
+audio{width:100%;height:36px}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;align-items:center}
+button{background:#4a372b;color:var(--text);border:1px solid #6b5340;border-radius:7px;padding:8px 12px;min-height:40px;font-family:"Source Sans 3",sans-serif}
+button.gold{background:#8b6914;border-color:var(--gold)}
+button.on{background:#8b6914;border-color:var(--gold)}
+.lang{margin-left:auto;display:flex;gap:4px}
+.lang button{min-width:44px;padding:8px 10px}
+.list{margin:10px 12px;display:grid;gap:8px}
+@media(min-width:800px){.list{grid-template-columns:1fr 1fr 1fr}}
+.item{text-align:left;padding:10px;background:transparent;width:100%}
+.item.active{background:#4a372b;color:var(--gold)}
+.quelle{display:block;color:var(--muted);font-size:.76rem;margin-top:4px}
+.stage{margin:10px 12px;display:grid;gap:10px}
+@media(min-width:900px){.stage.has-yt{grid-template-columns:minmax(240px,38%) 1fr}}
+#ytBox{display:none;width:100%;aspect-ratio:16/9;background:#000;border-radius:8px;overflow:hidden}
+#ytBox.on{display:block}
+#ytBox iframe{width:100%;height:100%;border:0}
+.panel{background:var(--card);border:1px solid #6b5340;border-radius:12px;max-height:62vh;overflow:auto;padding:10px 12px}
+.stanza{padding:6px 8px 8px;border-radius:8px;cursor:pointer;margin:0 0 4px;break-inside:avoid;-webkit-column-break-inside:avoid}
+.head{display:block;line-height:1.2;margin:0 0 2px}
+.head .vn{display:inline;color:var(--gold);font-size:.85rem;font-weight:700;margin-right:.55em;font-family:"Source Sans 3",sans-serif}
+.head .ch{display:none;font-family:"Source Sans 3",Consolas,sans-serif;color:#e8c57a;font-size:.78rem;letter-spacing:.05em;font-weight:500;white-space:pre-wrap}
+body.show-ch .head .ch{display:inline}
+.rowline{margin:0}
+.rowline .sa{display:block;font-family:"Gentium Book Plus","Noto Serif",Georgia,serif;font-size:1.18rem;line-height:1.28;letter-spacing:.01em;font-weight:600;color:var(--lyric);white-space:pre-wrap}
+.rowline .de{display:none;color:#ead9c0;font-size:.88rem;margin:0 0 4px;line-height:1.3;font-weight:400}
+body.show-de .rowline .de{display:block}
+.stanza.on{background:#5a3f24;box-shadow:inset 5px 0 0 var(--gold),0 0 0 1px var(--gold)} /* [Grok-Bot] V1.32: Markierung auch auf Handy gut sichtbar */
+.stanza.on .sa{color:#fff}
+.stanza.on .head .vn{color:#ffd88a}
+.rowline.refrain{margin-top:.35em;padding-top:.3em;border-top:1px dashed rgba(212,175,55,.35);font-style:italic} /* [Grok-Bot] V1.33 */
+.hint{color:var(--muted);font-size:.85rem;margin:0 12px 16px}
+footer{text-align:center;padding:18px;color:var(--muted);font-size:.85rem}
+#lyrics{column-count:1;column-gap:16px}
+#lyrics.cols-2{column-count:2}
+#lyrics.cols-3{column-count:3}
+#lyrics.cols-2 .rowline .sa,#lyrics.cols-3 .rowline .sa{font-size:1rem;line-height:1.2}
+#lyrics.cols-3 .head .ch{font-size:.7rem}
+@media(max-width:700px){.rowline .sa{font-size:1.08rem;line-height:1.26}.head .ch{font-size:.72rem}}
+/* [Grok-Bot] V1.35: kompakte Bedienleiste (Buttons etwa halb so groß) und kleineres YouTube, mehr Platz für die Lyrics */
+.bar{padding:4px 8px}
+.now{padding:0 0 3px;font-size:.9rem}
+audio{height:30px}
+.row{gap:4px;margin-top:4px}
+.bar button{padding:3px 7px;min-height:26px;font-size:.8rem;border-radius:6px}
+.lang{gap:3px}
+.lang button{min-width:32px;padding:3px 6px}
+#xpLab{min-width:3em!important;font-size:.78rem!important}
+#scLab{min-width:2.8em!important;font-size:.75rem!important}
+.bar .sep{width:1px;align-self:stretch;background:#3d2f26;margin:0 2px}
+#ytBox{width:min(100%,300px);justify-self:center}
+@media(min-width:900px){.stage.has-yt{grid-template-columns:minmax(200px,26%) 1fr}#ytBox{width:100%}}
+.panel{max-height:78vh}
+</style>
+</head>
+<body tabindex="0">
+<header>
+  <h1>Bhakti Prayers Player <span class="ver">V1.36</span></h1>
+  <p class="sub" id="sub"></p>
+  <p class="legend" id="legend"></p>
+</header>
+<div class="bar">
+  <div class="now" id="now"></div>
+  <audio id="a" controls preload="none" playsinline></audio>
+  <div class="row">
+    <button type="button" class="gold" id="btnPlay" onclick="togglePlay()"></button>
+    <button type="button" id="btnPrev" onclick="prevLine()"></button>
+    <button type="button" id="btnNext" onclick="nextLine()"></button>
+    <button type="button" id="btnAuto" onclick="toggleAuto()"></button>
+    <button type="button" id="btnScDown" onclick="shiftScroll(-0.05)">−</button>
+    <span id="scLab" style="min-width:3.2em;text-align:center;color:#e8c57a;font-size:.85rem"></span>
+    <button type="button" id="btnScUp" onclick="shiftScroll(0.05)">+</button>
+    <span class="sep"></span>
+    <button type="button" id="btnDe" onclick="toggleDe()"></button>
+    <button type="button" id="btnCh" onclick="toggleCh()"></button>
+    <span id="xpBox" style="display:flex;gap:4px;align-items:center">
+      <button type="button" id="btnXpDown" onclick="shiftSteps(-1)">♭</button>
+      <span id="xpLab" style="min-width:4.4em;text-align:center;color:#e8c57a;font-size:.9rem"></span>
+      <button type="button" id="btnXpUp" onclick="shiftSteps(1)">♯</button>
+      <button type="button" id="btnXpZero" onclick="shiftSteps(0,true)">0</button>
+    </span>
+    <div class="lang">
+      <button type="button" id="btnLangDe" onclick="setLang('de')">DE</button>
+      <button type="button" id="btnLangEn" onclick="setLang('en')">EN</button>
+    </div>
+  </div>
+</div>
+<div class="list" id="list"></div>
+<p class="hint" id="hint"></p>
+<div class="stage" id="stage">
+  <div id="ytBox"><iframe id="yt" title="YouTube" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+  <div class="panel" id="lyrics"></div>
+</div>
+<footer id="foot"></footer>
+<script src="prayers.js"></script>
+<script src="chords.js"></script>
+<script src="iast.js"></script>
+<script src="mukunda-chords.js"></script>
+<script src="lang-en.js"></script>
+<script src="govinda.js?v=15"></script>
+<script src="kavacham.js?v=29"></script>
+<script src="morning-prayers.js"></script>
+<script src="verses.js?v=36"></script>
+<script src="transpose.js"></script>
+<script src="autoscroll.js?v=35"></script>
+<script>
+var i=-1, line=0, showDe=false, showCh=false, lang="de", pendingSeek=0, lastSave=0, ytOn=false, ytPlaying=false, steps=0, autoScroll=false, scrollTempo=1;
+var a=document.getElementById("a");
+var ytBox=document.getElementById("ytBox");
+var yt=document.getElementById("yt");
+var stage=document.getElementById("stage");
+var UI={
+  de:{
+    sub:"Play / Pause oder Leertaste. N und V eine Strophe. Lyrics 1 / 2 / 3 Spalten je nach Platz.",
+    legend:"ā ī ū lang halten  ·  ṃ ṅ ñ ṇ nasal  ·  ś ṣ weiches / hartes sch  ·  ṛ ri",
+    now:"Einen Gesang wählen",
+    play:"Play",
+    pause:"Pause",
+    prev:"◀ V",
+    next:"N ▶",
+    trOff:"Übers. aus",
+    trOn:"Übers. an",
+    chOff:"Akk. aus",
+    chOn:"Akk. an",
+    foot:"Akkorde: Heft Sri Vitthal Dham. Ton aus Dropbox, wo vorhanden."
+  },
+  en:{
+    sub:"Play / Pause or Space. N and V one stanza. Lyrics 1 / 2 / 3 columns by available width.",
+    legend:"ā ī ū hold long  ·  ṃ ṅ ñ ṇ nasal  ·  ś ṣ soft / hard sh  ·  ṛ ri",
+    now:"Choose a prayer",
+    play:"Play",
+    pause:"Pause",
+    prev:"◀ V",
+    next:"N ▶",
+    trOff:"Transl. off",
+    trOn:"Transl. on",
+    chOff:"Chords off",
+    chOn:"Chords on",
+    foot:"Chords: Sri Vitthal Dham booklet. Audio from Dropbox where available."
+  }
+};
+function loadMem(){
+  try{ return JSON.parse(localStorage.getItem("bpp-mem")||"{}"); }catch(e){ return {}; }
+}
+function saveMem(m){
+  try{ localStorage.setItem("bpp-mem", JSON.stringify(m)); }catch(e){}
+}
+function songState(id){
+  var m=loadMem();
+  return (m.songs&&m.songs[id])||{};
+}
+function putSong(id, patch){
+  var m=loadMem();
+  if(!m.songs) m.songs={};
+  var s=m.songs[id]||{};
+  Object.keys(patch).forEach(function(k){ s[k]=patch[k]; });
+  s.at=Date.now();
+  m.songs[id]=s;
+  m.lastId=id;
+  saveMem(m);
+}
+function persistNow(){
+  if(i<0) return;
+  var P=PRAYERS[i];
+  var t=0;
+  try{ if(a.src && isFinite(a.currentTime)) t=a.currentTime; }catch(e){}
+  putSong(P.id, { line:line, time:t, showDe:showDe, showCh:showCh, lang:lang, steps:steps, autoScroll:autoScroll, scrollTempo:scrollTempo });
+  rememberTempo();
+}
+function isPlaying(){
+  if(ytOn) return ytPlaying;
+  return !!(a.src && !a.paused && !a.ended);
+}
+function syncPlayBtn(){
+  var u=UI[lang];
+  var b=document.getElementById("btnPlay");
+  var on=isPlaying();
+  b.textContent=on?u.pause:u.play;
+  b.classList.toggle("on", on);
+}
+function applyUI(){
+  var u=UI[lang];
+  document.documentElement.lang=lang;
+  document.getElementById("sub").textContent=u.sub;
+  document.getElementById("legend").innerHTML="<b>ā ī ū</b> "+(lang==="de"?"lang halten":"hold long")+" &nbsp;·&nbsp; <b>ṃ ṅ ñ ṇ</b> nasal &nbsp;·&nbsp; <b>ś ṣ</b> "+(lang==="de"?"weiches / hartes sch":"soft / hard sh")+" &nbsp;·&nbsp; <b>ṛ</b> ri";
+  document.getElementById("btnPrev").textContent=u.prev;
+  document.getElementById("btnNext").textContent=u.next;
+  document.getElementById("btnDe").textContent=showDe?u.trOn:u.trOff;
+  document.getElementById("btnCh").textContent=showCh?u.chOn:u.chOff;
+  document.getElementById("xpLab").textContent=steps===0?(lang==="de"?"Tonart":"Key"):((steps>0?"+":"")+steps);
+  document.getElementById("btnAuto").textContent=autoScroll?(lang==="de"?"Auto an":"Auto on"):(lang==="de"?"Auto aus":"Auto off");
+  document.getElementById("btnAuto").classList.toggle("on", autoScroll);
+  document.getElementById("scLab").textContent=tempoLabel();
+  document.getElementById("btnLangDe").classList.toggle("on", lang==="de");
+  document.getElementById("btnLangEn").classList.toggle("on", lang==="en");
+  document.getElementById("foot").textContent=u.foot;
+  syncPlayBtn();
+  if(i<0) document.getElementById("now").textContent=u.now;
+  else {
+    var P=PRAYERS[i];
+    document.getElementById("hint").textContent=(lang==="en"?(P.hinweisEn||P.hinweis): (P.hinweisDe||P.hinweis))||"";
+  }
+}
+function setLang(l){
+  lang=l;
+  try{ localStorage.setItem("bpp-lang", lang); }catch(e){}
+  persistNow();
+  applyUI(); paintList(); paintLyrics();
+}
+function layoutLyrics(){
+  var box=document.getElementById("lyrics");
+  if(!box) return;
+  var w=box.clientWidth||0;
+  box.classList.remove("cols-2","cols-3");
+  if(w>=860) box.classList.add("cols-3");
+  else if(w>=520) box.classList.add("cols-2");
+}
+function lineText(z){
+  if(lang==="en") return z.en||z.ue||"";
+  return z.ue||z.en||"";
+}
+function stanzaKey(nr){
+  nr=String(nr||"");
+  if(/^Refrain/i.test(nr)) return "Refrain";
+  var m=nr.match(/(\d+)/);
+  if(m) return m[1];
+  m=nr.match(/^([^\s]+)/);
+  return m?m[1]:nr;
+}
+function uniqueChords(list){
+  var out=[], last="";
+  list.forEach(function(c){
+    var t=String(c).replace(/\s+/g," ").trim();
+    if(t && t!==last){ out.push(t); last=t; }
+  });
+  return out;
+}
+function stanzaGroups(P){
+  var groups=[], cur=null;
+  P.zeilen.forEach(function(z,n){
+    var k=stanzaKey(z.nr);
+    /* [Grok-Bot] V1.33: Refrain gehört zur Strophe davor, damit er beim Scrollen mit sichtbar ist */
+    if(k==="Refrain" && cur){ cur.idx.push(n); return; }
+    if(!cur || cur.key!==k){
+      cur={ key:k, start:n, idx:[] };
+      groups.push(cur);
+    }
+    cur.idx.push(n);
+  });
+  return groups;
+}
+function currentGroupIndex(){
+  if(i<0) return -1;
+  var gs=stanzaGroups(PRAYERS[i]);
+  for(var g=0;g<gs.length;g++){
+    if(gs[g].idx.indexOf(line)>=0) return g;
+  }
+  return 0;
+}
+function paintList(){
+  var box=document.getElementById("list");
+  box.innerHTML="";
+  PRAYERS.forEach(function(P,idx){
+    var b=document.createElement("button");
+    b.type="button";
+    b.className="item"+(idx===i?" active":"");
+    var st=songState(P.id);
+    var extra="";
+    if(st.time>=5) extra=" · weiter ab "+Math.floor(st.time/60)+":"+String(Math.floor(st.time%60)).padStart(2,"0");
+    var tm=tempoMap()[P.id];
+    if(tm && tm.tempo && Math.abs(tm.tempo-1)>0.001) extra+=" · Scroll ×"+Number(tm.tempo).toFixed(2);
+    if(tm && tm.tempo2) extra+=" → ×"+Number(tm.tempo2).toFixed(2);
+    b.innerHTML=P.titel+"<span class='quelle'>"+P.autor+" · "+P.quelle+extra+"</span>";
+    b.onclick=function(){ play(idx, true); };
+    box.appendChild(b);
+  });
+}
+function paintLyrics(){
+  var P=PRAYERS[i];
+  var box=document.getElementById("lyrics");
+  if(!P){ box.innerHTML=""; return; }
+  var gs=stanzaGroups(P);
+  box.innerHTML=gs.map(function(g){
+    var on=g.idx.indexOf(line)>=0;
+    var verse=/^\d+$/.test(g.key)?g.key:"";
+    var chs=[];
+    g.idx.forEach(function(n){ if(P.zeilen[n].ch) chs.push(shiftChordLine(P.zeilen[n].ch, steps)); });
+    chs=uniqueChords(chs);
+    var head="";
+    if(verse || chs.length){
+      head="<div class='head'>"+(verse?"<span class='vn'>"+verse+"</span>":"")+(chs.length?"<span class='ch'>"+chs.join("   ")+"</span>":"")+"</div>";
+    }
+    var rows=g.idx.map(function(n){
+      var z=P.zeilen[n];
+      return "<div class='rowline"+(/^Refrain/i.test(z.nr)?" refrain":"")+"' data-n='"+n+"'><span class='sa'>"+z.sa+"</span><span class='de'>"+lineText(z)+"</span></div>";
+    }).join("");
+    return "<div class='stanza"+(on?" on":"")+"' data-start='"+g.start+"'>"+head+rows+"</div>";
+  }).join("");
+  layoutLyrics(); pinStanza();
+  box.querySelectorAll(".stanza").forEach(function(el){
+    el.onclick=function(){ line=parseInt(el.getAttribute("data-start"),10); persistNow(); paintLyrics(); syncAutoFromLine(); };
+  });
+}
+function ytCmd(fn){
+  try{ yt.contentWindow.postMessage(JSON.stringify({event:"command",func:fn,args:[]}),"*"); }catch(e){}
+}
+function showYt(P, startSec){
+  a.pause();
+  a.style.display="none";
+  ytOn=true; ytPlaying=true;
+  ytBox.classList.add("on");
+  stage.classList.add("has-yt");
+  var start=Math.floor(startSec||P.youtubeStart||0);
+  yt.src="https://www.youtube.com/embed/"+P.youtube+"?rel=0&modestbranding=1&enablejsapi=1"+(start?("&start="+start):"");
+  markPlayOrigin();
+  syncPlayBtn();
+  setTimeout(layoutLyrics, 50);
+}
+function showFile(P){
+  ytOn=false; ytPlaying=false;
+  ytBox.classList.remove("on");
+  stage.classList.remove("has-yt");
+  yt.src="";
+  a.style.display="block";
+  a.onerror=function(){ if(P.youtube) showYt(P, pendingSeek||P.youtubeStart); };
+  a.src=P.audio;
+  markPlayOrigin();
+  a.play().then(syncPlayBtn).catch(function(){ syncPlayBtn(); });
+  setTimeout(layoutLyrics, 50);
+}
+function togglePlay(){
+  if(i<0) return;
+  if(ytOn){
+    if(ytPlaying){ ytCmd("pauseVideo"); ytPlaying=false; }
+    else { ytCmd("playVideo"); ytPlaying=true; markPlayOrigin(); }
+    syncPlayBtn(); return;
+  }
+  if(!a.src){ var P=PRAYERS[i]; if(P && P.audio){ showFile(P); return; } }
+  if(a.paused){ markPlayOrigin(); a.play().then(syncPlayBtn).catch(function(){ syncPlayBtn(); }); }
+  else { a.pause(); persistNow(); syncPlayBtn(); }
+}
+function play(idx, resume){
+  persistNow();
+  i=idx;
+  var P=PRAYERS[i];
+  var st=resume?songState(P.id):{};
+  line=Math.min(st.line||0, Math.max(0, P.zeilen.length-1));
+  manualShift=0; /* [Grok-Bot] V1.32 */
+  steps=(typeof st.steps==="number")?st.steps:0;
+  autoScroll=!!st.autoScroll;
+  scrollTempo=(typeof st.scrollTempo==="number" && st.scrollTempo>0.3)?st.scrollTempo:1;
+  restoreTempo(P.id);
+  markPlayOrigin();
+  pendingSeek=st.time||0;
+  if(P.zeilen.length && pendingSeek && a.duration && pendingSeek>a.duration-4) pendingSeek=0;
+  document.getElementById("now").textContent=P.titel;
+  document.getElementById("hint").textContent=(lang==="en"?(P.hinweisEn||P.hinweis):(P.hinweisDe||P.hinweis))||"";
+  a.pause();
+  a.removeAttribute("src");
+  a.load();
+  if(P.preferFile && P.audio) showFile(P);
+  else if(P.youtube) showYt(P, pendingSeek||P.youtubeStart);
+  else if(P.audio) showFile(P);
+  putSong(P.id, { line:line, time:pendingSeek||0, showDe:showDe, showCh:showCh, lang:lang, steps:steps, autoScroll:autoScroll, scrollTempo:scrollTempo });
+  rememberTempo();
+  paintList(); paintLyrics(); syncPlayBtn(); applyUI();
+  try{ document.body.focus(); }catch(e){}
+}
+function nextLine(){
+  if(i<0) return;
+  var gs=stanzaGroups(PRAYERS[i]);
+  var n=currentGroupIndex();
+  if(n>=0 && n<gs.length-1) line=gs[n+1].start;
+  persistNow(); paintLyrics();
+  syncAutoFromLine();
+}
+function prevLine(){
+  if(i<0) return;
+  var gs=stanzaGroups(PRAYERS[i]);
+  var n=currentGroupIndex();
+  if(n>0) line=gs[n-1].start;
+  persistNow(); paintLyrics();
+  syncAutoFromLine();
+}
+function shiftSteps(d, reset){
+  if(reset) steps=0; else steps+=d;
+  if(steps>11) steps-=12;
+  if(steps<-11) steps+=12;
+  if(!showCh){ showCh=true; document.body.classList.add("show-ch"); }
+  persistNow(); applyUI(); paintLyrics();
+}
+function toggleDe(){
+  showDe=!showDe;
+  document.body.classList.toggle("show-de", showDe);
+  applyUI();
+  try{ localStorage.setItem("bpp-de", showDe?"1":"0"); }catch(e){}
+  persistNow();
+}
+function toggleCh(){
+  showCh=!showCh;
+  document.body.classList.toggle("show-ch", showCh);
+  applyUI();
+  try{ localStorage.setItem("bpp-ch", showCh?"1":"0"); }catch(e){}
+  persistNow();
+}
+function onKey(e){
+  if(e.ctrlKey || e.altKey || e.metaKey) return;
+  var t=e.target;
+  if(t && (t.tagName==="INPUT" || t.tagName==="TEXTAREA" || t.isContentEditable)) return;
+  var code=e.code||"";
+  var k=(e.key||"").toLowerCase();
+  if(code==="Space" || k===" "){ e.preventDefault(); togglePlay(); return; }
+  if(code==="KeyN" || k==="n"){ e.preventDefault(); nextLine(); }
+  if(code==="KeyV" || k==="v"){ e.preventDefault(); prevLine(); }
+}
+a.addEventListener("loadedmetadata", function(){
+  if(pendingSeek>=3 && isFinite(a.duration) && pendingSeek<a.duration-4){
+    try{ a.currentTime=pendingSeek; }catch(e){}
+  }
+  syncPlayBtn();
+});
+a.addEventListener("play", syncPlayBtn);
+a.addEventListener("playing", syncPlayBtn);
+a.addEventListener("pause", function(){ persistNow(); syncPlayBtn(); });
+a.addEventListener("timeupdate", function(){
+  autoLineFromTime();
+  var now=Date.now();
+  if(now-lastSave<2500) return;
+  lastSave=now;
+  persistNow();
+});
+a.addEventListener("ended", function(){
+  if(i<0) return;
+  putSong(PRAYERS[i].id, { time:0 });
+  syncPlayBtn();
+});
+document.addEventListener("visibilitychange", function(){ if(document.hidden) persistNow(); });
+window.addEventListener("pagehide", persistNow);
+document.addEventListener("keydown", onKey);
+/* [Grok-Bot] V1.32: nach Klick ins YouTube-Video Fokus zurückholen, sonst kommen N/V/Leertaste nicht an */
+window.addEventListener("blur", function(){ setTimeout(function(){ var ae=document.activeElement; if(ae && ae.tagName==="IFRAME"){ try{ window.focus(); document.body.focus(); }catch(e){} } }, 0); });
+window.addEventListener("resize", layoutLyrics);
+try{ new ResizeObserver(layoutLyrics).observe(document.getElementById("lyrics")); }catch(e){}
+try{ if(localStorage.getItem("bpp-lang")==="en") lang="en"; }catch(e){}
+try{ if(localStorage.getItem("bpp-de")==="1"){ showDe=true; document.body.classList.add("show-de"); } }catch(e){}
+try{ if(localStorage.getItem("bpp-ch")==="1"){ showCh=true; document.body.classList.add("show-ch"); } }catch(e){}
+applyUI();
+paintList();
+layoutLyrics();
+(function resumeLast(){
+  var m=loadMem();
+  if(!m.lastId) return;
+  var idx=PRAYERS.findIndex(function(p){ return p.id===m.lastId; });
+  if(idx>=0) play(idx, true);
+})();
+</script>
+</body>
+</html>
