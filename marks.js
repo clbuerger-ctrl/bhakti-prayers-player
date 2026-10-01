@@ -1,0 +1,73 @@
+/* [Grok-Bot] V1.38: Vers-Startzeiten statt festem Takt.
+   - N (oder Klick auf eine Strophe) waehrend der Wiedergabe setzt die Zeit neu: die gewaehlte Strophe beginnt JETZT.
+     Das wird pro Gesang und Tonquelle (MP3 / YouTube) gemerkt.
+   - Strophen ohne gemerkte Zeit werden nach ihrer Laenge (Silbenzahl) geschaetzt, nicht gleich lang.
+   - P.marksFile / P.marksYt: aus der Aufnahme ermittelte Startzeiten (Sekunden je Strophe), falls vorhanden. */
+function bppSrcKey(){ return ytOn?"yt":"file"; }
+function bppMarkStore(){ try{ return JSON.parse(localStorage.getItem("bpp-marks")||"{}"); }catch(e){ return {}; } }
+function bppUserMarks(id){ var s=bppMarkStore(); return s[id+"|"+bppSrcKey()]||{}; }
+function bppSaveUserMarks(id, m){ var s=bppMarkStore(); s[id+"|"+bppSrcKey()]=m; try{ localStorage.setItem("bpp-marks", JSON.stringify(s)); }catch(e){} }
+function bppWeights(P, gs){
+  return gs.map(function(g){
+    var t=g.idx.map(function(n){ return String(P.zeilen[n].sa||""); }).join(" ");
+    var v=(t.match(/(ai|au|[aāiīuūṛṝḷeoAĀIĪUŪEO])/g)||[]).length;
+    return Math.max(v, 6);
+  });
+}
+function bppAnchors(P, gs){
+  var A={};
+  var base=ytOn?P.marksYt:P.marksFile;
+  if(base && base.length){ base.forEach(function(t,g){ if(typeof t==="number" && g<gs.length) A[g]=t; }); }
+  var u=bppUserMarks(P.id);
+  Object.keys(u).forEach(function(k){ var g=+k; if(g<gs.length) A[g]=u[k]; });
+  if(A[0]==null) A[0]=(ytOn?P.youtubeStart:0)||0;
+  return A;
+}
+function bppStarts(p){
+  var P=PRAYERS[i], gs=p.gs, w=bppWeights(P, gs), A=bppAnchors(P, gs);
+  var cum=[0]; for(var g=0;g<gs.length;g++) cum.push(cum[g]+w[g]);
+  var keys=Object.keys(A).map(Number).sort(function(a,b){ return a-b; }).filter(function(k,j,arr){ return j===0 || A[k]>A[arr[j-1]]; });
+  /* Sekunden je Silbe: aus gemerkten Abstaenden, sonst Gesamtdauer / Gesamtlaenge */
+  var rates=[];
+  for(var j=1;j<keys.length;j++){ var dw=cum[keys[j]]-cum[keys[j-1]]; if(dw>0) rates.push((A[keys[j]]-A[keys[j-1]])/dw); }
+  var r;
+  if(rates.length){ rates.sort(function(a,b){ return a-b; }); r=rates[Math.floor(rates.length/2)]; }
+  else r=Math.max(p.dur-A[0], 10)/cum[gs.length];
+  r=r/(scrollTempo||1);
+  var st=[];
+  for(var g2=0;g2<gs.length;g2++){
+    if(A[g2]!=null && keys.indexOf(g2)>=0){ st.push(A[g2]); continue; }
+    var lo=null, hi=null;
+    keys.forEach(function(k){ if(k<g2) lo=k; if(k>g2 && hi==null) hi=k; });
+    if(lo==null) lo=keys[0];
+    if(hi!=null && cum[hi]>cum[lo]) st.push(A[lo]+(A[hi]-A[lo])*(cum[g2]-cum[lo])/(cum[hi]-cum[lo]));
+    else st.push(A[lo]+(cum[g2]-cum[lo])*r);
+  }
+  return st;
+}
+function stanzaFromProgress(p){
+  var st=bppStarts(p), k=0;
+  for(var g=0;g<st.length;g++){ if(st[g]<=p.t+0.05) k=g; }
+  return k;
+}
+function syncAutoFromLine(){
+  holdLineUntil=Date.now()+1200;
+  manualShift=0;
+  if(i<0) return;
+  var p=songProgress();
+  if(!p || !isPlaying() || p.t<1) { applyUI(); return; }
+  var g=currentGroupIndex(); if(g<0) return;
+  var P=PRAYERS[i], u=bppUserMarks(P.id), t=Math.round(p.t*10)/10;
+  Object.keys(u).forEach(function(k){ var kk=+k; if((kk>g && u[k]<=t) || (kk<g && u[k]>=t)) delete u[k]; });
+  u[g]=t;
+  bppSaveUserMarks(P.id, u);
+  applyUI();
+}
+function tempoLabel(){ return "×"+scrollTempo.toFixed(2); }
+function shiftScroll(d){
+  scrollTempo=Math.round((scrollTempo+d)*100)/100;
+  if(scrollTempo<0.5) scrollTempo=0.5;
+  if(scrollTempo>2.2) scrollTempo=2.2;
+  scrollTempo2=0; splitTime=-1; splitIdx=-1;
+  rememberTempo(); persistNow(); applyUI();
+}
