@@ -34,6 +34,7 @@ window.PRAYERS = [
   {
     id: "narasimha",
     titel: "Shri Nrisimha Prayer",
+    youtube: "Ex-FUGS3Ygw", /* [Grok-Bot] V1.46: Ton dazu, Sri Narasimha Prayer von Bhakti Marga Music */
     autor: "Prathana Daily Prayer Edition",
     quelle: "Prathana with chords, Seite 12",
     hinweis: "Zeilen wie im Musikerheft.",
