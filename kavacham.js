@@ -1,4 +1,4 @@
-/* [Grok.com] Vollstaendiges Shri Nrisimha Kavacham, 30 Slokas vierzeilig wie Heft. Am Ende das Nrsimha-Gebet von Heft Seite 12, vierzeilig, nicht nur im eigenen Eintrag. */
+/* [Grok.com] Vollstaendiges Shri Nrisimha Kavacham, 31 Slokas vierzeilig wie Heft. Am Ende das Nrsimha-Gebet von Heft Seite 12, vierzeilig, nicht nur im eigenen Eintrag. */
 (function(){
   var k = PRAYERS.find(function(p){ return p.id==="kavacham"; });
   if(!k) return;
@@ -41,6 +41,8 @@
     v(28, "tilakaṃ vinyased yas tu\ntasya graha-bhayaṃ haret\ntri-vāraṃ japamānas tu\ndattaṃ vāry abhimantrya ca", "Tilaka und geweihtes Wasser nehmen die Planetenangst.", "Tilaka and consecrated water remove fear of planets."),
     v(29, "prāśayed yo naro mantraṃ\nnṛsiṃha-dhyānam ācaret\ntasya rogāḥ praṇaśyanti\nye ca syuḥ kukṣi-sambhavāḥ", "Wer meditiert — Krankheiten weichen.", "Who meditates — diseases perish."),
     v(30, "kim atra bahunoktena\nnṛsiṃha-sadṛśo bhavet\nmanasā cintitaṃ yat tu\nsa tac cāpnoty asaṃśayam", "Man wird Nrisimha gleich. Was der Geist denkt, kommt.", "One becomes like Nrisimha. What the mind thinks comes."),
+    /* [Grok-Bot] V1.45: fehlender Schlussvers 31 (garjantaṃ ...) ergänzt */
+    v(31, "garjantaṃ garjayantaṃ\nnija-bhuja-paṭalaṃ\nsphoṭayantaṃ hatantaṃ\nrūpyantaṃ tāpayantaṃ\ndivi bhuvi ditijaṃ\nkṣepayantaṃ kṣipantam\nkrandantaṃ roṣayantaṃ\ndiśi diśi satataṃ\nsaṃharantaṃ bharantaṃ\nvīkṣantaṃ pūrṇayantaṃ\nkara-nikara-śatair\ndivya-siṃhaṃ namāmi", "Dem göttlichen Löwen, der brüllt und brüllen lässt, seine Arme ausbreitet, die Dämonen am Himmel und auf Erden schlägt, peinigt und fortschleudert, in alle Richtungen zürnt, vernichtet und erhält, mit hunderten Händen erfüllt und überschaut, bringe ich meine Verehrung dar.", "I bow to the divine lion, who roars and makes others roar, spreads his mighty arms, strikes, torments and hurls away the demons in heaven and on earth, rages in all directions, destroys and sustains, and oversees and fulfils all with his hundreds of hands."),
     { nr:"Iti", ch:L, sa:"iti śrī-brahmāṇḍa-purāṇe\nprahlādoktaṃ\nśrī-nṛsiṃha-kavacam\nsampūrṇam", ue:"So endet das von Prahlada gesprochene Kavacham.", en:"Thus ends the Kavacham spoken by Prahlada." },
     { nr:"Mantra", ch:"Dm              C", sa:"oṃ namo bhagavate\nnarasiṃhāya", ue:"Om, Verehrung dem Herrn Narasimha.", en:"Om, obeisance to Lord Narasimha." },
     { nr:"Ugram", ch:L, sa:"ugraṃ vīraṃ mahā-viṣṇuṃ\njvalantaṃ sarvato mukham\nnṛsiṃhaṃ bhīṣaṇaṃ bhadraṃ\nmṛtyor mṛtyuṃ namāmy aham", ue:"Den Furchtbaren, den Helden — ich verneige mich.", en:"The fierce, the hero — I bow." },

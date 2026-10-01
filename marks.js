@@ -78,7 +78,7 @@ function shiftScroll(d){
 })();
 /* [Grok-Bot] V1.40: YouTube-Strophenanfaenge (marksYt) per Spracherkennung der Videotonspur; Intro wie "Om" / "Sri Gurubhyo" vor Strophe 1 wird uebersprungen */
 (function(){
-  var Y={"mukunda":[19.1,38.1,63.6,88.7,106.7,136.2,168.2,187.7,209.7,null,null,268.6,304.1,null,349.6,376.6,408.1,null,null,495.1,524.1,553.6,584.1,613.1,643.6,null,null,null,745.1,774.1,794.1,815.9,null,857.1,888.1,910.6,935.1,953.6,973.1,994.1,1019.1],"govinda":[null,34,null,null,115,145,null,null,null,251,276,null,null,null,null,404.5,430,455,480,505.5,530,554.8,579.7,605,null,null,679,704.5,733],"suprabhatam":[10,null,null,null,90,null,null,150,null,null,null,null,null,266.5,null,306.5],"kavacham":[7,27.3,44.8,64.8,85,106,125,145,164.8,187.7,205.3,225.8,245,265.3,null,304.5,323.5,341.5,null,null,null,405,null,null,454,null,null,null,null,null,null,null,null,null,590,606.8,null,896]};
+  var Y={"mukunda":[19.1,38.1,63.6,88.7,106.7,136.2,168.2,187.7,209.7,null,null,268.6,304.1,null,349.6,376.6,408.1,null,null,495.1,524.1,553.6,584.1,613.1,643.6,null,null,null,745.1,774.1,794.1,815.9,null,857.1,888.1,910.6,935.1,953.6,973.1,994.1,1019.1],"govinda":[null,34,null,null,115,145,null,null,null,251,276,null,null,null,null,404.5,430,455,480,505.5,530,554.8,579.7,605,null,null,679,704.5,733],"suprabhatam":[10,null,null,null,90,null,null,150,null,null,null,null,null,266.5,null,306.5],"kavacham":[7,27.3,44.8,64.8,85,106,125,145,164.8,187.7,205.3,225.8,245,265.3,null,304.5,323.5,341.5,null,null,null,405,null,null,454,null,null,null,null,null,null,null,null,null,null,590,606.8,null,896]};
   if(typeof PRAYERS==="undefined") return;
   PRAYERS.forEach(function(p){ if(Y[p.id] && !p.marksYt) p.marksYt=Y[p.id]; });
 })();
