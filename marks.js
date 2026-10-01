@@ -71,3 +71,8 @@ function shiftScroll(d){
   scrollTempo2=0; splitTime=-1; splitIdx=-1;
   rememberTempo(); persistNow(); applyUI();
 }
+/* [Grok-Bot] V1.39: Mukunda Mala – Strophenanfaenge aus der MP3 per Spracherkennung ermittelt (null = geschaetzt) */
+(function(){
+  var m=(typeof PRAYERS!=="undefined")&&PRAYERS.find(function(p){ return p.id==="mukunda"; });
+  if(m && !m.marksFile) m.marksFile=[20,39,64.5,89.5,107.5,137,169,188.5,210.5,null,null,269.5,305,null,350.5,377.5,409,null,null,496,525,554.5,585,614,644.5,null,null,null,746,775,795,816.8,null,858,889,911.5,936,954.5,974,995,1020];
+})();
