@@ -66,7 +66,17 @@
       out.push(R());
     }
     post.forEach(function(z){ out.push(z); }); out.push(R());
+    out.forEach(function(z){ z.sa=String(z.sa).replace(/ \| /g,"\n"); }); /* [Grok-Bot] V1.37: jede Verszeile eigene Zeile */
+    var HEFT={"2": "cintāmaṇi-prakara-sadmasu kalpa-vṛkṣa-\nlakṣāvṛteṣu surabhīr abhipālayantam\nlakṣmī-sahasra-śata-sambhrama-sevyamānaṃ", "3": "veṇuṃ kvaṇantam aravinda-dalāyatākṣaṃ\nbarhāvataṃsam asitāmbuda-sundarāṅgam\nkandarpa-koṭi-kamanīya-viśeṣa-śobhaṃ", "4": "ālola-candraka-lasad-vanamālya-vaṃśī-\nratnāṅgadaṃ praṇaya-keli-kalā-vilāsam\nśyāmaṃ tri-bhaṅga-lalitaṃ niyata-prakāśaṃ", "5": "aṅgāni yasya sakalendriya-vṛttimanti\npaśyanti pānti kalayanti ciraṃ jaganti\nānanda-cinmaya-sad-ujjvala-vigrahasya", "6": "advaitam acyutam anādim ananta-rūpam\nādyaṃ purāṇa-puruṣaṃ nava-yauvanaṃ ca\nvedeṣu durlabham adurlabham ātma-bhaktau", "11": "premāñjana-cchurita-bhakti-vilocanena\nsantaḥ sadaiva hṛdayeṣu vilokayanti\nyaṃ śyāmasundaram acintya-guṇa-svarūpaṃ", "12": "rāmādi-mūrtiṣu kalā-niyamena tiṣṭhan\nnānāvatāram akarod bhuvaneṣu kintu\nkṛṣṇaḥ svayaṃ samabhavat paramaḥ pumān yo", "16": "goloka-nāmni nija-dhāmni tale ca tasya\ndevī-maheśa-hari-dhāmasu teṣu teṣu\nte te prabhāva-nicayā vihitāś ca yena", "17": "sṛṣṭi-sthiti-pralaya-sādhana-śaktir ekā\nchāyeva yasya bhuvanāni bibharti durgā\nicchānurūpam api yasya ca ceṣṭate sā"}; /* [Grok-Bot] V1.37: Zeilentrennung wie im Heft Seite 10 */
+    out.forEach(function(z){ if(HEFT[z.nr]) z.sa=HEFT[z.nr]; });
     g.zeilen=out;
+  }
+
+  /* [Grok-Bot] V1.37: Mukunda Mala, Zeilen nach Versmaß getrennt (vorher teils zwei halbe Verszeilen vermischt) */
+  var mu=byId("mukunda");
+  if(mu){
+    var MZ={"1": "śrī-vallabheti varadeti dayāpareti\nbhakta-priyeti bhava-luṇṭhana-kovideti |\nnātheti nāga-śayaneti jagan-nivāseti\nālāpanaṃ prati-dinaṃ kuru me mukunda ||", "3": "mukunda mūrdhnā praṇipatya yāce\nbhavantam ekāntam iyantam artham |\navismṛtis tvac-caraṇāravinde\nbhave bhave me ’stu bhavat-prasādāt ||", "4": "nāhaṃ vande tava caraṇayor dvandvam advandva-hetoḥ\nkumbhīpākaṃ gurum api hare narakaṃ nāpanetum |\nramyā-rāmā-mṛdu-tanu-latā-nandane nāpi rantuṃ\nbhave bhave hṛdaya-bhavane bhāvayeyaṃ bhavantam ||", "5": "nāsthā dharme na vasu-nicaye naiva kāmopabhoge\nyad yad bhāvyaṃ tad bhavatu bhagavan pūrva-karmānurūpam |\netat prārthyaṃ mama bahu mataṃ janma-janmāntare ’pi\ntvat-padāmbhoruha-yuga-gatā niścalā bhaktir astu ||", "6": "divi vā bhuvi vā mamāstu vāso\nnarake vā narakāntaka prakāmam |\navadhīrita-śāradāravindau\ncaraṇau te maraṇe ’pi cintayāmi ||", "7": "kṛṣṇa tvadīya-pada-paṅkaja-pañjarāntam\nadyaiva me viśatu mānasa-rāja-haṃsaḥ |\nprāṇa-prayāṇa-samaye kapha-vāta-pittaiḥ\nkaṇṭhāvarodhana-vidhau smaraṇaṃ kutas te ||", "8": "cintayāmi harim eva santataṃ\nmanda-manda-hasitānanāmbujam |\nnanda-gopa-tanayaṃ parāt paraṃ\nnāradādi-muni-vṛnda-vanditam ||", "9": "kara-caraṇa-saroje kāntiman-netra-mīne\nśrama-muṣi bhuja-vīci-vyākule ’gādha-mārge |\nhari-sarasi vigāhyāpīya tejo-jalāugham\nbhava-maru-parikhinnaḥ khedam adya tyajāmi ||"};
+    mu.zeilen.forEach(function(z){ if(MZ[z.nr]) z.sa=MZ[z.nr]; });
   }
 
   var n=byId("narasimha");
