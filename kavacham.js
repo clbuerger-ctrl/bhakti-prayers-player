@@ -1,4 +1,4 @@
-/* [Grok.com] Vollstaendiges Shri Nrisimha Kavacham, 30 Slokas vierzeilig wie Heft */
+/* [Grok.com] Vollstaendiges Shri Nrisimha Kavacham, 30 Slokas vierzeilig wie Heft. Am Ende das Nrsimha-Gebet von Heft Seite 12, vierzeilig, nicht nur im eigenen Eintrag. */
 (function(){
   var k = PRAYERS.find(function(p){ return p.id==="kavacham"; });
   if(!k) return;
@@ -7,9 +7,9 @@
     return { nr: String(n), ch: L, sa: sa, ue: ue, en: en };
   }
   k.quelle = "Prathana with chords · Sri Vitthal Dham · S. 20–21";
-  k.hinweis = "Strophen vierzeilig wie im Musikerheft.";
-  k.hinweisDe = "Jede Strophe in vier Heft-Zeilen.";
-  k.hinweisEn = "Each verse in four booklet lines.";
+  k.hinweis = "Strophen vierzeilig wie im Musikerheft. Am Ende das Nrsimha-Gebet von Heft Seite 12.";
+  k.hinweisDe = "Jede Strophe in vier Heft-Zeilen. Am Ende das Nrsimha-Gebet, Seite 12.";
+  k.hinweisEn = "Each verse in four booklet lines. The Nrsimha prayer from page 12 follows at the end.";
   k.zeilen = [
     v(1, "nṛsiṃha-kavacaṃ vakṣye\nprahlādenoditaṃ purā\nsarva-rakṣākaraṃ puṇyaṃ\nsarvopadrava-nāśanam", "Ich spreche das Narasimha-Kavacham, einst von Prahlada gesagt. Es schützt ganz und löscht jedes Unglück.", "I recite the Narasimha Kavacham spoken by Prahlada."),
     v(2, "sarva-sampat-karaṃ caiva\nsvarga-mokṣa-pradāyakam\ndhyātvā nṛsiṃhaṃ deveśaṃ\nhema-siṃhāsana-sthitam", "Es bringt allen Wohlstand, Himmel und Befreiung.", "It gives prosperity, heaven and liberation."),
@@ -44,6 +44,11 @@
     { nr:"Iti", ch:L, sa:"iti śrī-brahmāṇḍa-purāṇe\nprahlādoktaṃ\nśrī-nṛsiṃha-kavacam\nsampūrṇam", ue:"So endet das von Prahlada gesprochene Kavacham.", en:"Thus ends the Kavacham spoken by Prahlada." },
     { nr:"Mantra", ch:"Dm              C", sa:"oṃ namo bhagavate\nnarasiṃhāya", ue:"Om, Verehrung dem Herrn Narasimha.", en:"Om, obeisance to Lord Narasimha." },
     { nr:"Ugram", ch:L, sa:"ugraṃ vīraṃ mahā-viṣṇuṃ\njvalantaṃ sarvato mukham\nnṛsiṃhaṃ bhīṣaṇaṃ bhadraṃ\nmṛtyor mṛtyuṃ namāmy aham", ue:"Den Furchtbaren, den Helden — ich verneige mich.", en:"The fierce, the hero — I bow." },
-    { nr:"Jaya", ch:"Bb          F     C           F", sa:"jaya nṛśiṅga dev\nnṛśiṅga dev nṛśiṅga dev\njaya nṛśiṅga dev ://", ue:"Sieg Narasimha Deva.", en:"Victory, Narasimha Deva." }
+    { nr:"Jaya", ch:"Bb          F     C           F", sa:"jaya nṛśiṅga dev\nnṛśiṅga dev nṛśiṅga dev\njaya nṛśiṅga dev ://", ue:"Sieg Narasimha Deva.", en:"Victory, Narasimha Deva." },
+    /* [Grok.com] Heft Seite 12, nach dem Kavacam gesungen. Vier Zeilen je Strophe, eigener Eintrag bleibt. */
+    { nr:"Namaste", ch:"Dm   Bb    C     Dm", sa:"namaste nārasiṁhāya\nprahlādāh-lāda dāyine\nhiraṇyākaśipur vakṣaḥ\nśilā taṅka nakhālāye", ue:"Verehrung dir, Narasimha, der du Prahlada Freude schenkst. Deine Nägel, wie Meißel, spalteten die Brust des Hiranyakashipu.", en:"Obeisance to Narasimha, who gives joy to Prahlada. Your nails, like chisels, split the chest of Hiranyakashipu." },
+    { nr:"Ito", ch:"Dm   Bb    C     Dm", sa:"ito nṛsiṁho parato nṛsiṁho\nyato yato yāmi tato nṛsiṁho\nbahir nṛsiṁho hṛdaye nṛsiṁho\nnṛsiṁham ādiṁ śaranam prapadye", ue:"Hier Narasimha, dort Narasimha. Wohin ich gehe, dort Narasimha. Außen Narasimha, im Herzen Narasimha. Bei Narasimha, dem Ursprung, suche ich Zuflucht.", en:"Narasimha here, Narasimha there. Wherever I go, there is Narasimha. Outside Narasimha, in the heart Narasimha. In Narasimha, the origin, I take refuge." },
+    { nr:"Tava", ch:"Dm    F    C    Dm", sa:"tava kara kamala vare\nnakhām adbhuta śriṅgāṁ\ndalitā hiraṇyakaśipu\ntanu bhṛṅgam", ue:"An deiner Lotoshand die wundersame Nagelspitze, die den Leib des Hiranyakashipu wie eine Wespe zerbrach.", en:"On your lotus hand the wondrous nail-point, which tore the body of Hiranyakashipu like a wasp." },
+    { nr:"Keshava", ch:"Dm    F    C    Bb", sa:"keśava dhṛta nara hari rūpa\njaya jagadīśa hare\njaya jagadīśa hare\njaya jagadīśa hare", ue:"Keshava, der die Gestalt von Mensch und Löwe annahm. Sieg, Herr der Welt, Hari.", en:"Keshava who took the form of man and lion. Victory, Lord of the world, Hari." }
   ];
 })();
