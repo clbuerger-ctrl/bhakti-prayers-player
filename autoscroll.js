@@ -154,20 +154,23 @@ function stanzaFromProgress(p){
   if(k<0) k=0;
   return k;
 }
+/* [Grok-Bot] V1.44: aktuelle Strophe bleibt immer sichtbar; bei Spalten nebeneinander wird nicht mehr zur nächsten Spalte vorgesprungen */
 function pinStanza(){
   var panel=document.getElementById("lyrics");
   if(!panel) return;
   var on=panel.querySelector(".stanza.on");
   if(!on) return;
-  var nxt=on.nextElementSibling;
   var pr=panel.getBoundingClientRect();
   var r=on.getBoundingClientRect();
-  var nearBottom=r.bottom>pr.bottom-64;
-  if(nxt && nearBottom){
-    nxt.scrollIntoView({block:"start", behavior:"smooth"});
-  } else {
-    on.scrollIntoView({block:"start", behavior:"smooth"});
+  var cs=getComputedStyle(panel);
+  var pl=parseFloat(cs.paddingLeft||0), pt=parseFloat(cs.paddingTop||0);
+  if(panel.scrollWidth>panel.clientWidth+4){
+    if(r.left<pr.left+pl-2 || r.right>pr.left+panel.clientWidth+2){
+      panel.scrollTo({left:panel.scrollLeft+(r.left-pr.left-pl), behavior:"smooth"});
+    }
+    return;
   }
+  panel.scrollTo({top:panel.scrollTop+(r.top-pr.top-pt), behavior:"smooth"});
 }
 function autoLineFromTime(){
   if(!autoScroll || i<0) return;
