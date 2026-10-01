@@ -82,3 +82,8 @@ function shiftScroll(d){
   if(typeof PRAYERS==="undefined") return;
   PRAYERS.forEach(function(p){ if(Y[p.id] && !p.marksYt) p.marksYt=Y[p.id]; });
 })();
+/* [Grok-Bot] V1.41: Govinda spielt standardmaessig das YouTube-Video (bessere Aufnahme), die MP3 bleibt als Ersatz */
+(function(){
+  var g=(typeof PRAYERS!=="undefined")&&PRAYERS.find(function(p){ return p.id==="govinda"; });
+  if(g && g.youtube) g.preferFile=false;
+})();

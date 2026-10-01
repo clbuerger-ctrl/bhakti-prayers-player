@@ -3,10 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Bhakti Prayers Player V1.40</title>
+<title>Bhakti Prayers Player V1.41</title>
 <!-- [Grok-Bot] V1.38: Mukunda Mala Strophen 10-40 wieder mit Lyrics; N setzt die Zeit neu (Strophe beginnt jetzt, wird gemerkt), Autoscroll nach Verslänge statt festem Takt (marks.js) -->
 <!-- [Grok-Bot] V1.39: Mukunda Mala Strophenanfänge aus der MP3 ermittelt (marks.js), Autoscroll folgt der Aufnahme -->
 <!-- [Grok-Bot] V1.40: YouTube-Startzeiten je Strophe für Mukunda, Govinda, Suprabhatam, Kavacam (marks.js); Intro vor Strophe 1 wird übersprungen -->
+<!-- [Grok-Bot] V1.41: Govinda startet mit dem YouTube-Video statt der MP3 (marks.js) -->
 <!-- [Grok-Bot] V1.37: Verszeilen werden nie umbrochen; Spaltenzahl (1–3) und Schriftgröße richten sich nach der längsten Verszeile, damit die Versform wie im Heft erhalten bleibt -->
 <!-- [Grok-Bot] V1.32: aktuelle Strophe deutlich markiert; N/V bleiben bei Auto stehen; Tasten N/V/Leertaste gehen auch nach Klick ins YouTube-Video -->
 <!-- [Grok-Bot] V1.33: Govinda-Refrain wird mit der Strophe davor angezeigt und gescrollt; fehlender Refrain nach Strophe 4 ergänzt -->
@@ -91,7 +92,7 @@ audio{height:30px}
 </head>
 <body tabindex="0">
 <header>
-  <h1>Bhakti Prayers Player <span class="ver">V1.40</span></h1>
+  <h1>Bhakti Prayers Player <span class="ver">V1.41</span></h1>
   <p class="sub" id="sub"></p>
   <p class="legend" id="legend"></p>
 </header>
@@ -140,7 +141,7 @@ audio{height:30px}
 <script src="verses.js?v=38"></script>
 <script src="transpose.js"></script>
 <script src="autoscroll.js?v=35"></script>
-<script src="marks.js?v=40"></script>
+<script src="marks.js?v=41"></script>
 <script>
 var i=-1, line=0, showDe=false, showCh=false, lang="de", pendingSeek=0, lastSave=0, ytOn=false, ytPlaying=false, steps=0, autoScroll=false, scrollTempo=1;
 var a=document.getElementById("a");
