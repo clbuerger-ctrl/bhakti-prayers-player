@@ -11,3 +11,28 @@
   h.zeilen.forEach(function(z){ if(NR[z.nr]) z.nr = NR[z.nr]; });
   h.quelle = "Prathana with chords \u00b7 Sri Vitthal Dham \u00b7 S. 21\u201323 \u00b7 Ton: YouTube (Prabhus), MP3 als Ersatz";
 })();
+/* [Grok-Bot] V1.57: YouTube meldet seinen Abspielstatus nicht immer. Darum gilt das Video als laufend, sobald seine Zeit weiterlaeuft, und als angehalten, wenn sie stehen bleibt. Sonst startete der Autoscroll nicht. */
+(function(){
+  var lastT=null, still=0;
+  setInterval(function(){
+    if(typeof ytOn==="undefined" || !ytOn) { lastT=null; still=0; return; }
+    if(typeof ytTime!=="number") return;
+    if(lastT!==null && ytTime!==lastT){
+      still=0;
+      if(!ytPlaying){ ytPlaying=true; try{ markPlayOrigin(); }catch(e){} try{ syncPlayBtn(); }catch(e){} }
+    } else if(lastT!==null){
+      still++;
+      if(still>=3 && ytPlaying){ ytPlaying=false; try{ syncPlayBtn(); }catch(e){} }
+    }
+    lastT=ytTime;
+  }, 700);
+  /* Alte, von Hand gesetzte Strophenzeiten der Hanuman Chalisa (YouTube) einmalig verwerfen, die eingemessenen Zeiten gelten */
+  try{
+    if(localStorage.getItem("bpp-hn-reset1")!=="1"){
+      var s=JSON.parse(localStorage.getItem("bpp-marks")||"{}");
+      delete s["hanuman|yt"];
+      localStorage.setItem("bpp-marks", JSON.stringify(s));
+      localStorage.setItem("bpp-hn-reset1","1");
+    }
+  }catch(e){}
+})();
