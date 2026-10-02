@@ -1,10 +1,11 @@
+/* [Grok-Bot] V1.60: Ablauf je Wochentag (Wochenuebersicht Prathana-Heft Version 10), Tagesauswahl, fehlende Gebete grau. */
 /* [Grok-Bot] V1.58: Morgen- und Abendgebet vollstaendig wie im Heft (Astotram, Vaisnava Mantra, Ganesa und Gayatri vor dem Kavacam, Closing Prayers). */
 /* [Grok-Bot] V1.53: Gruppen, Details-Taste und Erklaertexte in 6 Sprachen (DE EN FR ES RU HI). */
 /* [Grok-Bot] V1.52: Prayer-Liste kompakt (nur Titel); Taste "Details" blendet Quellen ein, wird pro Geraet gemerkt.
    Liste gegliedert wie im Prathana-Heft: Morgengebet, Abendgebet, Weitere. Titel des laufenden Gebets steht ueber den Lyrics. Erklaertexte (Tooltip) fuer alle Tasten. Hinweise "Strophen wie im Heft ..." entfallen. */
 (function(){
   var st=document.createElement("style");
-  st.textContent="body:not(.show-det) .list .quelle{display:none}body:not(.show-det) .list{gap:4px}body:not(.show-det) .list .item{padding:5px 9px;min-height:30px;font-size:.92rem}@media(min-width:800px){body:not(.show-det) .list{grid-template-columns:repeat(4,1fr)}}.listbar{margin:8px 12px 0;display:flex;justify-content:flex-end}.list .grp{grid-column:1/-1;color:var(--gold);font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;margin:6px 2px 0}.list .grp:first-child{margin-top:0}#lyrTitle{margin:0 12px -4px;color:var(--gold);font-family:'Gentium Book Plus',Georgia,serif;font-size:1.15rem}#lyrTitle small{color:var(--muted);font-family:'Source Sans 3',sans-serif;font-size:.75rem;margin-left:.6em;letter-spacing:.04em}#lyrTitle:empty{display:none}.listbar button{padding:3px 9px;min-height:26px;font-size:.8rem;border-radius:6px}";
+  st.textContent="body:not(.show-det) .list .quelle{display:none}body:not(.show-det) .list{gap:4px}body:not(.show-det) .list .item{padding:5px 9px;min-height:30px;font-size:.92rem}@media(min-width:800px){body:not(.show-det) .list{grid-template-columns:repeat(4,1fr)}}.listbar{margin:8px 12px 0;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}.daybar{display:flex;gap:3px;flex-wrap:wrap}.daybar button{min-width:30px;padding:3px 6px}.daybar button.today{border-color:var(--gold)}.daybar button.on{background:var(--gold);color:#000}.list .item.miss{opacity:.45;cursor:default;font-style:italic}.list .grp{grid-column:1/-1;color:var(--gold);font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;margin:6px 2px 0}.list .grp:first-child{margin-top:0}#lyrTitle{margin:0 12px -4px;color:var(--gold);font-family:'Gentium Book Plus',Georgia,serif;font-size:1.15rem}#lyrTitle small{color:var(--muted);font-family:'Source Sans 3',sans-serif;font-size:.75rem;margin-left:.6em;letter-spacing:.04em}#lyrTitle:empty{display:none}.listbar button{padding:3px 9px;min-height:26px;font-size:.8rem;border-radius:6px}";
   document.head.appendChild(st);
   var on=false; try{ on=localStorage.getItem("bpp-det")==="1"; }catch(e){}
   document.body.classList.toggle("show-det", on);
@@ -18,10 +19,27 @@
   function lab(){ b.textContent=tr(on?DET[1]:DET[0]); b.classList.toggle("on", on); }
   b.onclick=function(){ on=!on; document.body.classList.toggle("show-det", on); try{ localStorage.setItem("bpp-det", on?"1":"0"); }catch(e){} lab(); };
   bar.appendChild(b); list.parentNode.insertBefore(bar, list); lab();
-  var GROUPS=[
-    { n:["Morgengebet","Morning prayers","Prière du matin","Oración de la mañana","Утренняя молитва","प्रातः प्रार्थना"], ids:["guru-stotram","ashtotram","vaishnava-mantra","guruji-gayatri","gayatri","ganesha-mantra","suprabhatam","govinda","narasimha","hanuman","ramanuja","vishnu-arati","closing-morning"] },
-    { n:["Abendgebet","Evening prayers","Prière du soir","Oración de la tarde","Вечерняя молитва","सायं प्रार्थना"], ids:["guru-stotram-abend","ashtotram","ganesha-mantra","gayatri","kavacham","hanuman","bhajare","closing-evening","vishnu-arati","closing-arati"] }
-  ];
+  /* [Grok-Bot] V1.60: Ablauf je Wochentag wie in der Wochenuebersicht des Prathana-Hefts (Version 10). Heute ist vorgewaehlt, andere Tage per Taste. Was noch nicht im Player ist, steht grau in der Liste. */
+  var NM=["Morgengebet","Morning prayers","Prière du matin","Oración de la mañana","Утренняя молитва","प्रातः प्रार्थना"], NE=["Abendgebet","Evening prayers","Prière du soir","Oración de la tarde","Вечерняя молитва","सायं प्रार्थना"];
+  var DAYS=[["Montag","Monday","Lundi","Lunes","\u041f\u043e\u043d\u0435\u0434\u0435\u043b\u044c\u043d\u0438\u043a","\u0938\u094b\u092e\u0935\u093e\u0930"],["Dienstag","Tuesday","Mardi","Martes","\u0412\u0442\u043e\u0440\u043d\u0438\u043a","\u092e\u0902\u0917\u0932\u0935\u093e\u0930"],["Mittwoch","Wednesday","Mercredi","Mi\u00e9rcoles","\u0421\u0440\u0435\u0434\u0430","\u092c\u0941\u0927\u0935\u093e\u0930"],["Donnerstag","Thursday","Jeudi","Jueves","\u0427\u0435\u0442\u0432\u0435\u0440\u0433","\u0917\u0941\u0930\u0941\u0935\u093e\u0930"],["Freitag","Friday","Vendredi","Viernes","\u041f\u044f\u0442\u043d\u0438\u0446\u0430","\u0936\u0941\u0915\u094d\u0930\u0935\u093e\u0930"],["Samstag","Saturday","Samedi","S\u00e1bado","\u0421\u0443\u0431\u0431\u043e\u0442\u0430","\u0936\u0928\u093f\u0935\u093e\u0930"],["Sonntag","Sunday","Dimanche","Domingo","\u0412\u043e\u0441\u043a\u0440\u0435\u0441\u0435\u043d\u044c\u0435","\u0930\u0935\u093f\u0935\u093e\u0930"]];
+  var MISS={ "guru-bhajan":"Guru Bhajan", "vedic-fr":"Vedic chanting: \u015ar\u012b S\u016bktam, Bh\u016b S\u016bktam, N\u012bl\u0101 S\u016bktam", "vedic-sa":"Vedic chanting: Puru\u1e63a S\u016bktam, Vi\u1e63\u1e47u Sahasran\u0101ma, N\u0101r\u0101ya\u1e47a S\u016bktam", "durga":"\u015ar\u012b Durg\u0101 C\u0101l\u012bs\u0101", "vchalisa":"Sri Vishwananda Chalisa", "gita":"Bhagavad G\u012bt\u0101", "ghalin":"Ghalin Lot\u0101nga\u1e47", "saprem":"\u0100rat\u012b Saprem, Jai Jai Vitthala Parabrahma", "panduranga":"P\u0101\u1e47\u1e0dura\u1e45ga A\u1e63\u1e6dakam" };
+  var NOTYET=["noch nicht im Player","not in the player yet","pas encore dans le lecteur","a\u00fan no est\u00e1 en el reproductor","\u043f\u043e\u043a\u0430 \u043d\u0435\u0442 \u0432 \u043f\u043b\u0435\u0435\u0440\u0435","\u0905\u092d\u0940 \u092a\u094d\u0932\u0947\u092f\u0930 \u092e\u0947\u0902 \u0928\u0939\u0940\u0902"];
+  function plan(d){
+    var m=["guru-stotram","~guru-bhajan","ashtotram","vaishnava-mantra","guruji-gayatri","gayatri","ganesha-mantra","suprabhatam","govinda"];
+    if(d<=3) m=m.concat(["narasimha","ramanuja","vishnu-arati","closing-morning"]);
+    else if(d===4) m=m.concat(["~vedic-fr","narasimha","ramanuja","lakshmi-arati","closing-morning"]);
+    else if(d===5) m=m.concat(["~vedic-sa","narasimha","ramanuja","vishnu-arati","closing-morning"]);
+    else m=m.concat(["kavacham","narasimha","hanuman","ramanuja","vishnu-arati","closing-arati"]);
+    var e;
+    if(d===6) e=["~ghalin","~saprem","closing-arati","~panduranga","~gita"];
+    else { e=["guru-stotram-abend","ashtotram","ganesha-mantra","gayatri","kavacham","narasimha","hanuman"]; if(d===1) e.push("~durga"); if(d===3) e.push("~vchalisa"); e=e.concat(["bhajare","closing-evening","~gita","mukunda","~ghalin","~saprem","closing-arati","~panduranga"]); }
+    return [ { n:NM, ids:m }, { n:NE, ids:e, late:d===6 } ];
+  }
+  var day=(new Date().getDay()+6)%7, GROUPS=plan(day);
+  var dbar=document.createElement("div"); dbar.className="daybar";
+  DAYS.forEach(function(D,k){ var x=document.createElement("button"); x.type="button"; x.setAttribute("data-d",k); x.onclick=function(){ day=k; GROUPS=plan(day); if(typeof window.paintList==="function") window.paintList(); else regroup(); }; dbar.appendChild(x); });
+  bar.insertBefore(dbar, b);
+  function dayLab(){ var today=(new Date().getDay()+6)%7; dbar.querySelectorAll("button").forEach(function(x){ var k=+x.getAttribute("data-d"); x.textContent=tr(DAYS[k]).slice(0,2); x.title=tr(DAYS[k]); x.classList.toggle("on", k===day); x.classList.toggle("today", k===today); }); }
   function regroup(){
     var btns=Array.prototype.slice.call(list.querySelectorAll("button.item"));
     if(btns.length!==PRAYERS.length) return;
@@ -34,13 +52,15 @@
       used[idx]=true; frag.appendChild(node);
     }
     GROUPS.forEach(function(G){
-      head(tr(G.n));
-      G.ids.forEach(function(id){ var idx=PRAYERS.findIndex(function(p){ return p.id===id; }); if(idx>=0) put(idx); });
+      head(tr(G.n)+" \u00b7 "+tr(DAYS[day])+(G.late?" \u00b7 21:00":""));
+      G.ids.forEach(function(id){
+        if(id.charAt(0)==="~"){ var mx=document.createElement("div"); mx.className="item miss"; mx.textContent=MISS[id.slice(1)]||id.slice(1); mx.title=tr(NOTYET); frag.appendChild(mx); return; }
+        var idx=PRAYERS.findIndex(function(p){ return p.id===id; }); if(idx>=0) put(idx); });
     });
     var rest=[]; PRAYERS.forEach(function(p, idx){ if(!used[idx]) rest.push(idx); });
     if(rest.length){ head(tr(["Weitere","More","Autres","Otros","Другие","अन्य"])); rest.forEach(put); }
     list.innerHTML=""; list.appendChild(frag);
-    title();
+    dayLab(); title();
   }
   var tt=document.createElement("div"); tt.id="lyrTitle";
   var stg=document.getElementById("stage"); if(stg) stg.parentNode.insertBefore(tt, stg);
