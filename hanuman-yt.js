@@ -13,19 +13,35 @@
 })();
 /* [Grok-Bot] V1.57: YouTube meldet seinen Abspielstatus nicht immer. Darum gilt das Video als laufend, sobald seine Zeit weiterlaeuft, und als angehalten, wenn sie stehen bleibt. Sonst startete der Autoscroll nicht. */
 (function(){
-  var lastT=null, still=0;
+  var lastT=null, still=0, moving=false;
   setInterval(function(){
-    if(typeof ytOn==="undefined" || !ytOn) { lastT=null; still=0; return; }
+    if(typeof ytOn==="undefined" || !ytOn) { lastT=null; still=0; moving=false; return; }
     if(typeof ytTime!=="number") return;
     if(lastT!==null && ytTime!==lastT){
-      still=0;
+      still=0; moving=true;
       if(!ytPlaying){ ytPlaying=true; try{ markPlayOrigin(); }catch(e){} try{ syncPlayBtn(); }catch(e){} }
     } else if(lastT!==null){
       still++;
+      if(still>=2) moving=false;
       if(still>=3 && ytPlaying){ ytPlaying=false; try{ syncPlayBtn(); }catch(e){} }
     }
     lastT=ytTime;
   }, 700);
+  /* [Grok-Bot] V1.59: Play/Pause beim Video richtet sich danach, ob das Video wirklich laeuft. Vorher galt ein frisch geladenes, noch stehendes Video als laufend, und der erste Druck auf Play hielt es an statt es zu starten. */
+  window.addEventListener("message", function(e){
+    var d=e.data; if(typeof d==="string"){ try{ d=JSON.parse(d); }catch(err){ return; } }
+    if(!d || typeof ytOn==="undefined" || !ytOn) return;
+    if((d.event==="initialDelivery" || d.event==="onReady") && !moving && ytPlaying){ ytPlaying=false; try{ syncPlayBtn(); }catch(err){} }
+  });
+  var tp=window.togglePlay;
+  window.togglePlay=function(){
+    if(typeof i!=="undefined" && i>=0 && ytOn){
+      if(moving){ ytCmd("pauseVideo"); ytPlaying=false; moving=false; still=0; }
+      else { ytCmd("playVideo"); ytPlaying=true; still=0; try{ markPlayOrigin(); }catch(err){} }
+      try{ syncPlayBtn(); }catch(err){} return;
+    }
+    return tp.apply(this, arguments);
+  };
   /* Alte, von Hand gesetzte Strophenzeiten der Hanuman Chalisa (YouTube) einmalig verwerfen, die eingemessenen Zeiten gelten */
   try{
     if(localStorage.getItem("bpp-hn-reset1")!=="1"){
@@ -62,5 +78,41 @@
   P("closing-arati","Closing Prayers (\u0101rat\u012b)","Abendgebet","27",[].concat(TVAM,ASATO,GLOR,SUD,PURN,SHG,JAI));
   var k=PRAYERS.findIndex(function(p){ return p.id==="final-prayers"; }); if(k>=0) PRAYERS.splice(k,1);
   var B=PRAYERS.find(function(p){ return p.id==="bhajare"; }); if(B) B.titel="Paramahamsa Sri Swami Vishwananda \u0100rat\u012b (Bhajare)";
-  document.addEventListener("DOMContentLoaded", function(){ var v=document.querySelector("h1 .ver"); if(v) v.textContent="V1.58"; document.title="Bhakti Prayers Player V1.58"; });
+  document.addEventListener("DOMContentLoaded", function(){ var v=document.querySelector("h1 .ver"); if(v) v.textContent="V1.59"; document.title="Bhakti Prayers Player V1.59"; });
+})();
+/* [Grok-Bot] V1.59: Hovertext jeder Sprachtaste in ihrer eigenen Sprache. Details in der Liste (Quelle, Seite, Fortsetzungsstelle) in der gewaehlten Sprache. */
+(function(){
+  var LL=["de","en","fr","es","ru","hi"];
+  var LT={ btnLangDe:"Bedienung und \u00dcbersetzung auf Deutsch", btnLangEn:"Controls and translation in English", btnLangFr:"Interface et traduction en fran\u00e7ais", btnLangEs:"Controles y traducci\u00f3n en espa\u00f1ol", btnLangRu:"\u0418\u043d\u0442\u0435\u0440\u0444\u0435\u0439\u0441 \u0438 \u043f\u0435\u0440\u0435\u0432\u043e\u0434 \u043d\u0430 \u0440\u0443\u0441\u0441\u043a\u043e\u043c", btnLangHi:"\u0928\u093f\u092f\u0902\u0924\u094d\u0930\u0923 \u0914\u0930 \u0905\u0928\u0941\u0935\u093e\u0926 \u0939\u093f\u0928\u094d\u0926\u0940 \u092e\u0947\u0902" };
+  var W=[
+    [/Morgen- und Abendgebet/g,"Morning and evening prayers","Pri\u00e8re du matin et du soir","Oraci\u00f3n de la ma\u00f1ana y de la tarde","\u0423\u0442\u0440\u0435\u043d\u043d\u044f\u044f \u0438 \u0432\u0435\u0447\u0435\u0440\u043d\u044f\u044f \u043c\u043e\u043b\u0438\u0442\u0432\u0430","\u092a\u094d\u0930\u093e\u0924\u0903 \u0914\u0930 \u0938\u093e\u092f\u0902 \u092a\u094d\u0930\u093e\u0930\u094d\u0925\u0928\u093e"],
+    [/Morgengebet/g,"Morning prayers","Pri\u00e8re du matin","Oraci\u00f3n de la ma\u00f1ana","\u0423\u0442\u0440\u0435\u043d\u043d\u044f\u044f \u043c\u043e\u043b\u0438\u0442\u0432\u0430","\u092a\u094d\u0930\u093e\u0924\u0903 \u092a\u094d\u0930\u093e\u0930\u094d\u0925\u0928\u093e"],
+    [/Abendgebet/g,"Evening prayers","Pri\u00e8re du soir","Oraci\u00f3n de la tarde","\u0412\u0435\u0447\u0435\u0440\u043d\u044f\u044f \u043c\u043e\u043b\u0438\u0442\u0432\u0430","\u0938\u093e\u092f\u0902 \u092a\u094d\u0930\u093e\u0930\u094d\u0925\u0928\u093e"],
+    [/MP3 als Ersatz/g,"MP3 as fallback","MP3 en secours","MP3 de reserva","MP3 \u043a\u0430\u043a \u0437\u0430\u043f\u0430\u0441\u043d\u043e\u0439 \u0432\u0430\u0440\u0438\u0430\u043d\u0442","MP3 \u0935\u093f\u0915\u0932\u094d\u092a \u0915\u0947 \u0930\u0942\u092a \u092e\u0947\u0902"],
+    [/Ton:/g,"Audio:","Son :","Audio:","\u0417\u0432\u0443\u043a:","\u0927\u094d\u0935\u0928\u093f:"],
+    [/Prathana-Heft S\./g,"Prathana booklet p.","Livret Prathana p.","Cuadernillo Prathana p.","\u0411\u0440\u043e\u0448\u044e\u0440\u0430 Prathana, \u0441.","\u092a\u094d\u0930\u093e\u0930\u094d\u0925\u0928\u093e \u092a\u0941\u0938\u094d\u0924\u093f\u0915\u093e, \u092a\u0943."],
+    [/Chords-Heft/g,"chord booklet","livret d'accords","cuadernillo de acordes","\u0441\u0431\u043e\u0440\u043d\u0438\u043a \u0430\u043a\u043a\u043e\u0440\u0434\u043e\u0432","\u0915\u0949\u0930\u094d\u0921 \u092a\u0941\u0938\u094d\u0924\u093f\u0915\u093e"],
+    [/\bHeft\b/g,"booklet","livret","cuadernillo","\u0431\u0440\u043e\u0448\u044e\u0440\u0430","\u092a\u0941\u0938\u094d\u0924\u093f\u0915\u093e"],
+    [/Notenblatt/g,"sheet music","partition","partitura","\u043d\u043e\u0442\u044b","\u0938\u094d\u0935\u0930\u0932\u093f\u092a\u093f"],
+    [/Seite /g,"page ","page ","p\u00e1gina ","\u0441. ","\u092a\u0943. "],
+    [/weiter ab/g,"resume at","reprendre \u00e0","continuar en","\u043f\u0440\u043e\u0434\u043e\u043b\u0436\u0438\u0442\u044c \u0441","\u092f\u0939\u093e\u0901 \u0938\u0947 \u091c\u093e\u0930\u0940"],
+    [/\bS\. /g,"p. ","p. ","p. ","\u0441. ","\u092a\u0943. "],
+    [/ und /g," and "," et "," y "," \u0438 "," \u0914\u0930 "]
+  ];
+  function li(){ var k=(typeof lang==="undefined")?0:LL.indexOf(lang); return k<0?1:k; }
+  function fix(){
+    var k=li();
+    document.querySelectorAll("#list .quelle").forEach(function(q){
+      if(q.getAttribute("data-de")===null) q.setAttribute("data-de", q.textContent);
+      var s=q.getAttribute("data-de");
+      if(k>0) W.forEach(function(w){ s=s.replace(w[0], w[k]); });
+      if(q.textContent!==s) q.textContent=s;
+    });
+    Object.keys(LT).forEach(function(id){ var e=document.getElementById(id); if(e) e.title=LT[id]; });
+  }
+  window.bppFixDet=fix;
+  document.addEventListener("DOMContentLoaded", function(){ setTimeout(function(){
+    ["paintList","applyUI"].forEach(function(n){ var f=window[n]; if(typeof f==="function"){ window[n]=function(){ var r=f.apply(this, arguments); fix(); return r; }; } });
+    fix();
+  }, 0); });
 })();
