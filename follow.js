@@ -1,7 +1,8 @@
+/* [Grok-Bot] V1.53: Vorlauf auf 0,5 s verkuerzt (war 1,5 s, zu frueh). Beim Start eines Prayers springt das Strophenfenster zur Strophe, die zur Abspielstelle passt (Anfang = Strophe 1). */
 /* [Grok-Bot] V1.52: Autoscroll wechselt 1,5 s vor dem Strophenanfang, damit man die neue Strophe noch lesen kann.
    YouTube: Autoscroll laeuft nur, solange das Video wirklich spielt (Status vom YouTube-Player), Pause haelt ihn an. */
 (function(){
-  var LEAD=1.5, inAuto=false;
+  var LEAD=0.5, inAuto=false;
   var sp=window.songProgress, al=window.autoLineFromTime, sy=window.showYt;
   if(typeof sp==="function"){ window.songProgress=function(){ var p=sp.apply(this, arguments); if(p && inAuto){ p.t=Math.min(p.t+LEAD, Math.max(0, p.dur-0.1)); } return p; }; }
   if(typeof al==="function"){ window.autoLineFromTime=function(){ inAuto=true; try{ return al.apply(this, arguments); } finally { inAuto=false; } }; }
@@ -20,5 +21,37 @@
     if(d.event==="onStateChange") setState(d.info);
     if(d.event==="infoDelivery" && d.info) setState(d.info.playerState);
   });
+  function pinNow(){
+    var panel=document.getElementById("lyrics"); if(!panel) return;
+    var on=panel.querySelector(".stanza.on"); if(!on) return;
+    var pr=panel.getBoundingClientRect(), r=on.getBoundingClientRect(), cs=getComputedStyle(panel);
+    if(panel.scrollWidth>panel.clientWidth+4) panel.scrollLeft+=r.left-pr.left-parseFloat(cs.paddingLeft||0);
+    else panel.scrollTop+=r.top-pr.top-parseFloat(cs.paddingTop||0);
+  }
+  function syncFromTime(){
+    if(typeof i==="undefined" || i<0) return true;
+    if(!ytOn){
+      if(!(a.src && isFinite(a.duration) && a.duration>=8)) return false;
+      if(pendingSeek>=3 && (a.currentTime||0)<1) return false;
+    } else if(typeof ytTime!=="number") return false;
+    var p=songProgress(); if(!p || !p.gs || !p.gs.length) return true;
+    var k=stanzaFromProgress(p); if(k<0) k=0; if(k>p.gs.length-1) k=p.gs.length-1;
+    var start=p.gs[k].start;
+    if(start!==line){ line=start; persistNow(); paintLyrics(); }
+    pinNow(); return true;
+  }
+  var timer=null;
+  document.addEventListener("DOMContentLoaded", function(){ var pl=window.play; if(typeof pl==="function"){ window.play=function(){
+    var r=pl.apply(this, arguments);
+    var P=PRAYERS[i];
+    if(P && (P.audio || P.youtube) && !(pendingSeek>=3) && line!==0){ line=0; persistNow(); paintLyrics(); }
+    [60,400,1200].forEach(function(t){ setTimeout(pinNow, t); });
+    if(timer) clearInterval(timer);
+    var n=0; timer=setInterval(function(){ n++; if(syncFromTime() || n>30){ clearInterval(timer); timer=null; } }, 300);
+    return r;
+  }; }
+    if(typeof i!=="undefined" && i>=0){ var n0=0, t0=setInterval(function(){ n0++; if(syncFromTime() || n0>30) clearInterval(t0); }, 300); }
+  });
+  window.addEventListener("load", function(){ setTimeout(pinNow, 300); });
   setInterval(function(){ if(ytOn){ try{ yt.contentWindow.postMessage(JSON.stringify({event:"listening",id:1}),"*"); }catch(e){} } }, 1500);
 })();
