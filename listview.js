@@ -18,8 +18,8 @@
   b.onclick=function(){ on=!on; document.body.classList.toggle("show-det", on); try{ localStorage.setItem("bpp-det", on?"1":"0"); }catch(e){} lab(); };
   bar.appendChild(b); list.parentNode.insertBefore(bar, list); lab();
   var GROUPS=[
-    { n:["Morgengebet","Morning prayers","Prière du matin","Oración de la mañana","Утренняя молитва","प्रातः प्रार्थना"], ids:["guru-stotram","guruji-gayatri","gayatri","ganesha-mantra","suprabhatam","govinda","narasimha","ramanuja","vishnu-arati","final-prayers"] },
-    { n:["Abendgebet","Evening prayers","Prière du soir","Oración de la tarde","Вечерняя молитва","सायं प्रार्थना"], ids:["guru-stotram-abend","kavacham","bhajare","vishnu-arati"] }
+    { n:["Morgengebet","Morning prayers","Prière du matin","Oración de la mañana","Утренняя молитва","प्रातः प्रार्थना"], ids:["guru-stotram","guruji-gayatri","gayatri","ganesha-mantra","suprabhatam","govinda","narasimha","hanuman","ramanuja","vishnu-arati","final-prayers"] },
+    { n:["Abendgebet","Evening prayers","Prière du soir","Oración de la tarde","Вечерняя молитва","सायं प्रार्थना"], ids:["guru-stotram-abend","kavacham","hanuman","bhajare","vishnu-arati"] }
   ];
   function regroup(){
     var btns=Array.prototype.slice.call(list.querySelectorAll("button.item"));
