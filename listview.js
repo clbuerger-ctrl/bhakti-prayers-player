@@ -1,4 +1,4 @@
-/* [Grok-Bot] V1.62: Abendgebet wie im Prathana-Heft: langes Abend-Nrsimha-Prayer, Guru Arati nach dem Bhajare, in den Closing Prayers zusaetzlich Rukmini Maharani und Pandarinatha. */
+/* [Grok-Bot] V1.63: Aufnahme fuer das Ashtotram, Mini-Ladebalken am aktiven Prayer, Zeichen fuer Prayers ohne Ton, unter "Alle" keine doppelten Titel. V1.62: Abendgebet wie im Prathana-Heft: langes Abend-Nrsimha-Prayer, Guru Arati nach dem Bhajare, in den Closing Prayers zusaetzlich Rukmini Maharani und Pandarinatha. */
 (function(){
   if(typeof PRAYERS==="undefined") return;
   var Q="Prathana with chords \u00b7 Sri Vitthal Dham";
@@ -40,7 +40,7 @@
   var NOTYET=["noch nicht im Player","not in the player yet","pas encore dans le lecteur","a\u00fan no est\u00e1 en el reproductor","\u043f\u043e\u043a\u0430 \u043d\u0435\u0442 \u0432 \u043f\u043b\u0435\u0435\u0440\u0435","\u0905\u092d\u0940 \u092a\u094d\u0932\u0947\u092f\u0930 \u092e\u0947\u0902 \u0928\u0939\u0940\u0902"];
   var ALL=["Alle","All","Tous","Todos","\u0412\u0441\u0435","\u0938\u092d\u0940"];
   function plan(d){
-    if(d<0) return [ { n:ALL, ids:PRAYERS.map(function(p){ return p.id; }), all:true } ];
+    if(d<0){ var seen={}, ids=[], skip=[]; PRAYERS.forEach(function(p){ var k=String(p.titel||"").trim().toLowerCase(); if(seen[k]) skip.push(p.id); else { seen[k]=1; ids.push(p.id); } }); return [ { n:ALL, ids:ids, skip:skip, all:true } ]; }
     var m=["guru-stotram","~guru-bhajan","ashtotram","vaishnava-mantra","guruji-gayatri","gayatri","ganesha-mantra","suprabhatam","govinda"];
     if(d<=3) m=m.concat(["narasimha","ramanuja","vishnu-arati","closing-morning"]);
     else if(d===4) m=m.concat(["~vedic-fr","narasimha","ramanuja","lakshmi-arati","closing-morning"]);
@@ -66,6 +66,7 @@
       var b0=btns[idx], node=b0;
       if(used[idx]){ node=b0.cloneNode(true); }
       node.onclick=function(){ play(idx, true); };
+      node.setAttribute("data-i", idx); var Pq=PRAYERS[idx]; if(Pq && !Pq.audio && !Pq.youtube) node.classList.add("noaud"); else node.classList.remove("noaud");
       used[idx]=true; frag.appendChild(node);
     }
     GROUPS.forEach(function(G){
@@ -74,10 +75,11 @@
         if(id.charAt(0)==="~"){ var mx=document.createElement("div"); mx.className="item miss"; mx.textContent=MISS[id.slice(1)]||id.slice(1); mx.title=tr(NOTYET); frag.appendChild(mx); return; }
         var idx=PRAYERS.findIndex(function(p){ return p.id===id; }); if(idx>=0) put(idx); });
     });
+    GROUPS.forEach(function(G){ (G.skip||[]).forEach(function(id){ var k=PRAYERS.findIndex(function(p){ return p.id===id; }); if(k>=0) used[k]=true; }); });
     var rest=[]; PRAYERS.forEach(function(p, idx){ if(!used[idx]) rest.push(idx); });
     if(rest.length){ head(tr(["Weitere","More","Autres","Otros","Другие","अन्य"])); rest.forEach(put); }
     list.innerHTML=""; list.appendChild(frag);
-    dayLab(); title();
+    dayLab(); title(); if(window.__ldPaint) window.__ldPaint();
   }
   var tt=document.createElement("div"); tt.id="lyrTitle";
   var stg=document.getElementById("stage"); if(stg) stg.parentNode.insertBefore(tt, stg);
@@ -122,7 +124,7 @@
     var orig=window.applyUI; if(typeof orig==="function"){ window.applyUI=function(){ orig.apply(this, arguments); lab(); tips(); }; } lab(); tips(); });
 })();
 /* [Grok-Bot] V1.61: Versionsanzeige. */
-document.addEventListener("DOMContentLoaded", function(){ setTimeout(function(){ var v=document.querySelector("h1 .ver"); if(v) v.textContent="V1.62"; document.title="Bhakti Prayers Player V1.62"; }, 0); });
+document.addEventListener("DOMContentLoaded", function(){ setTimeout(function(){ var v=document.querySelector("h1 .ver"); if(v) v.textContent="V1.63"; document.title="Bhakti Prayers Player V1.63"; }, 0); });
 /* [Grok-Bot] V1.61: Sprachauswahl als kleines Dropdown statt sechs Tasten. Die alten Tasten bleiben unsichtbar im Seitenaufbau, damit vorhandene Funktionen weiterlaufen. */
 document.addEventListener("DOMContentLoaded", function(){
   var L=[["de","DE","Deutsch"],["en","EN","English"],["fr","FR","Fran\u00e7ais"],["es","ES","Espa\u00f1ol"],["ru","RU","\u0420\u0443\u0441\u0441\u043a\u0438\u0439"],["hi","HI","\u0939\u093f\u0928\u094d\u0926\u0940"]];
@@ -138,3 +140,60 @@ document.addEventListener("DOMContentLoaded", function(){
   var orig=window.applyUI; if(typeof orig==="function"){ window.applyUI=function(){ orig.apply(this, arguments); sync(); }; }
   sync();
 });
+
+/* [Grok-Bot] V1.63: Ashtotram-Aufnahme + Mini-Ladebalken in der Liste */
+(function(){
+  try{ var P=PRAYERS.find(function(p){ return p.id==="ashtotram"; }); if(P && !P.audio) P.audio="https://www.dropbox.com/scl/fo/9jrivp0fkl4bfo9t0dejx/AH5jHUcyt3nRMmAxFO4M2V8/Sri%20Swami%20Vishwananda%20Ashtotram.mp3?rlkey=s8lox2d2652b2i133h1jjty3k&dl=1"; }catch(e){}
+  var css=document.createElement("style");
+  css.textContent=".item{position:relative}"+
+    ".item .ldb{display:inline-block;vertical-align:middle;margin-left:8px;width:46px;height:5px;border-radius:3px;background:rgba(127,127,127,.25);overflow:hidden;position:relative}"+
+    ".item .ldb i{display:block;height:100%;width:0;background:#e0a030;border-radius:3px;transition:width .3s}"+
+    ".item .ldb.ind i{width:30%;position:absolute;animation:ldmv 1s linear infinite}"+
+    "@keyframes ldmv{from{left:-30%}to{left:100%}}"+
+    ".item .ldp{font-size:10px;opacity:.7;margin-left:4px;vertical-align:middle}"+
+    ".item.noaud::after{content:'\\1F507';font-size:11px;opacity:.55;margin-left:6px}";
+  document.head.appendChild(css);
+  var NOA=["Noch keine Aufnahme","No recording yet","Pas encore d'enregistrement","Aún sin grabación","Записи пока нет","अभी रिकॉर्डिंग नहीं"];
+  var LANGS=["de","en","fr","es","ru","hi"];
+  var st={on:false,pct:0,ind:true};
+  function aud(){ return window.a || document.getElementById("a"); }
+  function calc(){
+    var A=aud(); if(!A) return;
+    var d=A.duration, p=0, ind=true;
+    if(d && isFinite(d) && d>0){ ind=false;
+      try{ var b=A.buffered, t=A.currentTime||0, e=0;
+        for(var k=0;k<b.length;k++){ if(b.start(k)<=t+1 && b.end(k)>e) e=b.end(k); }
+        if(!e && b.length) e=b.end(b.length-1);
+        p=Math.max(0,Math.min(100,Math.round(e/d*100))); }catch(x){}
+    }
+    var on=!!A.currentSrc && (ind || p<99) && !A.error;
+    if(on===st.on && p===st.pct && ind===st.ind) return;
+    st.pct=p; st.ind=ind; st.on=on; paint();
+  }
+  function paint(){
+    var list=document.getElementById("list"); if(!list) return;
+    var old=list.querySelectorAll(".ldb,.ldp"); for(var k=0;k<old.length;k++) old[k].remove();
+    var li=(LANGS.indexOf(window.lang)>=0)?LANGS.indexOf(window.lang):0;
+    var nb=list.querySelectorAll(".item.noaud"); for(var k=0;k<nb.length;k++) nb[k].title=NOA[li];
+    if(!st.on) return;
+    var P=PRAYERS[window.i]; if(!P || !P.audio) return;
+    var bs=list.querySelectorAll('.item[data-i="'+window.i+'"]');
+    for(var k=0;k<bs.length;k++){
+      var q=bs[k].querySelector(".quelle");
+      var bar=document.createElement("span"); bar.className="ldb"+(st.ind?" ind":""); bar.innerHTML="<i></i>";
+      if(!st.ind) bar.firstChild.style.width=st.pct+"%";
+      var pc=document.createElement("span"); pc.className="ldp"; pc.textContent=st.ind?"…":st.pct+"%";
+      if(q){ bs[k].insertBefore(bar,q); bs[k].insertBefore(pc,q); } else { bs[k].appendChild(bar); bs[k].appendChild(pc); }
+    }
+  }
+  window.__ldPaint=paint;
+  function init(){
+    var A=aud(); if(!A) return;
+    A.addEventListener("loadstart",function(){ st.on=true; st.pct=0; st.ind=true; paint(); });
+    ["progress","loadedmetadata","durationchange","canplay","canplaythrough","playing","waiting","seeked","timeupdate"].forEach(function(ev){ A.addEventListener(ev,calc); });
+    A.addEventListener("error",function(){ st.on=false; paint(); });
+    A.addEventListener("emptied",function(){ st.on=false; paint(); });
+    paint();
+  }
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",function(){ setTimeout(init,0); }); else init();
+})();
