@@ -1,3 +1,4 @@
+/* [Grok-Bot] V1.61: Taste "Alle" zeigt alle Prayers ohne Tagesfilter. */
 /* [Grok-Bot] V1.60: Ablauf je Wochentag (Wochenuebersicht Prathana-Heft Version 10), Tagesauswahl, fehlende Gebete grau. */
 /* [Grok-Bot] V1.58: Morgen- und Abendgebet vollstaendig wie im Heft (Astotram, Vaisnava Mantra, Ganesa und Gayatri vor dem Kavacam, Closing Prayers). */
 /* [Grok-Bot] V1.53: Gruppen, Details-Taste und Erklaertexte in 6 Sprachen (DE EN FR ES RU HI). */
@@ -24,7 +25,9 @@
   var DAYS=[["Montag","Monday","Lundi","Lunes","\u041f\u043e\u043d\u0435\u0434\u0435\u043b\u044c\u043d\u0438\u043a","\u0938\u094b\u092e\u0935\u093e\u0930"],["Dienstag","Tuesday","Mardi","Martes","\u0412\u0442\u043e\u0440\u043d\u0438\u043a","\u092e\u0902\u0917\u0932\u0935\u093e\u0930"],["Mittwoch","Wednesday","Mercredi","Mi\u00e9rcoles","\u0421\u0440\u0435\u0434\u0430","\u092c\u0941\u0927\u0935\u093e\u0930"],["Donnerstag","Thursday","Jeudi","Jueves","\u0427\u0435\u0442\u0432\u0435\u0440\u0433","\u0917\u0941\u0930\u0941\u0935\u093e\u0930"],["Freitag","Friday","Vendredi","Viernes","\u041f\u044f\u0442\u043d\u0438\u0446\u0430","\u0936\u0941\u0915\u094d\u0930\u0935\u093e\u0930"],["Samstag","Saturday","Samedi","S\u00e1bado","\u0421\u0443\u0431\u0431\u043e\u0442\u0430","\u0936\u0928\u093f\u0935\u093e\u0930"],["Sonntag","Sunday","Dimanche","Domingo","\u0412\u043e\u0441\u043a\u0440\u0435\u0441\u0435\u043d\u044c\u0435","\u0930\u0935\u093f\u0935\u093e\u0930"]];
   var MISS={ "guru-bhajan":"Guru Bhajan", "vedic-fr":"Vedic chanting: \u015ar\u012b S\u016bktam, Bh\u016b S\u016bktam, N\u012bl\u0101 S\u016bktam", "vedic-sa":"Vedic chanting: Puru\u1e63a S\u016bktam, Vi\u1e63\u1e47u Sahasran\u0101ma, N\u0101r\u0101ya\u1e47a S\u016bktam", "durga":"\u015ar\u012b Durg\u0101 C\u0101l\u012bs\u0101", "vchalisa":"Sri Vishwananda Chalisa", "gita":"Bhagavad G\u012bt\u0101", "ghalin":"Ghalin Lot\u0101nga\u1e47", "saprem":"\u0100rat\u012b Saprem, Jai Jai Vitthala Parabrahma", "panduranga":"P\u0101\u1e47\u1e0dura\u1e45ga A\u1e63\u1e6dakam" };
   var NOTYET=["noch nicht im Player","not in the player yet","pas encore dans le lecteur","a\u00fan no est\u00e1 en el reproductor","\u043f\u043e\u043a\u0430 \u043d\u0435\u0442 \u0432 \u043f\u043b\u0435\u0435\u0440\u0435","\u0905\u092d\u0940 \u092a\u094d\u0932\u0947\u092f\u0930 \u092e\u0947\u0902 \u0928\u0939\u0940\u0902"];
+  var ALL=["Alle","All","Tous","Todos","\u0412\u0441\u0435","\u0938\u092d\u0940"];
   function plan(d){
+    if(d<0) return [ { n:ALL, ids:PRAYERS.map(function(p){ return p.id; }), all:true } ];
     var m=["guru-stotram","~guru-bhajan","ashtotram","vaishnava-mantra","guruji-gayatri","gayatri","ganesha-mantra","suprabhatam","govinda"];
     if(d<=3) m=m.concat(["narasimha","ramanuja","vishnu-arati","closing-morning"]);
     else if(d===4) m=m.concat(["~vedic-fr","narasimha","ramanuja","lakshmi-arati","closing-morning"]);
@@ -38,8 +41,9 @@
   var day=(new Date().getDay()+6)%7, GROUPS=plan(day);
   var dbar=document.createElement("div"); dbar.className="daybar";
   DAYS.forEach(function(D,k){ var x=document.createElement("button"); x.type="button"; x.setAttribute("data-d",k); x.onclick=function(){ day=k; GROUPS=plan(day); if(typeof window.paintList==="function") window.paintList(); else regroup(); }; dbar.appendChild(x); });
+  (function(){ var x=document.createElement("button"); x.type="button"; x.setAttribute("data-d","-1"); x.onclick=function(){ day=-1; GROUPS=plan(day); if(typeof window.paintList==="function") window.paintList(); else regroup(); }; dbar.appendChild(x); })();
   bar.insertBefore(dbar, b);
-  function dayLab(){ var today=(new Date().getDay()+6)%7; dbar.querySelectorAll("button").forEach(function(x){ var k=+x.getAttribute("data-d"); x.textContent=tr(DAYS[k]).slice(0,2); x.title=tr(DAYS[k]); x.classList.toggle("on", k===day); x.classList.toggle("today", k===today); }); }
+  function dayLab(){ var today=(new Date().getDay()+6)%7; dbar.querySelectorAll("button").forEach(function(x){ var k=+x.getAttribute("data-d"); x.textContent=k<0?tr(ALL):tr(DAYS[k]).slice(0,2); x.title=k<0?tr(ALL):tr(DAYS[k]); x.classList.toggle("on", k===day); x.classList.toggle("today", k===today); }); }
   function regroup(){
     var btns=Array.prototype.slice.call(list.querySelectorAll("button.item"));
     if(btns.length!==PRAYERS.length) return;
@@ -52,7 +56,7 @@
       used[idx]=true; frag.appendChild(node);
     }
     GROUPS.forEach(function(G){
-      head(tr(G.n)+" \u00b7 "+tr(DAYS[day])+(G.late?" \u00b7 21:00":""));
+      head(G.all?tr(G.n):tr(G.n)+" \u00b7 "+tr(DAYS[day])+(G.late?" \u00b7 21:00":""));
       G.ids.forEach(function(id){
         if(id.charAt(0)==="~"){ var mx=document.createElement("div"); mx.className="item miss"; mx.textContent=MISS[id.slice(1)]||id.slice(1); mx.title=tr(NOTYET); frag.appendChild(mx); return; }
         var idx=PRAYERS.findIndex(function(p){ return p.id===id; }); if(idx>=0) put(idx); });
@@ -67,7 +71,7 @@
   function title(){
     if(typeof i==="undefined" || i<0 || !PRAYERS[i]){ tt.textContent=""; return; }
     var P=PRAYERS[i], grp="";
-    GROUPS.forEach(function(G){ if(!grp && G.ids.indexOf(P.id)>=0) grp=tr(G.n); });
+    GROUPS.forEach(function(G){ if(!grp && !G.all && G.ids.indexOf(P.id)>=0) grp=tr(G.n); });
     tt.innerHTML="";
     tt.appendChild(document.createTextNode(P.titel));
     if(grp){ var sm=document.createElement("small"); sm.textContent=grp; tt.appendChild(sm); }
@@ -104,3 +108,20 @@
     regroup();
     var orig=window.applyUI; if(typeof orig==="function"){ window.applyUI=function(){ orig.apply(this, arguments); lab(); tips(); }; } lab(); tips(); });
 })();
+/* [Grok-Bot] V1.61: Versionsanzeige. */
+document.addEventListener("DOMContentLoaded", function(){ setTimeout(function(){ var v=document.querySelector("h1 .ver"); if(v) v.textContent="V1.61"; document.title="Bhakti Prayers Player V1.61"; }, 0); });
+/* [Grok-Bot] V1.61: Sprachauswahl als kleines Dropdown statt sechs Tasten. Die alten Tasten bleiben unsichtbar im Seitenaufbau, damit vorhandene Funktionen weiterlaufen. */
+document.addEventListener("DOMContentLoaded", function(){
+  var L=[["de","DE","Deutsch"],["en","EN","English"],["fr","FR","Fran\u00e7ais"],["es","ES","Espa\u00f1ol"],["ru","RU","\u0420\u0443\u0441\u0441\u043a\u0438\u0439"],["hi","HI","\u0939\u093f\u0928\u094d\u0926\u0940"]];
+  var first=document.getElementById("btnLangDe"); if(!first || typeof setLang!=="function") return;
+  var st=document.createElement("style"); st.textContent="#langSel{font-size:.75rem;padding:1px 2px;height:24px;border-radius:6px;background:transparent;color:inherit;border:1px solid var(--muted,#888);cursor:pointer}#langSel option{color:#000}.lang-hidden{display:none!important}";
+  document.head.appendChild(st);
+  var s=document.createElement("select"); s.id="langSel";
+  L.forEach(function(x){ var o=document.createElement("option"); o.value=x[0]; o.textContent=x[1]; o.title=x[2]; s.appendChild(o); });
+  first.parentNode.insertBefore(s, first);
+  L.forEach(function(x){ var e=document.getElementById("btnLang"+x[1].charAt(0)+x[1].charAt(1).toLowerCase()); if(e) e.classList.add("lang-hidden"); });
+  function sync(){ try{ if(typeof lang!=="undefined") s.value=lang; }catch(e){} var k=L.findIndex(function(x){ return x[0]===s.value; }); s.title=k>=0?L[k][2]:""; }
+  s.onchange=function(){ setLang(s.value); sync(); };
+  var orig=window.applyUI; if(typeof orig==="function"){ window.applyUI=function(){ orig.apply(this, arguments); sync(); }; }
+  sync();
+});
