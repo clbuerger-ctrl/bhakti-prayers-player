@@ -75,7 +75,7 @@ window.bppNrTr("hi",[
   P.quelle=(P.quelle?P.quelle+" \u00b7 ":"")+"Ton: Morning Prayers CD \u00b7 05 Vaishnava Mantra";
 })();
 /* [Grok-Bot] V1.68: Versionsanzeige (laeuft nach kavacham.js, das V1.66 nach 30 ms setzt) */
-document.addEventListener("DOMContentLoaded", function(){ setTimeout(function(){ var v=document.querySelector("h1 .ver"); if(v) v.textContent="V1.68"; document.title="Bhakti Prayers Player V1.68"; }, 80); });
+document.addEventListener("DOMContentLoaded", function(){ setTimeout(function(){ var v=document.querySelector("h1 .ver"); if(v) v.textContent="V1.69"; document.title="Bhakti Prayers Player V1.69"; }, 80); });
 /* [Grok-Bot] V1.67: Fussleiste mit Quellenhinweis ("Akkorde: Heft Sri Vitthal Dham ...") fuer alle Prayers ausgeblendet */
 (function(){ var s=document.createElement("style"); s.textContent="#foot{display:none!important}"; document.head.appendChild(s); })();
 /* [Grok-Bot] V1.68: Tasten "-10 s" / "+10 s" neben den Wiedergabetasten. YouTube: getCurrentTime (ytTime) + seekTo, MP3: currentTime.
@@ -113,3 +113,45 @@ document.addEventListener("DOMContentLoaded", function(){
   var bk=mk("btnBack10","\u221210 s",-10,"10 Sekunden zur\u00fcck"), fw=mk("btnFwd10","+10 s",10,"10 Sekunden vor");
   nx.parentNode.insertBefore(bk, nx.nextSibling); bk.parentNode.insertBefore(fw, bk.nextSibling);
 });
+/* [Grok-Bot] V1.69: "gayatri" (Gayatri Mantra) und "ganesha-mantra" (Ganesa Mantra) ausgeblendet: Liste, "Alle" und Tagesplan.
+   Daten bleiben erhalten; rueckgaengig: Id aus window.bppHidden entfernen (oder die Liste leeren). guruji-gayatri bleibt sichtbar. */
+window.bppHidden=["gayatri","ganesha-mantra"];
+(function(){
+  var st=document.createElement("style"); st.textContent=".list .item.bpp-hide{display:none!important}"; document.head.appendChild(st);
+  function hide(){
+    var list=document.getElementById("list"); if(!list || typeof PRAYERS==="undefined") return;
+    list.querySelectorAll("button.item[data-i]").forEach(function(b){ var P=PRAYERS[+b.getAttribute("data-i")];
+      b.classList.toggle("bpp-hide", !!(P && window.bppHidden.indexOf(P.id)>=0)); });
+  }
+  window.bppHideApply=hide;
+  document.addEventListener("DOMContentLoaded", function(){
+    var list=document.getElementById("list"); if(!list) return;
+    hide(); new MutationObserver(hide).observe(list, {childList:true});
+  });
+})();
+/* [Grok-Bot] V1.69: Nach Auswahl eines Prayers in der Liste scrollt die Seite 3 s spaeter weich zum Player, sodass das Lyrics-Fenster ganz sichtbar ist
+   (Titel/Video direkt unter der festen Wiedergabeleiste). Scrollt oder tippt der Nutzer in den 3 s selbst (oder waehlt etwas anderes), unterbleibt der Sprung. */
+(function(){
+  var tm=null;
+  function cancel(){ if(tm){ clearTimeout(tm); tm=null; } }
+  function go(){
+    tm=null;
+    var bar=document.querySelector(".bar"), stg=document.getElementById("stage"), pan=document.getElementById("lyrics"); if(!stg || !pan) return;
+    var top0=document.getElementById("lyrTitle")||stg;
+    var bh=bar?bar.getBoundingClientRect().height:0, vh=window.innerHeight, y=window.scrollY;
+    var tTop=top0.getBoundingClientRect().top+y, pTop=pan.getBoundingClientRect().top+y, pBot=pan.getBoundingClientRect().bottom+y;
+    var target;
+    if(pBot-tTop <= vh-bh-8) target=tTop-bh-6;            /* Titel, Video und Lyrics passen ganz ins Bild */
+    else if(pBot-pTop <= vh-bh-8) target=pBot-vh+6;       /* sonst: Lyrics-Fenster ganz sichtbar, unten buendig */
+    else target=pTop-bh-6;                                /* Lyrics hoeher als der Bildschirm: Oberkante unter die Leiste */
+    target=Math.max(0, Math.round(target));
+    if(Math.abs(target-y)>4) window.scrollTo({top:target, behavior:"smooth"});
+  }
+  window.bppScrollToPlayer=go;
+  ["wheel","touchmove","keydown","mousedown"].forEach(function(ev){ window.addEventListener(ev, cancel, {capture:true, passive:true}); });
+  document.addEventListener("click", function(e){
+    var it=e.target && e.target.closest ? e.target.closest("#list button.item") : null;
+    cancel();
+    if(it) tm=setTimeout(go, 3000);
+  }, true);
+})();
