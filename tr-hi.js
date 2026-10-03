@@ -75,7 +75,7 @@ window.bppNrTr("hi",[
   P.quelle=(P.quelle?P.quelle+" \u00b7 ":"")+"Ton: Morning Prayers CD \u00b7 05 Vaishnava Mantra";
 })();
 /* [Grok-Bot] V1.68: Versionsanzeige (laeuft nach kavacham.js, das V1.66 nach 30 ms setzt) */
-document.addEventListener("DOMContentLoaded", function(){ setTimeout(function(){ var v=document.querySelector("h1 .ver"); if(v) v.textContent="V1.69"; document.title="Bhakti Prayers Player V1.69"; }, 80); });
+document.addEventListener("DOMContentLoaded", function(){ setTimeout(function(){ var v=document.querySelector("h1 .ver"); if(v) v.textContent="V1.70"; document.title="Bhakti Prayers Player V1.70"; }, 80); });
 /* [Grok-Bot] V1.67: Fussleiste mit Quellenhinweis ("Akkorde: Heft Sri Vitthal Dham ...") fuer alle Prayers ausgeblendet */
 (function(){ var s=document.createElement("style"); s.textContent="#foot{display:none!important}"; document.head.appendChild(s); })();
 /* [Grok-Bot] V1.68: Tasten "-10 s" / "+10 s" neben den Wiedergabetasten. YouTube: getCurrentTime (ytTime) + seekTo, MP3: currentTime.
@@ -154,4 +154,140 @@ window.bppHidden=["gayatri","ganesha-mantra"];
     cancel();
     if(it) tm=setTimeout(go, 3000);
   }, true);
+})();
+/* [Grok-Bot] V1.70: Govinda (Prathana S. 22-23): Englisch woertlich aus dem Heft fuer 1a-d, Refrain, Strophen 2-17 und Schluss a-d; DE/FR/ES/RU/HI daraus uebersetzt.
+   Strophen 18-28 stehen nicht im Heft und bleiben unveraendert. Sanskrit bleibt wie im Player. Zuordnung der Strophen ueber den Sanskrit-Anfang. */
+window.bppApplyGov=function(G){
+  var P=(typeof PRAYERS!=="undefined")&&PRAYERS.find(function(p){ return p.id==="govinda"; }); if(!P||!P.zeilen) return;
+  var F=["en","ue","fr","es","ru","hi"];
+  function norm(s){ return (s||"").toLowerCase().replace(/\u1e41/g,"\u1e43").replace(/[\s\-\u2019']/g,""); }
+  var keys=G.keys.map(norm);
+  P.zeilen.forEach(function(z){
+    var nr=String(z.nr||""), m=nr.match(/^(?:1|Schluss )\s*([a-d])$/);
+    if(m){ var k="abcd".indexOf(m[1]); F.forEach(function(f){ z[f]=G.v1[f][k]; }); return; }
+    if(nr==="Refrain"){ F.forEach(function(f){ z[f]=G.ref[f]; }); return; }
+    var s=norm(z.sa);
+    for(var j=0;j<keys.length;j++){ if(s.indexOf(keys[j])===0){ F.forEach(function(f){ z[f]=G.v[f][j]; }); return; } }
+  });
+};
+/* [Grok-Bot] V1.70: Ashtotram (Prathana S. 14-17): je Name die englische Uebersetzung woertlich aus dem Heft, DE/FR/ES/RU/HI daraus uebersetzt.
+   Gliederung (9 Namen je Strophe, ein Name je Zeile) bleibt. Nr. 14 nach Heft: "carumbara dharine". */
+window.bppApplyAsht=function(T){
+  var P=(typeof PRAYERS!=="undefined")&&PRAYERS.find(function(p){ return p.id==="ashtotram"; }); if(!P||!P.zeilen||P.zeilen.length!==108) return;
+  P.zeilen.forEach(function(z,n){
+    ["en","ue","fr","es","ru","hi"].forEach(function(f){ z[f]=T[f][n]||""; });
+    if(n===13) z.sa="14 o\u1e41 c\u0101rumbara dh\u0101rine nama\u1e25";
+  });
+  P.quelle=(P.quelle||"")+" \u00b7 Namen und \u00dcbersetzung: Prathana S. 14\u201317";
+};
+/* Daten in tr-v170-gov.js und tr-v170-asht.js, synchron nachgeladen (vor dem Seitenskript mit resumeLast). */
+if(document.readyState==="loading"){ document.write('<script src="tr-v170-gov.js?v=1"><\/script><script src="tr-v170-asht.js?v=1"><\/script>'); }
+/* [Grok-Bot] V1.70: Ton aus dem Repo (audio/*.mp3, GitHub Pages). Ersatzquellen der Reihe nach: jsDelivr, dann der alte Dropbox-Link.
+   YouTube bleibt Standard bei kavacham, narasimha, govinda, hanuman (andere Aufnahme, marksYt vorhanden), sonst MP3.
+   Wahl des Nutzers (Taste "MP3"/"YT") wird je Prayer in localStorage "bpp-src" gemerkt. */
+(function(){
+  if(typeof PRAYERS==="undefined") return;
+  var MAP={"guru-stotram":"guru-stotram","guru-stotram-abend":"guru-stotram-abend","guruji-gayatri":"guruji-gayatri","gayatri":"gayatri","ganesha-mantra":"ganesha-mantra",
+    "suprabhatam":"suprabhatam","govinda":"govinda","narasimha":"narasimha","ramanuja":"ramanuja","kavacham":"kavacham","hanuman":"hanuman","bhajare":"bhajare",
+    "lakshmi-arati":"lakshmi-arati","mukunda":"mukunda","ashtotram":"ashtotram","vaishnava-mantra":"vaishnava-mantra","closing-morning":"closing-morning","vishnu-arati":"arati-cd13"};
+  var YTFIRST={"kavacham":1,"narasimha":1,"govinda":1,"hanuman":1};
+  var TON={"guruji-gayatri":"06 Guruji Gayatri","gayatri":"08 Gayatri Mantra","ganesha-mantra":"07 Ganesha Mantra","suprabhatam":"10 Suprabhatam",
+    "narasimha":"12 Narasimha Prayer","vishnu-arati":"13 Arati","lakshmi-arati":"14 Lakshmi Arati","closing-morning":"15 Closing Prayers"};
+  var CDN="https://cdn.jsdelivr.net/gh/clbuerger-ctrl/bhakti-prayers-player@main/audio/";
+  var ch={}; try{ ch=JSON.parse(localStorage.getItem("bpp-src")||"{}")||{}; }catch(e){ ch={}; }
+  var dead=false; try{ dead=sessionStorage.getItem("bpp-ytdead")==="1"; }catch(e){}
+  PRAYERS.forEach(function(P){
+    var f=MAP[P.id]; if(!f) return;
+    var old=P.audio||"";
+    P.audio="audio/"+f+".mp3";
+    P.audioAlt=[CDN+f+".mp3"]; if(old && old!==P.audio) P.audioAlt.push(old);
+    P.preferFile=!YTFIRST[P.id];
+    if(TON[P.id] && (P.quelle||"").indexOf("Ton:")<0) P.quelle=(P.quelle?P.quelle+" \u00b7 ":"")+"Ton: Morning Prayers CD \u00b7 "+TON[P.id];
+    if(P.id==="kavacham" && (P.quelle||"").indexOf("Ton:")<0) P.quelle+=" \u00b7 Ton: YouTube, MP3 (Telegram \u201e7. Narasimha Kavacham\u201c) als Ersatz";
+  });
+  PRAYERS.forEach(function(P){
+    if(!P.audio) return;
+    if(ch[P.id]==="file") P.preferFile=true; else if(ch[P.id]==="yt" && P.youtube) P.preferFile=false;
+    if(dead) P.preferFile=true;
+  });
+  function by(id){ return PRAYERS.find(function(p){ return p.id===id; }); }
+  var s=by("suprabhatam"); if(s) s.marksFile=[2.8,21.8,41.6,60.8,79.9,99.1,118.7,138.0,157.2,176.5,195.2,214.4,null,252.8,272.0,293.8];
+  var v=by("vishnu-arati"); if(v) v.marksFile=[0,29.0];
+  var c=by("closing-morning"); if(c) c.marksFile=[4.1,38.2,100.7,135.9,164.0,null];
+  window.bppSetSrc=function(P, src){ ch[P.id]=src; try{ localStorage.setItem("bpp-src", JSON.stringify(ch)); }catch(e){} P.preferFile=(src==="file"); };
+
+  /* MP3-Ersatzkette: laeuft vor dem a.onerror der Seite (das zu YouTube wechselt) und haelt es an, solange noch eine Quelle uebrig ist. */
+  var au=document.getElementById("a");
+  if(au) au.addEventListener("error", function(e){
+    if(typeof i==="undefined" || i<0) return;
+    var P=PRAYERS[i]; if(!P || !P.audio) return;
+    var L=[P.audio].concat(P.audioAlt||[]), cur=au.getAttribute("src"), k=L.indexOf(cur);
+    if(k<0 || k>=L.length-1) return;
+    e.stopImmediatePropagation();
+    var t=(typeof pendingSeek==="number")?pendingSeek:0;
+    setTimeout(function(){
+      if(PRAYERS[i]!==P || au.getAttribute("src")!==cur) return;
+      au.src=L[k+1];
+      if(t){ au.addEventListener("loadedmetadata", function(){ try{ au.currentTime=t; }catch(x){} }, {once:true}); }
+      au.play().then(function(){ if(typeof syncPlayBtn==="function") syncPlayBtn(); }).catch(function(){});
+    }, 0);
+  });
+
+  /* YouTube-Waechter: meldet sich der Player 8 s nach dem Laden nicht (kein onReady/infoDelivery), wird auf MP3 umgeschaltet. */
+  var alive=false, tmr=null;
+  function toast(msg){
+    var d=document.getElementById("bppToast");
+    if(!d){ d=document.createElement("div"); d.id="bppToast"; d.style.cssText="position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:#333;color:#fff;padding:7px 14px;border-radius:8px;font-size:.85rem;z-index:9999;opacity:.93"; document.body.appendChild(d); }
+    d.textContent=msg; d.style.display="block"; clearTimeout(d._t); d._t=setTimeout(function(){ d.style.display="none"; }, 5000);
+  }
+  function fallback(why){
+    if(tmr){ clearTimeout(tmr); tmr=null; }
+    if(typeof i==="undefined" || i<0 || !ytOn) return;
+    var P=PRAYERS[i]; if(!P || !P.audio) return;
+    if(why==="dead"){ dead=true; try{ sessionStorage.setItem("bpp-ytdead","1"); }catch(e){} PRAYERS.forEach(function(Q){ if(Q.audio) Q.preferFile=true; }); }
+    toast(why==="dead"?"YouTube nicht erreichbar \u2013 MP3":"YouTube-Fehler \u2013 MP3");
+    showFile(P);
+  }
+  window.addEventListener("message", function(e){
+    if(!/youtube/.test(e.origin||"")) return;
+    var d=e.data; if(typeof d==="string"){ try{ d=JSON.parse(d); }catch(x){ return; } }
+    if(!d || !d.event) return;
+    if(d.event==="onError"){ fallback("err"); return; }
+    if(/^(onReady|initialDelivery|infoDelivery|onStateChange)$/.test(d.event)){ alive=true; if(tmr){ clearTimeout(tmr); tmr=null; } }
+  });
+  function watch(){
+    var y=document.getElementById("yt"); if(!y) return;
+    new MutationObserver(function(){
+      if(tmr){ clearTimeout(tmr); tmr=null; }
+      var src=y.getAttribute("src")||""; if(!/youtube/.test(src)) return;
+      alive=false;
+      tmr=setTimeout(function(){ tmr=null; if(!alive && y.getAttribute("src")===src) fallback("dead"); }, 8000);
+    }).observe(y, {attributes:true, attributeFilter:["src"]});
+  }
+  if(document.getElementById("yt")) watch(); else document.addEventListener("DOMContentLoaded", watch);
+
+  document.addEventListener("DOMContentLoaded", function(){
+    /* Taste Quelle: neben "+10 s"; nur bei Prayers mit YouTube und MP3 */
+    var fw=document.getElementById("btnFwd10")||document.getElementById("btnNext");
+    if(fw && !document.getElementById("btnSrc")){
+      var b=document.createElement("button"); b.type="button"; b.id="btnSrc"; b.style.fontSize=".78rem"; b.style.padding="2px 7px"; b.style.display="none";
+      b.onclick=function(){ if(typeof i==="undefined"||i<0) return; var P=PRAYERS[i]; if(!P||!P.audio||!P.youtube) return;
+        window.bppSetSrc(P, ytOn?"file":"yt"); play(i,false); upd(); };
+      fw.parentNode.insertBefore(b, fw.nextSibling);
+      var upd=function(){ var P=(typeof i!=="undefined"&&i>=0)?PRAYERS[i]:null; var on=!!(P&&P.youtube&&P.audio);
+        b.style.display=on?"":"none"; if(!on) return;
+        var t=ytOn?"\u266a MP3":"\u25b6 YT"; if(b.textContent!==t) b.textContent=t;
+        b.title=ytOn?"Auf MP3 umschalten":"Auf YouTube umschalten"; };
+      upd(); setInterval(upd, 600);
+    }
+    /* Uebersetzung an/aus: danach Spalten neu berechnen und die aktuelle Strophe wieder ins Bild holen */
+    var td=window.toggleDe;
+    if(typeof td==="function" && !td._bpp){
+      var w=function(){ var r=td.apply(this, arguments);
+        requestAnimationFrame(function(){ try{ layoutLyrics(); pinStanza(); }catch(e){} });
+        setTimeout(function(){ try{ pinStanza(); }catch(e){} }, 350);
+        return r; };
+      w._bpp=1; window.toggleDe=w;
+    }
+  });
 })();
