@@ -6,6 +6,8 @@
   function v(n, sa, ue, en){
     return { nr: String(n), ch: L, sa: sa, ue: ue, en: en };
   }
+  /* [Grok-Bot] V1.64: Titel korrigiert, Vers 11 „ananta-kṛt“ in einer Zeile */
+  k.titel = "Śrī Nṛsiṁha Kavaca Stotram";
   k.quelle = "Prathana with chords · Sri Vitthal Dham · S. 20–21";
   k.hinweis = "Strophen vierzeilig wie im Musikerheft. Am Ende das Nrsimha-Gebet von Heft Seite 12.";
   k.hinweisDe = "Jede Strophe in vier Heft-Zeilen. Am Ende das Nrsimha-Gebet, Seite 12.";
@@ -21,7 +23,7 @@
     v(8, "sarvago 'pi stambha-vāsaḥ\nphālaṃ me rakṣatu dhvanim\nnṛsiṃho me dṛśau pātu\nsoma-sūryāgni-locanaḥ", "Der im Pfeiler wohnte schütze Stirn, Stimme und Augen.", "He who dwelt in the pillar protect brow, voice and eyes."),
     v(9, "smṛtiṃ me pātu nṛhariḥ\nmuni-varya-stuti-priyaḥ\nnāsāṃ me siṃha-nāsas tu\nmukhaṃ lakṣmī-mukha-priyaḥ", "Nrihari schütze Gedächtnis, Nase und Gesicht.", "May Nrihari protect memory, nose and face."),
     v(10, "sarva-vidyādhipaḥ pātu\nnṛsiṃho rasanāṃ mama\nvaktraṃ pātv indu-vadanaḥ\nsadā prahlāda-vanditaḥ", "Herr allen Wissens schütze Zunge und Mund.", "Lord of knowledge protect tongue and mouth."),
-    v(11, "nṛsiṃhaḥ pātu me kaṇṭhaṃ\nskandhau bhū-bhṛd ananta\nkṛt divyāstra śobhita bhujaḥ\nnṛsiṃhaḥ pātu me bhujaḥ", "Nrisimha schütze Hals und Arme.", "May Nrisimha protect throat and arms."),
+    v(11, "nṛsiṃhaḥ pātu me kaṇṭhaṃ\nskandhau bhū-bhṛd ananta-kṛt\ndivyāstra-śobhita-bhujaḥ\nnṛsiṃhaḥ pātu me bhujaḥ", "Nrisimha schütze Hals und Arme.", "May Nrisimha protect throat and arms."),
     v(12, "karau me deva-varado\nnṛsiṃhaḥ pātu sarvataḥ\nhṛdayaṃ yogi-sādhyaś ca\nnivāsaṃ pātu me hariḥ", "Der Wunschgewährer schütze Hände, Herz und Wohnsitz.", "The boon-giver protect hands, heart and dwelling."),
     v(13, "madhyaṃ pātu hiraṇyākṣa\nvakṣaḥ-kukṣi-vidāraṇaḥ\nnābhiṃ me pātu nṛhariḥ\nsva-nābhi-brahma-saṃstutaḥ", "Er schütze Mitte und Nabel.", "May he protect midriff and navel."),
     v(14, "brahmāṇḍa-koṭayaḥ kaṭyāṃ\nyasyāsau pātu me kaṭim\nguhyaṃ me pātu guhyānāṃ\nmantrāṇāṃ guhya-rūpa-dhṛk", "Er schütze Hüfte und das Verborgene.", "May he protect hips and what is hidden."),
@@ -54,3 +56,5 @@
     { nr:"Keshava", ch:"Dm    F    C    Bb", sa:"keśava dhṛta nara hari rūpa\njaya jagadīśa hare\njaya jagadīśa hare\njaya jagadīśa hare", ue:"Keshava, der die Gestalt von Mensch und Löwe annahm. Sieg, Herr der Welt, Hari.", en:"Keshava who took the form of man and lion. Victory, Lord of the world, Hari." }
   ];
 })();
+/* [Grok-Bot] V1.64: Versionsanzeige (nach listview.js). */
+document.addEventListener("DOMContentLoaded", function(){ setTimeout(function(){ var v=document.querySelector("h1 .ver"); if(v) v.textContent="V1.64"; document.title="Bhakti Prayers Player V1.64"; }, 30); });
