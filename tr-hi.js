@@ -75,7 +75,7 @@ window.bppNrTr("hi",[
   P.quelle=(P.quelle?P.quelle+" \u00b7 ":"")+"Ton: Morning Prayers CD \u00b7 05 Vaishnava Mantra";
 })();
 /* [Grok-Bot] V1.68: Versionsanzeige (laeuft nach kavacham.js, das V1.66 nach 30 ms setzt) */
-document.addEventListener("DOMContentLoaded", function(){ setTimeout(function(){ var v=document.querySelector("h1 .ver"); if(v) v.textContent="V1.70"; document.title="Bhakti Prayers Player V1.70"; }, 80); });
+document.addEventListener("DOMContentLoaded", function(){ setTimeout(function(){ var v=document.querySelector("h1 .ver"); if(v) v.textContent="V1.71"; document.title="Bhakti Prayers Player V1.71"; }, 80); });
 /* [Grok-Bot] V1.67: Fussleiste mit Quellenhinweis ("Akkorde: Heft Sri Vitthal Dham ...") fuer alle Prayers ausgeblendet */
 (function(){ var s=document.createElement("style"); s.textContent="#foot{display:none!important}"; document.head.appendChild(s); })();
 /* [Grok-Bot] V1.68: Tasten "-10 s" / "+10 s" neben den Wiedergabetasten. YouTube: getCurrentTime (ytTime) + seekTo, MP3: currentTime.
@@ -290,4 +290,66 @@ if(document.readyState==="loading"){ document.write('<script src="tr-v170-gov.js
       w._bpp=1; window.toggleDe=w;
     }
   });
+})();
+/* [Grok-Bot] V1.71: Closing Prayers ohne YouTube (kein Video, keine Taste MP3/YT, kein Wechsel zu YouTube bei Ladefehler).
+   closing-morning spielt nur die CD-MP3 (audio/closing-morning.mp3, Ersatz jsDelivr). closing-evening und closing-arati haben keinen Ton.
+   Fehler bis V1.70: Bei einem Prayer ohne eigenen Ton blieb das Video des vorigen Prayers stehen (z. B. Hanuman Chalisa vor closing-arati).
+   Jetzt wird das YouTube-Fenster bei jedem Prayer ohne eigenes Video geschlossen. */
+(function(){
+  if(typeof PRAYERS==="undefined") return;
+  PRAYERS.forEach(function(P){
+    if(!/^closing-/.test(P.id)) return;
+    delete P.youtube; delete P.youtubeStart; delete P.marksYt;
+    if(P.audio) P.preferFile=true;
+  });
+  try{ var ch=JSON.parse(localStorage.getItem("bpp-src")||"{}")||{}, c=false;
+    Object.keys(ch).forEach(function(k){ if(/^closing-/.test(k)){ delete ch[k]; c=true; } });
+    if(c) localStorage.setItem("bpp-src", JSON.stringify(ch)); }catch(e){}
+  function closeYt(){
+    try{
+      if(!ytOn) return;
+      ytOn=false; ytPlaying=false;
+      var y=document.getElementById("yt"); if(y && y.getAttribute("src")) y.src="";
+      ytBox.classList.remove("on"); stage.classList.remove("has-yt");
+      if(typeof syncPlayBtn==="function") syncPlayBtn();
+      setTimeout(function(){ try{ layoutLyrics(); }catch(e){} }, 50);
+    }catch(e){}
+  }
+  document.addEventListener("DOMContentLoaded", function(){
+    var pl=window.play; if(typeof pl!=="function" || pl._bpp71) return;
+    var w=function(idx){ var r=pl.apply(this, arguments); var P=PRAYERS[idx]; if(P && !P.youtube) closeYt(); return r; };
+    w._bpp71=1; window.play=w;
+    if(typeof i!=="undefined" && i>=0 && PRAYERS[i] && !PRAYERS[i].youtube) closeYt();
+  });
+})();
+/* [Grok-Bot] V1.71: Sri Lakshmi Mata Arati vollstaendig (Prathana S. 46): 8 Strophen + Schluss-Refrain = 9 Abschnitte (bisher nur Strophe 1).
+   Das Heft hat zu diesem Arati keine englische Uebersetzung; EN, DE, FR, ES, RU neu uebersetzt, HI = Originaltext in Devanagari.
+   Akkorde: Strophe 1 und 9 wie bisher, Strophen 2-8 wie Vishnu-Arati Strophe 2 (laut Musikerheft gleiche Melodie C G F).
+   marksFile gemessen an audio/lakshmi-arati.mp3 (CD 14): Pausen alle ~28,2 s, Text per Whisper geprueft. */
+(function(){
+  if(typeof PRAYERS==="undefined") return;
+  var P=PRAYERS.find(function(p){ return p.id==="lakshmi-arati"; }); if(!P) return;
+  var F=["sa","en","ue","fr","es","ru","hi"], C1=["C                 G","C             G","G    F      C","G              F","G          C"], C2=["C","G","C         G","G   F           C","G    F","G        C"];
+  var V1=[["oṃ jaya lakṣmī mātā","Victory, Mother Lakshmi","Sieg, Mutter Lakṣmī","Victoire, Mère Lakshmi","Victoria, Madre Lakshmi","Слава, Мать Лакшми","ॐ जय लक्ष्मी माता"],["maiyā jaya lakṣmī mātā","Mother, victory Lakshmi","Mutter, Sieg Lakṣmī","Mère, victoire Lakshmi","Madre, victoria Lakshmi","Матушка, слава Лакшми","मैया जय लक्ष्मी माता"],["tumako niśa dina sevata","day and night you are served","Tag und Nacht dienen dir","jour et nuit te servent","día y noche te sirven","день и ночь тебе служат","तुमको निशदिन सेवत"],["hara viṣṇu vidhātā","by Hara, Vishnu and the Creator","Hara, Viṣṇu und der Schöpfer","Hara, Vishnu et le Créateur","Hara, Vishnu y el Creador","Хара, Вишну и Творец","हर विष्णु विधाता"],["oṃ jaya lakṣmī mātā","Victory, Mother Lakshmi","Sieg, Mutter Lakṣmī","Victoire, Mère Lakshmi","Victoria, Madre Lakshmi","Слава, Мать Лакшми","ॐ जय लक्ष्मी माता"]];
+  var V=[[["umā ramā brahmāṇī","Uma, Rama, Brahmani","Umā, Ramā, Brahmāṇī","Umā, Ramā, Brahmāṇī","Umā, Ramā, Brahmāṇī","Ума, Рама, Брахмани","उमा रमा ब्रह्माणी"],["tuma hī jaga-mātā","you alone are the Mother of the world","du allein bist die Mutter der Welt","toi seule es la Mère du monde","solo tú eres la Madre del mundo","лишь ты – Мать мира","तुम ही जग-माता"],["sūrya chandra-mā dhyāvata","sun and moon meditate on you","Sonne und Mond meditieren über dich","le soleil et la lune méditent sur toi","el sol y la luna meditan en ti","солнце и луна созерцают тебя","सूर्य चन्द्रमा ध्यावत"],["nārada ṛṣī gātā","the sage Narada sings of you","der Weise Nārada besingt dich","le sage Nārada te chante","el sabio Nārada te canta","мудрец Нарада воспевает тебя","नारद ऋषि गाता"]],[["durgā rūpa nirañjanī","in the form of Durga, O spotless one","in Gestalt Durgās, du Makellose","sous la forme de Durgā, ô Immaculée","en la forma de Durgā, oh Inmaculada","в облике Дурги, о Незапятнанная","दुर्गा रूप निरंजनी"],["sukha sampati dātā","giver of happiness and wealth","die Glück und Reichtum schenkt","qui donnes bonheur et richesse","que concedes felicidad y riqueza","дарующая счастье и богатство","सुख सम्पत्ति दाता"],["jo koī tuma ko dhyāvatā","whoever meditates on you","wer immer über dich meditiert","quiconque médite sur toi","quien medita en ti","кто бы ни созерцал тебя","जो कोई तुमको ध्यावत"],["ṛddhi siddhi dhana pātā","gains prosperity, perfection and wealth","erlangt Gedeihen, Vollkommenheit und Reichtum","obtient prospérité, accomplissement et richesse","obtiene prosperidad, perfección y riqueza","обретает процветание, совершенство и богатство","ऋद्धि-सिद्धि धन पाता"]],[["tuma pātāla nivāsinī","you dwell in the netherworld","du wohnst in der Unterwelt","tu demeures dans le monde souterrain","tú moras en el mundo inferior","ты обитаешь в подземном мире","तुम पाताल निवासिनी"],["tuma hī śubha-dātā","you alone are the giver of all that is auspicious","du allein schenkst alles Glückverheißende","toi seule donnes tout ce qui est propice","solo tú concedes todo lo auspicioso","лишь ты даруешь всё благое","तुम ही शुभदाता"],["karma-prabhāva-prakāśinī","you reveal the power of karma","du offenbarst die Macht des Karma","tu révèles la puissance du karma","tú revelas el poder del karma","ты раскрываешь силу кармы","कर्म-प्रभाव-प्रकाशिनी"],["bhava-nidhi kī trātā","saviour from the ocean of worldly existence","Retterin aus dem Ozean des weltlichen Daseins","libératrice de l'océan de l'existence","salvadora del océano de la existencia","спасительница из океана мирского бытия","भवनिधि की त्राता"]],[["jisa ghara meṃ tuma rahatīṃ","the house in which you dwell","das Haus, in dem du wohnst","la maison où tu demeures","la casa en la que moras","дом, в котором ты живёшь","जिस घर में तुम रहतीं"],["saba sadguṇa ātā","receives all virtues","empfängt alle Tugenden","reçoit toutes les vertus","recibe todas las virtudes","обретает все добродетели","सब सद्गुण आता"],["saba sambhava ho jātā","everything becomes possible","alles wird möglich","tout devient possible","todo se vuelve posible","всё становится возможным","सब सम्भव हो जाता"],["mana nahiṃ ghabarātā","the mind is not troubled","der Geist ist ohne Unruhe","l'esprit n'est pas troublé","la mente no se inquieta","ум не тревожится","मन नहीं घबराता"]],[["tuma bina yajña na hote","without you no sacrifice can take place","ohne dich gibt es kein Opfer","sans toi aucun sacrifice n'a lieu","sin ti no hay sacrificio","без тебя не бывает жертвоприношений","तुम बिन यज्ञ न होते"],["vastra na koī pātā","no one obtains clothing","niemand erhält Kleidung","personne n'obtient de vêtements","nadie obtiene vestido","никто не получает одежды","वस्त्र न कोई पाता"],["khāna-pāna kā vaibhava","the abundance of food and drink","die Fülle an Speise und Trank","l'abondance de nourriture et de boisson","la abundancia de comida y bebida","изобилие пищи и питья","खान-पान का वैभव"],["saba tumase ātā","all comes from you","alles kommt von dir","tout vient de toi","todo viene de ti","всё исходит от тебя","सब तुमसे आता"]],[["śubha guṇa mandira sundara","beautiful temple of auspicious qualities","schöner Tempel glückverheißender Eigenschaften","beau temple des qualités propices","bello templo de cualidades auspiciosas","прекрасный храм благих качеств","शुभ-गुण मन्दिर सुन्दर"],["kṣīro dadhi jātā","born from the ocean of milk","geboren aus dem Milchozean","née de l'océan de lait","nacida del océano de leche","рождённая из молочного океана","क्षीरोदधि जाता"],["ratna caturdaśa tuma bina","the fourteen jewels, without you","die vierzehn Juwelen ohne dich","les quatorze joyaux, sans toi","las catorce joyas, sin ti","четырнадцать сокровищ без тебя","रत्न चतुर्दश तुम बिन"],["koī nahiṃ pātā","no one obtains","erlangt niemand","personne ne les obtient","nadie las obtiene","никто не обретает","कोई नहीं पाता"]],[["mahālakṣmī-jī kī āratī","the Arati of Mahalakshmi","das Āratī Mahālakṣmīs","l'Āratī de Mahālakṣmī","el Āratī de Mahālakṣmī","Арати Махалакшми","महालक्ष्मी जी की आरती"],["jo koī jana gātā","whoever sings it","wer immer es singt","quiconque le chante","quien lo canta","кто бы его ни пел","जो कोई जन गाता"],["ura ānanda samātā","their heart fills with joy","dessen Herz füllt sich mit Freude","son cœur se remplit de joie","su corazón se llena de alegría","сердце того наполняется радостью","उर आनन्द समाता"],["pāpa utara jātā","and sin falls away","und die Sünde fällt ab","et le péché s'efface","y el pecado se desvanece","и грех отпадает","पाप उतर जाता"]]];
+  var M=["maiyā ","Mother, ","Mutter, ","Mère, ","Madre, ","Матушка, ","मैया "];
+  function lc(t,f){ return (f===0||f===6||/^(Umā|Uma|Нар)/.test(t))?t:t.charAt(0).toLowerCase()+t.slice(1); }
+  function row(n,k,c,L){ var z={nr:n+"abcdef".charAt(k),ch:c}; F.forEach(function(f,x){ z[f]=L[x]; }); return z; }
+  var Z=[]; V1.forEach(function(L,k){ Z.push(row(1,k,C1[k],L)); });
+  V.forEach(function(v,g){ var b=v[1], mb=b.map(function(t,x){ return M[x]+lc(t,x); });
+    [v[0],b,mb,v[2],v[3],V1[0]].forEach(function(L,k){ Z.push(row(g+2,k,C2[k],L)); }); });
+  V1.forEach(function(L,k){ Z.push(row(9,k,C1[k],L)); });
+  P.zeilen=Z;
+  P.marksFile=[1.0,29.3,57.4,85.6,113.7,141.9,170.1,198.2,225.6];
+  P.quelle=(P.quelle||"")+" \u00b7 alle Strophen: Prathana S. 46";
+})();
+/* [Grok-Bot] V1.71: Hanuman Chalisa, Strophenanfaenge in audio/hanuman.mp3 (andere Aufnahme als das YouTube-Video), per Whisper gemessen.
+   Nur sichere Anker; die uebrigen Strophen schaetzt marks.js nach Silbenzahl dazwischen. */
+(function(){
+  if(typeof PRAYERS==="undefined") return;
+  var P=PRAYERS.find(function(p){ return p.id==="hanuman"; }); if(!P||!P.zeilen) return;
+  var m=[]; for(var k=0;k<27;k++) m.push(null);
+  var A={4:81.0,12:224.3,13:240.0,18:320.0,19:335.0,22:380.0,26:487.0};
+  Object.keys(A).forEach(function(k){ m[+k]=A[k]; });
+  P.marksFile=m;
 })();
