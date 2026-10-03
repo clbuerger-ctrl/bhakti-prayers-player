@@ -74,7 +74,42 @@ window.bppNrTr("hi",[
   P.marksFile=[0.9,null,null,null,null,null,54.2];
   P.quelle=(P.quelle?P.quelle+" \u00b7 ":"")+"Ton: Morning Prayers CD \u00b7 05 Vaishnava Mantra";
 })();
-/* [Grok-Bot] V1.67: Versionsanzeige (laeuft nach kavacham.js, das V1.66 nach 30 ms setzt) */
-document.addEventListener("DOMContentLoaded", function(){ setTimeout(function(){ var v=document.querySelector("h1 .ver"); if(v) v.textContent="V1.67"; document.title="Bhakti Prayers Player V1.67"; }, 80); });
+/* [Grok-Bot] V1.68: Versionsanzeige (laeuft nach kavacham.js, das V1.66 nach 30 ms setzt) */
+document.addEventListener("DOMContentLoaded", function(){ setTimeout(function(){ var v=document.querySelector("h1 .ver"); if(v) v.textContent="V1.68"; document.title="Bhakti Prayers Player V1.68"; }, 80); });
 /* [Grok-Bot] V1.67: Fussleiste mit Quellenhinweis ("Akkorde: Heft Sri Vitthal Dham ...") fuer alle Prayers ausgeblendet */
 (function(){ var s=document.createElement("style"); s.textContent="#foot{display:none!important}"; document.head.appendChild(s); })();
+/* [Grok-Bot] V1.68: Tasten "-10 s" / "+10 s" neben den Wiedergabetasten. YouTube: getCurrentTime (ytTime) + seekTo, MP3: currentTime.
+   Danach springt die Anzeige zur passenden Strophe (stanzaFromProgress), auch wenn Auto aus ist. */
+window.bppSkip=function(d){
+  if(typeof i==="undefined" || i<0) return;
+  var t=null;
+  try{
+    if(ytOn){
+      var cur=(typeof ytTime==="number")?ytTime:0;
+      t=Math.max(0, cur+d); if(typeof ytDur==="number" && ytDur>1) t=Math.min(t, ytDur-1);
+      yt.contentWindow.postMessage(JSON.stringify({event:"command",func:"seekTo",args:[t,true]}),"*");
+      ytTime=t;
+    } else if(a && a.src){
+      var dur=isFinite(a.duration)?a.duration:1e9;
+      t=Math.max(0, Math.min(dur-0.5, (a.currentTime||0)+d));
+      a.currentTime=t;
+    }
+  }catch(e){}
+  if(t==null) return;
+  manualShift=0; holdLineUntil=Date.now()+1500;
+  try{
+    var p=songProgress(); if(!p || !p.gs || !p.gs.length) return;
+    p.t=t;
+    var k=stanzaFromProgress(p); if(k<0) k=0; if(k>p.gs.length-1) k=p.gs.length-1;
+    var st=p.gs[k].start;
+    if(st!==line){ line=st; if(typeof persistNow==="function") persistNow(); paintLyrics(); }
+    if(ytOn) setTimeout(askYtTime, 400);
+  }catch(e){}
+};
+document.addEventListener("DOMContentLoaded", function(){
+  var nx=document.getElementById("btnNext"); if(!nx || document.getElementById("btnBack10")) return;
+  function mk(id, txt, d, tip){ var b=document.createElement("button"); b.type="button"; b.id=id; b.textContent=txt; b.title=tip; b.style.fontSize=".78rem"; b.style.padding="2px 7px";
+    b.onclick=function(){ window.bppSkip(d); }; return b; }
+  var bk=mk("btnBack10","\u221210 s",-10,"10 Sekunden zur\u00fcck"), fw=mk("btnFwd10","+10 s",10,"10 Sekunden vor");
+  nx.parentNode.insertBefore(bk, nx.nextSibling); bk.parentNode.insertBefore(fw, bk.nextSibling);
+});
