@@ -89,39 +89,7 @@
   }
   var k = PRAYERS.find(function(p){ return p.id==="kavacham"; });
   if(k){
-    var kEn = [
-      "I speak the Narasimha Kavacham, once uttered by Prahlada.",
-      "It protects wholly, is holy, and destroys every distress.",
-      "It brings all prosperity",
-      "heaven and liberation.",
-      "Meditate on Nrisimha, Lord of gods, seated on a golden lion-throne.",
-      "Open mouth, three eyes, glow like the autumn moon.",
-      "Lakshmi embraces his left side; glories surround him.",
-      "Four arms, tender body, shining golden earrings.",
-      "Let him dwell in the heart-lotus, then recite the Kavacham.",
-      "May Nrisimha guard my head, he who came to protect the worlds.",
-      "May Nrisimha guard my eyes, whose glance is moon, sun and fire.",
-      "May Nrisimha guard my throat and shoulders.",
-      "May the boon-giver Nrisimha guard my hands from every side.",
-      "May Hari guard my heart, the dwelling of yogis.",
-      "May Nrihari guard my navel, whom Brahma praises from his navel.",
-      "May the Lord guard my feet. May the thousand-headed One guard the whole body.",
-      "May the fierce One guard the east, the great hero the south-east.",
-      "Maha-Vishnu the south, the great flame the south-west.",
-      "In the west the Lord of all, in every direction the all-faced One.",
-      "From the fear of becoming may the death of death, the man-lion, protect me.",
-      "This is the Narasimha Kavacham, adorned by Prahlada's mouth.",
-      "The devoted one who recites it daily is freed from all sins.",
-      "Children, wealth and long life arise in the world.",
-      "Everywhere victory; everywhere one becomes a victor.",
-      "Thus ends in the Brahmanda Purana the Shri Nrisimha Kavacham spoken by Prahlada.",
-      "Om, obeisance to Lord Narasimha.",
-      "The fierce, the hero, great Vishnu, blazing, facing all sides.",
-      "Nrisimha, terrible and auspicious, death of death — I bow.",
-      "Victory, Narasimha Deva.",
-      "Nrisimha Deva, victory Narasimha Deva."
-    ];
-    k.zeilen.forEach(function(z,i){ if(kEn[i]) z.en = kEn[i]; });
+    /* [Grok-Bot] V1.65: alte zeilenweise kEn-Liste entfernt – englische Verse kommen jetzt aus kavacham.js (SNKS 1–3) und werden hier nicht mehr ueberschrieben */
     k.hinweisDe = k.hinweis;
     k.hinweisEn = "Protective hymn. Chords sit over the first lines in the booklet (Dm Bb C Dm).";
   }
