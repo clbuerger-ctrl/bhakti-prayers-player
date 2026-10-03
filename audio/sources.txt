@@ -1,0 +1,20 @@
+# [Grok-Bot] V1.70: Quellen fuer audio/<id>.mp3 (Dropbox-Freigabeordner 05 Prayers Bhajan Vedic Chants). Format: id|Pfad im Freigabelink
+guru-stotram|AHxwpU6Xttm9wzQ47RfwNiM/Guru-Stotram.mp3
+guru-stotram-abend|AGEKF5xxUyuwQnJzfScG7YU/Guru-Stotram-Abend.mp3
+guruji-gayatri|AN9q-fNqFXyuFTku3304XA0/Guruji-Gayatri.mp3
+gayatri|AKOTWkKWmnaEdn4NlBA7o1w/Gayatri-Mantra.mp3
+ganesha-mantra|AItehQdQpl3Z4tWsMQxREO4/Ganesha-Mantra.mp3
+suprabhatam|ADdscIHVis_jUGJsm1UIWZE/Sri-Krishna-Suprabhatam.mp3
+govinda|AAHyM8CgbCWzOJ-fFLJTP80/Govinda%20Prayer%20(prabhu)%203.mp3
+narasimha|AJbyWqpFxmu4zIDLFldm-kM/Narasimha-Prayer-CD.mp3
+ramanuja|AHbLURUpJLp1dREEL45Qvx8/Ramanuja-Mangalam.mp3
+kavacham|ACiwqb49t9d6YJKlMeToQ0w/Narasimha-Kavacham-A.mp3
+kavacham-b|AKziKo5deCKxv6Q_Rto6akk/Narasimha-Kavacham-B-lyric.mp3
+hanuman|AIhKtbXquRNBdUPTntYvPTg/Hanuman%20Chalisa%20(prabhu)%2011.mp3
+bhajare|ALN7EX-IbJTtEvxZUrmXkAs/Vishwananda-Arati.mp3
+lakshmi-arati|AF0QghAiOxI37bwnW4H3BJs/Lakshmi-Arati.mp3
+mukunda|AAaWhfo8FVeG_XB4CKwSWqQ/2022-12-12-Mix-BhaktiMargaPrayers-43-MukundaMalaStotram.mp3
+ashtotram|AH5jHUcyt3nRMmAxFO4M2V8/Sri%20Swami%20Vishwananda%20Ashtotram.mp3
+vaishnava-mantra|APnB6jdCzTSNP053l3ACCV0/Vaishnava-Mantra.mp3
+closing-morning|AJIAbsbis2rnqdqKBibOwCM/Closing-Prayers-Morning.mp3
+arati-cd13|ADY1G3ggJmllZfNIILBmuAI/Arati-CD13-Kandidat.mp3
