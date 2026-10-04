@@ -57,3 +57,5 @@
 })();
 /* [Grok-Bot] V1.72: Guru-Stotram-Uebersetzung (Prathana SVD) und Listen-Reihenfolge nach SVD-Inhalt, synchron nachgeladen vor dem Seitenskript. */
 if(document.readyState==="loading"){ document.write('<script src="tr-v172.js?v=1"><\/script>'); }
+/* [Grok-Bot] V1.73: Morgen-/Abendliste nach dem SVD-Inhaltsverzeichnis (Override der Anordnung aus listview.js). */
+if(document.readyState==="loading"){ document.write('<script src="plan-v173.js?v=1"><\/script>'); }
