@@ -63,3 +63,5 @@ if(document.readyState==="loading"){ document.write('<script src="plan-v173.js?v
 if(document.readyState==="loading"){ document.write('<script src="tr-v174.js?v=1"><\/script>'); }
 /* [Grok-Bot] V1.75: Tempo-Auswahl fuer die MP3-Wiedergabe (je Prayer gemerkt, Tonhoehe bleibt). */
 if(document.readyState==="loading"){ document.write('<script src="rate-v175.js?v=1"><\/script>'); }
+/* [Grok-Bot] V1.76: Zeitmarken als Abfolge [Zeit, Strophe] (Narasimha mit Ruecksprung 4->3), Taste "Mitlesen", Tasten -/+ nur wo sie wirken. */
+if(document.readyState==="loading"){ document.write('<script src="seq-v176.js?v=1"><\/script>'); }
