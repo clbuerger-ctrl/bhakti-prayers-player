@@ -57,14 +57,15 @@
   setInterval(function(){ if(typeof ytOn!=="undefined" && ytOn && typeof yt!=="undefined"){ try{ yt.contentWindow.postMessage(JSON.stringify({event:"listening",id:1}),"*"); }catch(e){} } }, 1500);
 })();
 /* [Grok-Bot] V1.72: Guru-Stotram-Uebersetzung (Prathana SVD) und Listen-Reihenfolge nach SVD-Inhalt, synchron nachgeladen vor dem Seitenskript. */
-if(document.readyState==="loading"){ document.write('<script src="tr-v172.js?v=1"><\/script>'); }
+if(document.readyState==="loading"){ document.write('<script src="tr-v172.js?v=177"><\/script>'); }
 /* [Grok-Bot] V1.73: Morgen-/Abendliste nach dem SVD-Inhaltsverzeichnis (Override der Anordnung aus listview.js). */
-if(document.readyState==="loading"){ document.write('<script src="plan-v173.js?v=1"><\/script>'); }
+if(document.readyState==="loading"){ document.write('<script src="plan-v173.js?v=177"><\/script>'); }
 /* [Grok-Bot] V1.74: Suprabhatam- und Govinda-Uebersetzungen nach Prathana SVD, Wochentag-Knoepfe ausgeblendet. */
-if(document.readyState==="loading"){ document.write('<script src="tr-v174.js?v=1"><\/script>'); }
+if(document.readyState==="loading"){ document.write('<script src="tr-v174.js?v=177"><\/script>'); }
 /* [Grok-Bot] V1.75: Tempo-Auswahl fuer die MP3-Wiedergabe (je Prayer gemerkt, Tonhoehe bleibt). */
-if(document.readyState==="loading"){ document.write('<script src="rate-v175.js?v=1"><\/script>'); }
+if(document.readyState==="loading"){ document.write('<script src="rate-v175.js?v=177"><\/script>'); }
 /* [Grok-Bot] V1.76: Zeitmarken als Abfolge [Zeit, Strophe] (Narasimha mit Ruecksprung 4->3), Taste "Mitlesen", Tasten -/+ nur wo sie wirken. */
-if(document.readyState==="loading"){ document.write('<script src="seq-v176.js?v=1"><\/script>'); }
-/* [Grok-Bot] V1.77: Schutz gegen Seitenfehler bei langsamer Verbindung: Zeitgeber in autoscroll.js und follow.js warten, bis autoScroll, ytOn, i und line definiert sind. */
-document.addEventListener("DOMContentLoaded", function(){ setTimeout(function(){ var v=document.querySelector("h1 .ver"); if(v) v.textContent="V1.77"; document.title="Bhakti Prayers Player V1.77"; }, 450); });
+if(document.readyState==="loading"){ document.write('<script src="seq-v176.js?v=177"><\/script>'); }
+/* [Grok-Bot] V1.77: Schutz gegen Seitenfehler bei langsamer Verbindung: Zeitgeber in autoscroll.js und follow.js warten, bis autoScroll, ytOn, i und line definiert sind.
+   Dazu v177.js: Tasten -/+ ueberall aus, Bhajare-Text und -Abfolge, Versionspruefung (version.json). Zusatzdateien mit ?v=177, damit kein alter Stand aus dem Cache kommt. */
+if(document.readyState==="loading"){ document.write('<script src="v177.js?v=177"><\/script>'); }
