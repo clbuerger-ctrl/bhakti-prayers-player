@@ -55,3 +55,5 @@
   window.addEventListener("load", function(){ setTimeout(pinNow, 300); });
   setInterval(function(){ if(ytOn){ try{ yt.contentWindow.postMessage(JSON.stringify({event:"listening",id:1}),"*"); }catch(e){} } }, 1500);
 })();
+/* [Grok-Bot] V1.72: Guru-Stotram-Uebersetzung (Prathana SVD) und Listen-Reihenfolge nach SVD-Inhalt, synchron nachgeladen vor dem Seitenskript. */
+if(document.readyState==="loading"){ document.write('<script src="tr-v172.js?v=1"><\/script>'); }
