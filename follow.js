@@ -73,3 +73,5 @@ if(document.readyState==="loading"){ document.write('<script src="v177.js?v=177"
 if(document.readyState==="loading"){ document.write('<script src="v178.js?v=178"><\/script>'); }
 /* [Grok-Bot] V1.79: Hanuman Chalisa Uebersetzung nach SVD-Heft S. 46-48, Vishnu Arati Str. 1 Akkorde Musikerheft, Giridhari Arati mit Ton (v179.js). */
 if(document.readyState==="loading"){ document.write('<script src="v179.js?v=179"><\/script>'); }
+/* [Grok-Bot] V1.80: Giridhari Arati mit den Mira-Strophen der Aufnahme, Uebersetzung und Abfolge (v180.js). */
+if(document.readyState==="loading"){ document.write('<script src="v180.js?v=180"><\/script>'); }
