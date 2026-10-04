@@ -10,7 +10,7 @@
     window.showYt=function(){ ytTime=null; ytDur=null; var r=sy.apply(this, arguments); ytPlaying=false; syncPlayBtn(); return r; };
   }
   function setState(s){
-    if(typeof s!=="number" || !ytOn) return;
+    if(typeof s!=="number" || typeof ytOn==="undefined" || !ytOn) return;
     var on=(s===1);
     if(on!==ytPlaying){ ytPlaying=on; if(on){ try{ markPlayOrigin(); }catch(e){} } syncPlayBtn(); }
   }
@@ -29,6 +29,7 @@
     else panel.scrollTop+=r.top-pr.top-parseFloat(cs.paddingTop||0);
   }
   function syncFromTime(){
+    if(typeof ytOn==="undefined" || typeof line==="undefined") return false;
     if(typeof i==="undefined" || i<0) return true;
     if(!ytOn){
       if(!(a.src && isFinite(a.duration) && a.duration>=8)) return false;
@@ -53,7 +54,7 @@
     if(typeof i!=="undefined" && i>=0){ var n0=0, t0=setInterval(function(){ n0++; if(syncFromTime() || n0>30) clearInterval(t0); }, 300); }
   });
   window.addEventListener("load", function(){ setTimeout(pinNow, 300); });
-  setInterval(function(){ if(ytOn){ try{ yt.contentWindow.postMessage(JSON.stringify({event:"listening",id:1}),"*"); }catch(e){} } }, 1500);
+  setInterval(function(){ if(typeof ytOn!=="undefined" && ytOn && typeof yt!=="undefined"){ try{ yt.contentWindow.postMessage(JSON.stringify({event:"listening",id:1}),"*"); }catch(e){} } }, 1500);
 })();
 /* [Grok-Bot] V1.72: Guru-Stotram-Uebersetzung (Prathana SVD) und Listen-Reihenfolge nach SVD-Inhalt, synchron nachgeladen vor dem Seitenskript. */
 if(document.readyState==="loading"){ document.write('<script src="tr-v172.js?v=1"><\/script>'); }
@@ -65,3 +66,5 @@ if(document.readyState==="loading"){ document.write('<script src="tr-v174.js?v=1
 if(document.readyState==="loading"){ document.write('<script src="rate-v175.js?v=1"><\/script>'); }
 /* [Grok-Bot] V1.76: Zeitmarken als Abfolge [Zeit, Strophe] (Narasimha mit Ruecksprung 4->3), Taste "Mitlesen", Tasten -/+ nur wo sie wirken. */
 if(document.readyState==="loading"){ document.write('<script src="seq-v176.js?v=1"><\/script>'); }
+/* [Grok-Bot] V1.77: Schutz gegen Seitenfehler bei langsamer Verbindung: Zeitgeber in autoscroll.js und follow.js warten, bis autoScroll, ytOn, i und line definiert sind. */
+document.addEventListener("DOMContentLoaded", function(){ setTimeout(function(){ var v=document.querySelector("h1 .ver"); if(v) v.textContent="V1.77"; document.title="Bhakti Prayers Player V1.77"; }, 450); });

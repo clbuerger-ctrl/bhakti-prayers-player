@@ -195,8 +195,10 @@ window.addEventListener("message", function(e){
     if(typeof d.info.duration==="number") ytDur=d.info.duration;
   }
 });
+/* [Grok-Bot] V1.77: Zeitgeber tut nichts, solange das Seitenskript (autoScroll, ytOn, i, line) noch nicht geladen ist (langsame Verbindung). */
+function bppReady(){ return typeof autoScroll!=="undefined" && typeof ytOn!=="undefined" && typeof i!=="undefined" && typeof line!=="undefined" && typeof PRAYERS!=="undefined"; }
 setInterval(function(){
-  if(!autoScroll) return;
+  if(!bppReady() || !autoScroll) return;
   askYtTime();
   autoLineFromTime();
 }, 400);
