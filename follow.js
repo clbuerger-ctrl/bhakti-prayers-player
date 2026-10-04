@@ -69,3 +69,5 @@ if(document.readyState==="loading"){ document.write('<script src="seq-v176.js?v=
 /* [Grok-Bot] V1.77: Schutz gegen Seitenfehler bei langsamer Verbindung: Zeitgeber in autoscroll.js und follow.js warten, bis autoScroll, ytOn, i und line definiert sind.
    Dazu v177.js: Tasten -/+ ueberall aus, Bhajare-Text und -Abfolge, Versionspruefung (version.json). Zusatzdateien mit ?v=177, damit kein alter Stand aus dem Cache kommt. */
 if(document.readyState==="loading"){ document.write('<script src="v177.js?v=177"><\/script>'); }
+/* [Grok-Bot] V1.78: Akkorde Giridhari Arati und Vishnu Arati Str. 2-9 nach "Morning Prayer SVD with Chords" (v178.js). */
+if(document.readyState==="loading"){ document.write('<script src="v178.js?v=178"><\/script>'); }
