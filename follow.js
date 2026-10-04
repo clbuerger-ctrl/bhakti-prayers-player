@@ -71,3 +71,5 @@ if(document.readyState==="loading"){ document.write('<script src="seq-v176.js?v=
 if(document.readyState==="loading"){ document.write('<script src="v177.js?v=177"><\/script>'); }
 /* [Grok-Bot] V1.78: Akkorde Giridhari Arati und Vishnu Arati Str. 2-9 nach "Morning Prayer SVD with Chords" (v178.js). */
 if(document.readyState==="loading"){ document.write('<script src="v178.js?v=178"><\/script>'); }
+/* [Grok-Bot] V1.79: Hanuman Chalisa Uebersetzung nach SVD-Heft S. 46-48, Vishnu Arati Str. 1 Akkorde Musikerheft, Giridhari Arati mit Ton (v179.js). */
+if(document.readyState==="loading"){ document.write('<script src="v179.js?v=179"><\/script>'); }
