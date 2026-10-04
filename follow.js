@@ -59,3 +59,5 @@
 if(document.readyState==="loading"){ document.write('<script src="tr-v172.js?v=1"><\/script>'); }
 /* [Grok-Bot] V1.73: Morgen-/Abendliste nach dem SVD-Inhaltsverzeichnis (Override der Anordnung aus listview.js). */
 if(document.readyState==="loading"){ document.write('<script src="plan-v173.js?v=1"><\/script>'); }
+/* [Grok-Bot] V1.74: Suprabhatam- und Govinda-Uebersetzungen nach Prathana SVD, Wochentag-Knoepfe ausgeblendet. */
+if(document.readyState==="loading"){ document.write('<script src="tr-v174.js?v=1"><\/script>'); }
