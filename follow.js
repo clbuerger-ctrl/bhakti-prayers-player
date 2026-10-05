@@ -79,5 +79,6 @@ if(document.readyState==="loading"){ document.write('<script src="v180.js?v=180"
 if(document.readyState==="loading"){ document.write('<script src="v183.js?v=183"><\/script>'); }
 /* [Grok-Bot] V1.84: Govinda-MP3 (CD, gleiche Melodie wie YouTube) und voriges/naechstes Prayer im Vollbild immer sichtbar (v184.js). */
 if(document.readyState==="loading"){ document.write('<script src="v184.js?v=184"><\/script>'); }
-/* [Grok-Bot] V1.85-V1.86: Mitlesen (Ashtotram Name fuer Name, geschaetzte Marken je Quelle, alte Strophen-Tipps entschaerft) und Vollbild-Menue nur nach Tippen (v186.js ersetzt v185.js). */
-if(document.readyState==="loading"){ document.write('<script src="v186.js?v=186"><\/script>'); }
+/* [Grok-Bot] V1.85-V1.87: Mitlesen (Ashtotram Name fuer Name, geschaetzte Marken je Quelle, alte Strophen-Tipps entschaerft), Vollbild-Menue nur nach Tippen,
+   V1.87: Strophenwechsel am Ende des Gesangs (Pausentabelle), gemessene Marken Ashtotram, Vaishnava Mantra, Kavaca (v187.js ersetzt v186.js). */
+if(document.readyState==="loading"){ document.write('<script src="v187.js?v=187"><\/script>'); }
