@@ -75,3 +75,5 @@ if(document.readyState==="loading"){ document.write('<script src="v178.js?v=178"
 if(document.readyState==="loading"){ document.write('<script src="v179.js?v=179"><\/script>'); }
 /* [Grok-Bot] V1.80: Giridhari Arati mit den Mira-Strophen der Aufnahme, Uebersetzung und Abfolge (v180.js). */
 if(document.readyState==="loading"){ document.write('<script src="v180.js?v=180"><\/script>'); }
+/* [Grok-Bot] V1.81: Ganzseiten-Modus zum Mitlesen (v181.js). */
+if(document.readyState==="loading"){ document.write('<script src="v181.js?v=181"><\/script>'); }
