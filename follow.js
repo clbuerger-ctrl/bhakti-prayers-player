@@ -75,5 +75,5 @@ if(document.readyState==="loading"){ document.write('<script src="v178.js?v=178"
 if(document.readyState==="loading"){ document.write('<script src="v179.js?v=179"><\/script>'); }
 /* [Grok-Bot] V1.80: Giridhari Arati mit den Mira-Strophen der Aufnahme, Uebersetzung und Abfolge (v180.js). */
 if(document.readyState==="loading"){ document.write('<script src="v180.js?v=180"><\/script>'); }
-/* [Grok-Bot] V1.81/V1.82: Ganzseiten-Modus zum Mitlesen (v182.js ersetzt v181.js: grosse Play/Pause-Taste, Doppeltippen). */
-if(document.readyState==="loading"){ document.write('<script src="v182.js?v=182"><\/script>'); }
+/* [Grok-Bot] V1.81-V1.83: Ganzseiten-Modus zum Mitlesen (v183.js ersetzt v181/v182: Ende-Bildschirm, voriges/naechstes Prayer, Wiederholen). */
+if(document.readyState==="loading"){ document.write('<script src="v183.js?v=183"><\/script>'); }
