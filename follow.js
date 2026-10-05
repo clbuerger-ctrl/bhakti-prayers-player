@@ -77,3 +77,5 @@ if(document.readyState==="loading"){ document.write('<script src="v179.js?v=179"
 if(document.readyState==="loading"){ document.write('<script src="v180.js?v=180"><\/script>'); }
 /* [Grok-Bot] V1.81-V1.83: Ganzseiten-Modus zum Mitlesen (v183.js ersetzt v181/v182: Ende-Bildschirm, voriges/naechstes Prayer, Wiederholen). */
 if(document.readyState==="loading"){ document.write('<script src="v183.js?v=183"><\/script>'); }
+/* [Grok-Bot] V1.84: Govinda-MP3 (CD, gleiche Melodie wie YouTube) und voriges/naechstes Prayer im Vollbild immer sichtbar (v184.js). */
+if(document.readyState==="loading"){ document.write('<script src="v184.js?v=184"><\/script>'); }
