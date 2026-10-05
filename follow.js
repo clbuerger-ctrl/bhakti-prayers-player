@@ -79,3 +79,5 @@ if(document.readyState==="loading"){ document.write('<script src="v180.js?v=180"
 if(document.readyState==="loading"){ document.write('<script src="v183.js?v=183"><\/script>'); }
 /* [Grok-Bot] V1.84: Govinda-MP3 (CD, gleiche Melodie wie YouTube) und voriges/naechstes Prayer im Vollbild immer sichtbar (v184.js). */
 if(document.readyState==="loading"){ document.write('<script src="v184.js?v=184"><\/script>'); }
+/* [Grok-Bot] V1.85: Mitlesen — Ashtotram Name fuer Name, geschaetzte Zeitmarken fuer Prayers ohne Marken (v185.js). */
+if(document.readyState==="loading"){ document.write('<script src="v185.js?v=185"><\/script>'); }
