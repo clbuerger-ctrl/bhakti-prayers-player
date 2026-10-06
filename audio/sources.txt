@@ -10,7 +10,8 @@ narasimha|AJbyWqpFxmu4zIDLFldm-kM/Narasimha-Prayer-CD.mp3
 ramanuja|AHbLURUpJLp1dREEL45Qvx8/Ramanuja-Mangalam.mp3
 kavacham|ACiwqb49t9d6YJKlMeToQ0w/Narasimha-Kavacham-A.mp3
 kavacham-b|AKziKo5deCKxv6Q_Rto6akk/Narasimha-Kavacham-B-lyric.mp3
-hanuman|AIhKtbXquRNBdUPTntYvPTg/Hanuman%20Chalisa%20(prabhu)%2011.mp3
+# hanuman: nicht mehr Prabhu. Ton ist Pandita Bhavani, YouTube rhSVddEZW88 (Telegram/Prarthana). Nicht aus Dropbox neu laden.
+# hanuman|AIhKtbXquRNBdUPTntYvPTg/Hanuman%20Chalisa%20(prabhu)%2011.mp3
 bhajare|ALN7EX-IbJTtEvxZUrmXkAs/Vishwananda-Arati.mp3
 lakshmi-arati|AF0QghAiOxI37bwnW4H3BJs/Lakshmi-Arati.mp3
 mukunda|AAaWhfo8FVeG_XB4CKwSWqQ/2022-12-12-Mix-BhaktiMargaPrayers-43-MukundaMalaStotram.mp3
