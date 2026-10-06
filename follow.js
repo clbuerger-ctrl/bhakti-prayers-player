@@ -99,3 +99,5 @@ if(document.readyState==="loading"){ document.write('<script src="v194.js?v=194"
 /* [Grok-Bot] V1.95: Grossbild – die ganze naechste Strophe faehrt waehrend der letzten Zeile von unten hoch, nahtloser Wechsel (v195.js ersetzt v191.js);
    Quellenwahl als Zweier-Auswahl "YT | MP3". Laufband (v189) und Tastenschutz (v194) unveraendert. */
 if(document.readyState==="loading"){ document.write('<script src="v195.js?v=195"><\/script>'); }
+/* [Grok-Bot] V1.96: Kavaca Stotram - Strophenzeiten MP3 und YouTube neu gemessen (Abfolge + Pausentabelle), alte Strophen-Tipps ohne Wirkung. */
+if(document.readyState==="loading"){ document.write('<script src="v196.js?v=196"><\/script>'); }
