@@ -1,6 +1,6 @@
 /* [Grok-Bot] V1.91: Grossbild – Vorschau in voller Groesse und gleitender Uebergang (ersetzt die Vorschau aus v189.js).
    - Vorschauzeile (erste Zeile der naechsten Strophe bzw. des naechsten Teils) in derselben Schriftgroesse wie die Strophe,
-     nur leicht gedimmt (65 %), direkt unter der letzten Zeile (nur wenig mehr als der normale Zeilenabstand), nie umbrochen.
+     nur leicht gedimmt (V1.94: 88 %), direkt unter der letzten Zeile (nur wenig mehr als der normale Zeilenabstand), nie umbrochen.
      Ist sie breiter als der Bildschirm, gilt fuer Strophe und Vorschau die kleinere Groesse (Strophe wird weich verkleinert).
    - Waehrend der letzten Zeile gleitet die Strophe nach Medienzeit hoch, bis die letzte Zeile etwa bei 42 % der Hoehe steht;
      obere Zeilen duerfen oben hinauslaufen. Die Uebersetzung blendet dabei aus, damit die Vorschau nichts ueberdeckt.
@@ -11,7 +11,7 @@ window.BPP_BUILD="1.91";
 window.bppPv191=1;
 (function(){
   if(window.bppV191) return; window.bppV191=1;
-  var EASE="cubic-bezier(.45,0,.2,1)", DUR=550, OP=0.65, RAMP=0.6, TARGET=0.42;
+  var EASE="cubic-bezier(.45,0,.2,1)", DUR=550, OP=0.88, RAMP=0.6, TARGET=0.42; /* V1.94: Vorschau nur ganz wenig dunkler (88 % statt 65 %) */
   var css=document.createElement("style");
   css.textContent="#bppFsBox{transition:none!important;transform-origin:50% 0}"+
     "#bppFsPv191{position:absolute;left:0;right:0;top:0;text-align:center;white-space:nowrap;overflow:hidden;line-height:1.22;color:inherit;opacity:0;pointer-events:none;z-index:1;will-change:transform,opacity}"+

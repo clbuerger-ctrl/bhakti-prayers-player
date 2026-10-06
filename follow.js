@@ -90,6 +90,9 @@ if(document.readyState==="loading"){ document.write('<script src="v189.js?v=191"
 /* [Grok-Bot] V1.90: Grossbild teilt lange Strophen nur, wenn die Schrift dadurch wirklich groesser wird (v190.js; v183.js?v=190 mit Haken bppFsSplitOk). */
 if(document.readyState==="loading"){ document.write('<script src="v190.js?v=190"><\/script>'); }
 /* [Grok-Bot] V1.91: Grossbild-Vorschau in voller Groesse (65 %), Strophe gleitet waehrend der letzten Zeile hoch, nahtloser Wechsel (v191.js; v189.js?v=191). */
-if(document.readyState==="loading"){ document.write('<script src="v191.js?v=191"><\/script>'); }
+if(document.readyState==="loading"){ document.write('<script src="v191.js?v=194"><\/script>'); }
 /* [Grok-Bot] V1.93: Hotfix – v192.js (Klicksperre im Grossbild-Menue) wird nicht mehr geladen, sie blockierte auf echten Handys alle Tasten. Stand wie V1.91 (v193.js setzt nur die Version). */
 if(document.readyState==="loading"){ document.write('<script src="v193.js?v=193"><\/script>'); }
+/* [Grok-Bot] V1.94: Grossbild-Menue: nur der Klick des Oeffnungs-Tipps wird verworfen, keine Sperre/pointer-events, Leiste bleibt 6 s nach letzter Beruehrung (v194.js; v192.js bleibt aus).
+   Vorschauzeile 88 % statt 65 % Deckkraft (v191.js?v=194). */
+if(document.readyState==="loading"){ document.write('<script src="v194.js?v=194"><\/script>'); }
