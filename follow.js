@@ -91,3 +91,5 @@ if(document.readyState==="loading"){ document.write('<script src="v189.js?v=191"
 if(document.readyState==="loading"){ document.write('<script src="v190.js?v=190"><\/script>'); }
 /* [Grok-Bot] V1.91: Grossbild-Vorschau in voller Groesse (65 %), Strophe gleitet waehrend der letzten Zeile hoch, nahtloser Wechsel (v191.js; v189.js?v=191). */
 if(document.readyState==="loading"){ document.write('<script src="v191.js?v=191"><\/script>'); }
+/* [Grok-Bot] V1.92: Grossbild-Menue: verborgene Tasten nehmen keine Klicks an, erster Tipp blendet nur ein (v192.js). */
+if(document.readyState==="loading"){ document.write('<script src="v192.js?v=192"><\/script>'); }
