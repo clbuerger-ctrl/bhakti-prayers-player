@@ -12,7 +12,8 @@
    Ohne Wiederholen kein automatisches Weiterspielen. Ersetzt v182.js. */
 /* [Grok-Bot] V1.89: einfarbige SVG-Symbole statt Emoji (voriges/naechstes Prayer, Wiederholen), Wiederholen groesser:
    aus = Standard, dieses Prayer = gold mit "1", ganze Liste = gold. Tasten gold nur wenn an/aktiv (auch Play), sonst Standard.
-   Haken bppPageSwitchAt fuer den Teilwechsel langer Strophen (v189.js). */
+   Haken bppPageSwitchAt fuer den Teilwechsel langer Strophen (v189.js).
+   V1.90: Haken bppFsSplitOk (v190.js): keine Teilung, wenn die Zeilen breitenbegrenzt sind und die Teile nicht groesser wuerden. */
 window.BPP_BUILD="1.83";
 (function(){
   if(typeof PRAYERS==="undefined" || window.bppFsV183) return; window.bppFsV183=1;
@@ -209,6 +210,8 @@ window.BPP_BUILD="1.83";
       var A=c.lines.slice(0,cut), B=c.lines.slice(cut), sa=A.reduce(function(s,x){ return s+wlen(x); },0)/tot;
       var fa=fitSize(A, c.ch, ""), fb=fitSize(B, "", c.tr);
       res=[{lines:A, fs:fa, share:sa, ch:c.ch, tr:""},{lines:B, fs:fb, share:1-sa, ch:"", tr:c.tr}];
+      /* V1.90: Teilung nur, wenn sie die Schrift wirklich vergroessert (Regel in v190.js: window.bppFsSplitOk) */
+      if(typeof window.bppFsSplitOk==="function"){ try{ if(!window.bppFsSplitOk(f, fa, fb, c.lines.length, cut)) res=[{lines:c.lines, fs:f, share:1}]; }catch(e){} }
     }
     res.forEach(function(r){ if(r.ch===undefined){ r.ch=c.ch; r.tr=c.tr; } });
     fitCache[key]=res; return res;
@@ -312,6 +315,7 @@ window.BPP_BUILD="1.83";
     if(!fromEvent){ try{ if(document.fullscreenElement && document.exitFullscreen) document.exitFullscreen(); }catch(e){} }
     try{ persistNow(); paintLyrics(); }catch(e){}
   }
+  window.bppFsPages=function(k){ return (isOn && stage)?pages(k):null; };
   window.bppFsOpen=open; window.bppFsClose=close; window.bppFsState=function(){ return {on:isOn, k:curK, page:page, pages:curK>=0?pages(curK).length:0, fs:box?parseFloat(box.style.fontSize):0, timed:!!timed(), cut:(curK>=0 && pages(curK).length>1)?pages(curK)[0].lines.length:0}; };
   function addBtn(){
     var ba=document.getElementById("btnAuto"); if(!ba || document.getElementById("btnFs")) return;

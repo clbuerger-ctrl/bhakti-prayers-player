@@ -76,7 +76,7 @@ if(document.readyState==="loading"){ document.write('<script src="v179.js?v=179"
 /* [Grok-Bot] V1.80: Giridhari Arati mit den Mira-Strophen der Aufnahme, Uebersetzung und Abfolge (v180.js). */
 if(document.readyState==="loading"){ document.write('<script src="v180.js?v=180"><\/script>'); }
 /* [Grok-Bot] V1.81-V1.83: Ganzseiten-Modus zum Mitlesen (v183.js ersetzt v181/v182: Ende-Bildschirm, voriges/naechstes Prayer, Wiederholen). */
-if(document.readyState==="loading"){ document.write('<script src="v183.js?v=189"><\/script>'); }
+if(document.readyState==="loading"){ document.write('<script src="v183.js?v=190"><\/script>'); }
 /* [Grok-Bot] V1.84: Govinda-MP3 (CD, gleiche Melodie wie YouTube) und voriges/naechstes Prayer im Vollbild immer sichtbar (v184.js). */
 if(document.readyState==="loading"){ document.write('<script src="v184.js?v=184"><\/script>'); }
 /* [Grok-Bot] V1.85-V1.87: Mitlesen (Ashtotram Name fuer Name, geschaetzte Marken je Quelle, alte Strophen-Tipps entschaerft), Vollbild-Menue nur nach Tippen,
@@ -87,3 +87,5 @@ if(document.readyState==="loading"){ document.write('<script src="v188.js?v=188"
 /* [Grok-Bot] V1.89: Grossbild-Vorschau der ersten Zeile der naechsten Strophe bzw. des naechsten Teils waehrend der letzten Zeile, Ashtotram im Grossbild als Laufband,
    Tastenfarben einheitlich (gold = an/aktiv) und einfarbige Symbole (v189.js; v183.js?v=189 mit Symbolen und Teilwechsel-Haken). */
 if(document.readyState==="loading"){ document.write('<script src="v189.js?v=189"><\/script>'); }
+/* [Grok-Bot] V1.90: Grossbild teilt lange Strophen nur, wenn die Schrift dadurch wirklich groesser wird (v190.js; v183.js?v=190 mit Haken bppFsSplitOk). */
+if(document.readyState==="loading"){ document.write('<script src="v190.js?v=190"><\/script>'); }
