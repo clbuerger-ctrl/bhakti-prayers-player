@@ -4,7 +4,8 @@
    Gesangs) gleitet dann die ganze neue Strophe hoch (Animation aus V1.87). Nicht bei der letzten Strophe.
    Beginn der letzten Zeile: Silbenanteil an der gesungenen Zeit der Strophe (Pausen herausgerechnet), eingerastet auf eine
    gemessene Pause innerhalb der Strophe, wo es eine gibt (BPP_PAUSES). Alles in Medienzeit, stimmt bei jedem Tempo.
-   Die Schriftgroesse der Strophe bleibt; reicht der Platz unten nicht, rueckt sie weich hoch (notfalls leicht verkleinert). */
+   Die Schriftgroesse der Strophe bleibt; reicht der Platz unten nicht, rueckt sie weich hoch (notfalls leicht verkleinert).
+   V1.91: Vorschau und Hochgleiten macht v191.js (window.bppPv191); hier bleiben Zeitplan (bppLineSched) und Teilwechsel-Haken. */
 window.BPP_BUILD="1.89";
 (function(){
   if(window.bppV189) return; window.bppV189=1;
@@ -74,6 +75,7 @@ window.BPP_BUILD="1.89";
     var sc=sched(p, j, info, L.length, L);
     return (sc.end[cut-1]!=null)?sc.end[cut-1]+0.1:null;
   };
+  window.bppLineSched=function(j, info, L){ var p=P(); return p?sched(p, j, info, L.length, L):null; };
   /* ---------- Vorschau ---------- */
   var pv=null, stage=null, box=null, cur=null, lastSt="", shift=null;
   function ensure(){
@@ -96,6 +98,7 @@ window.BPP_BUILD="1.89";
     else pv.classList.remove("on");
   }
   function onBoxChange(){
+    if(window.bppPv191) return;
     /* Wechsel (Strophe/Teil): neue Strophe ohne Verschiebung, Geist der alten an der verschobenen Stelle lassen */
     var old=shift; var had=pv && pv.classList.contains("on");
     var stNow=fsOn(), sk=stNow?(stNow.k+"/"+stNow.page):"";
@@ -117,6 +120,7 @@ window.BPP_BUILD="1.89";
     setShift(dy, sc, false);
   }
   function tick(){
+    if(window.bppPv191) return;
     var s=fsOn(), ovl=document.getElementById("bppFs");
     if(!s || !s.on || !ensure() || (ovl && ovl.classList.contains("scr"))){ if(pv && cur){ setShift(0,1,true); hide(false); } return; }
     var want=null;
