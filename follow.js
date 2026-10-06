@@ -103,3 +103,5 @@ if(document.readyState==="loading"){ document.write('<script src="v195.js?v=195"
 if(document.readyState==="loading"){ document.write('<script src="v196.js?v=196"><\/script>'); }
 /* [Grok.com] V1.98: Hanuman Chalisa spielt die Bhavani-Datei. BPP_BUILD muss nach v196 stehen, sonst setzt v177 die Anzeige wieder auf 1.96. */
 if(document.readyState==="loading"){ document.write('<script src="v198.js?v=198"><\/script>'); }
+/* [Grok-Bot] V1.99: Hanuman Chalisa - Zeitmarken der neuen MP3 (Pandita Bhavani) gemessen, feste Abfolge mit Refrain, Pausentabelle (v199.js). */
+if(document.readyState==="loading"){ document.write('<script src="v199.js?v=199"><\/script>'); }
