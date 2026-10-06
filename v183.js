@@ -10,6 +10,9 @@
 /* [Grok-Bot] V1.83: Ende-Bildschirm (Leiste bleibt sichtbar, grosse Taste "Naechstes: <Titel>"), voriges/naechstes Prayer in der Leiste und im normalen Player
    (Reihenfolge der aktiven Liste, Eintraege ohne Ton uebersprungen), Wiederholen-Schalter aus / 🔂 dieses Prayer / 🔁 ganze Liste (gespeichert, MP3 und YouTube).
    Ohne Wiederholen kein automatisches Weiterspielen. Ersetzt v182.js. */
+/* [Grok-Bot] V1.89: einfarbige SVG-Symbole statt Emoji (voriges/naechstes Prayer, Wiederholen), Wiederholen groesser:
+   aus = Standard, dieses Prayer = gold mit "1", ganze Liste = gold. Tasten gold nur wenn an/aktiv (auch Play), sonst Standard.
+   Haken bppPageSwitchAt fuer den Teilwechsel langer Strophen (v189.js). */
 window.BPP_BUILD="1.83";
 (function(){
   if(typeof PRAYERS==="undefined" || window.bppFsV183) return; window.bppFsV183=1;
@@ -22,6 +25,12 @@ window.BPP_BUILD="1.83";
     ru:["⛶ Крупно","Полный экран: только текущая строфа, очень крупно","Аккорды","Перевод","Закрыть","Предыдущая молитва","Следующая молитва","Далее","Повтор: выкл.","Повтор: эта молитва","Повтор: весь список","Предыдущая строфа","Следующая строфа","Конец","Ещё раз"],
     hi:["⛶ बड़ा","पूर्ण स्क्रीन: केवल वर्तमान पद, बहुत बड़ा","कॉर्ड","अनुवाद","बंद करें","पिछली प्रार्थना","अगली प्रार्थना","अगली","दोहराएँ: बंद","दोहराएँ: यह प्रार्थना","दोहराएँ: पूरी सूची","पिछला पद","अगला पद","समाप्त","फिर से"]};
   function T(k){ var l=(typeof lang!=="undefined" && L[lang])?L[lang]:L.en; return l[k]; }
+  var RP='<path d="M4 11.5V9.5A3.5 3.5 0 0 1 7.5 6H19"/><path d="M15.5 2.5L19 6l-3.5 3.5"/><path d="M20 12.5v2a3.5 3.5 0 0 1-3.5 3.5H5"/><path d="M8.5 21.5L5 18l3.5-3.5"/>';
+  var ICO={prev:'<svg class="bppI" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M5 5h2.8v14H5zM19.5 5v14L9 12z"/></svg>',
+    next:'<svg class="bppI" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16.2 5H19v14h-2.8zM4.5 5v14L15 12z"/></svg>',
+    rep:'<svg class="bppI bppIR" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">'+RP+'</svg>',
+    rep1:'<svg class="bppI bppIR" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">'+RP+'</svg><b class="bppR1">1</b>'};
+  window.bppIcons=ICO;
   var css=document.createElement("style");
   css.textContent="#bppFs{position:fixed;inset:0;z-index:2147483000;background:#0b0b0d;color:#f3eee2;display:none;overflow:hidden;font-family:inherit;touch-action:manipulation;user-select:none;-webkit-user-select:none}"+
     "#bppFs.on{display:block}#bppFsStage{position:absolute;left:3vw;right:3vw;top:5vh;bottom:4vh;display:flex;align-items:center;justify-content:center}"+
@@ -31,17 +40,18 @@ window.BPP_BUILD="1.83";
     "#bppFsTop{position:absolute;left:10px;right:10px;top:6px;font-size:13px;color:#8d877c;display:flex;justify-content:space-between;pointer-events:none}"+
     "#bppFsBar{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;width:max-content;background:rgba(40,38,34,.92);padding:7px 9px;border-radius:12px;transition:opacity .4s;max-width:96vw}"+
     "#bppFsBar.hid{opacity:0;pointer-events:none}#bppFsBar button{font-size:17px;min-width:44px;min-height:40px;border:0;border-radius:8px;background:#5a5146;color:#fff;padding:0 10px;cursor:pointer}"+
-    "#bppFsBar button.on{background:#a8792c}#bppFsBar .row{display:flex;flex-wrap:nowrap;gap:8px;align-items:center;justify-content:center}"+
-    "#bppFsBar button#bppFsPlay{width:72px;height:72px;min-width:72px;border-radius:50%;background:#e0b45a;padding:0;display:flex;align-items:center;justify-content:center}"+
-    "#bppFsPlay i{display:block;box-sizing:border-box}#bppFsPlay i.pl{width:0;height:0;border-style:solid;border-width:16px 0 16px 27px;border-color:transparent transparent transparent #1a1714;margin-left:7px}"+
-    "#bppFsPlay i.pa{width:26px;height:30px;border-left:9px solid #1a1714;border-right:9px solid #1a1714}"+
-    "#bppFsBar button:disabled{opacity:.3;cursor:default}#bppFsBar button.pn{font-size:13px;max-width:36vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;background:#3e3a33}"+
-    "#bppFsBar button.str{font-size:26px;line-height:1}#bppFsBar button.rep{font-size:18px}#bppFsBar button.rep.off{opacity:.45;background:#3e3a33}"+
+    "#bppFsBar button.on{background:#8b6914;box-shadow:inset 0 0 0 1px #c9a36a}#bppFsBar .row{display:flex;flex-wrap:nowrap;gap:8px;align-items:center;justify-content:center}"+
+    "#bppFsBar button#bppFsPlay{width:72px;height:72px;min-width:72px;border-radius:50%;background:#5a5146;padding:0;display:flex;align-items:center;justify-content:center}#bppFsBar button#bppFsPlay.on{background:#8b6914;box-shadow:inset 0 0 0 2px #c9a36a}"+
+    "#bppFsPlay i{display:block;box-sizing:border-box}#bppFsPlay i.pl{width:0;height:0;border-style:solid;border-width:16px 0 16px 27px;border-color:transparent transparent transparent #fff6e8;margin-left:7px}"+
+    "#bppFsPlay i.pa{width:26px;height:30px;border-left:9px solid #fff6e8;border-right:9px solid #fff6e8}"+
+    "#bppFsBar button:disabled{opacity:.3;cursor:default}#bppFsBar button.pn{font-size:13px;max-width:36vw;overflow:hidden;white-space:nowrap;display:inline-flex;align-items:center;gap:6px}#bppFsBar button.pn span{overflow:hidden;text-overflow:ellipsis;min-width:0}"+
+    "#bppFsBar button.str{font-size:26px;line-height:1}#bppFsBar button.rep{font-size:18px;min-width:56px}"+
     "#bppFsEnd{position:absolute;left:0;right:0;top:12vh;display:none;flex-direction:column;align-items:center;gap:14px;padding:0 5vw;text-align:center}#bppFs.end #bppFsEnd{display:flex}#bppFs.end #bppFsBox{opacity:.18}"+
     "#bppFsEnd .et{font-size:15px;color:#a9a39a;letter-spacing:.08em;text-transform:uppercase}"+
-    "#bppFsEnd button{border:0;border-radius:14px;cursor:pointer;font-family:inherit}#bppFsEnd .en{background:#e0b45a;color:#1a1714;font-size:22px;font-weight:600;padding:16px 22px;max-width:90vw;line-height:1.25}#bppFsEnd .en small{display:block;font-size:13px;font-weight:400;letter-spacing:.06em;text-transform:uppercase;opacity:.75}"+
+    "#bppFsEnd button{border:0;border-radius:14px;cursor:pointer;font-family:inherit}#bppFsEnd .en{background:#8b6914;color:#fff6e8;box-shadow:inset 0 0 0 1px #c9a36a;font-size:22px;font-weight:600;padding:16px 22px;max-width:90vw;line-height:1.25}#bppFsEnd .en small{display:block;font-size:13px;font-weight:400;letter-spacing:.06em;text-transform:uppercase;opacity:.75}"+
     "#bppFsEnd .ea{background:#5a5146;color:#fff;font-size:16px;padding:10px 18px}"+
-    ".bppPn{min-width:2.4em}.bppRep.off{opacity:.5}"+
+    ".bppPn{min-width:2.4em}.bppI{display:inline-block;width:1.3em;height:1.3em;vertical-align:-.25em;flex:none}.bppI.bppIR{width:1.75em;height:1.75em;vertical-align:-.5em}"+
+    ".bppRep{min-width:3em;padding-top:2px!important;padding-bottom:2px!important;white-space:nowrap}.bppR1{font-weight:700;font-size:1.05em;margin-left:3px;vertical-align:-.05em;line-height:1}"+
     "@media(max-width:400px){#bppFsBar .row{gap:6px}#bppFsBar button{min-width:44px;padding:0 6px;font-size:16px}}";
   document.head.appendChild(css);
   /* ---- Prayer-Navigation (aktive Liste) und Wiederholen ---- */
@@ -75,7 +85,7 @@ window.BPP_BUILD="1.83";
     try{ putSong(PRAYERS[nb.idx].id, {time:0, line:0}); }catch(e){}
     play(nb.idx, true); endOff();
   }
-  function repLabel(){ return rep===1?"🔂":"🔁"; }
+  function repLabel(){ return rep===1?ICO.rep1:ICO.rep; }
   function repTitle(){ return T(rep===1?9:(rep===2?10:8)); }
   function cycleRep(){ rep=(rep+1)%3; try{ localStorage.setItem(RL, String(rep)); }catch(e){} syncNav(); }
   function onEnded(){
@@ -105,16 +115,18 @@ window.BPP_BUILD="1.83";
   function ttl(nb){ return nb?String(PRAYERS[nb.idx].titel||""):""; }
   function syncNav(){
     var w=(rep===2), np=neighbor(-1, w), nn=neighbor(1, w);
-    [[mPrev,np,5,"⏮︎"],[mNext,nn,6,"⏭︎"],[bPP,np,5,null],[bNP,nn,6,null]].forEach(function(x){ var b=x[0]; if(!b) return;
+    [[mPrev,np,5,"p"],[mNext,nn,6,"n"],[bPP,np,5,null],[bNP,nn,6,null]].forEach(function(x){ var b=x[0]; if(!b) return;
       b.disabled=!x[1]; var t=T(x[2])+(x[1]?": "+ttl(x[1]):""); if(b.title!==t){ b.title=t; b.setAttribute("aria-label", t); }
-      if(x[3]===null){ var lab=(b===bPP)?"⏮︎ "+(x[1]?ttl(x[1]):""):(x[1]?ttl(x[1]):"")+" ⏭︎"; if(b.textContent!==lab) b.textContent=lab; } });
-    [mRep,bRep].forEach(function(b){ if(!b) return; if(b.textContent!==repLabel()) b.textContent=repLabel(); b.title=repTitle(); b.setAttribute("aria-label", b.title); b.classList.toggle("off", rep===0); b.classList.toggle("on", rep!==0); });
+      var nm=(x[3]===null)?(x[1]?ttl(x[1]):""):"", key=(x[3]||(b===bPP?"P":"N"))+"|"+nm;
+      if(b.getAttribute("data-k")!==key){ b.setAttribute("data-k", key);
+        b.innerHTML=(x[3]==="p")?ICO.prev:(x[3]==="n")?ICO.next:(b===bPP)?ICO.prev+"<span>"+esc(nm)+"</span>":"<span>"+esc(nm)+"</span>"+ICO.next; } });
+    [mRep,bRep].forEach(function(b){ if(!b) return; if(b.getAttribute("data-r")!==String(rep)){ b.setAttribute("data-r", String(rep)); b.innerHTML=repLabel(); } b.title=repTitle(); b.setAttribute("aria-label", b.title); b.classList.toggle("off", rep===0); b.classList.toggle("on", rep!==0); });
   }
   function endOn(){
     if(!isOn || !endBox) return; endIs=true; ov.classList.add("end");
     var nn=neighbor(1, false), p=P();
     var h="<div class='et'>"+esc(T(13))+" · "+esc(p?p.titel:"")+"</div>";
-    if(nn) h+="<button type='button' class='en' id='bppFsEndNext'><small>"+esc(T(7))+"</small>"+esc(ttl(nn))+" ⏭︎</button>";
+    if(nn) h+="<button type='button' class='en' id='bppFsEndNext'><small>"+esc(T(7))+"</small>"+esc(ttl(nn))+" "+ICO.next+"</button>";
     h+="<button type='button' class='ea' id='bppFsEndAgain'>↺ "+esc(T(14))+"</button>";
     endBox.innerHTML=h;
     var bn=endBox.querySelector("#bppFsEndNext"); if(bn) bn.onclick=function(e){ e.stopPropagation(); startPrayer(nn); };
@@ -204,7 +216,10 @@ window.BPP_BUILD="1.83";
   function autoPage(k, pg){
     if(pg.length<2) return 0;
     if(Date.now()<holdUntil || !playing()) return Math.min(page, pg.length-1);
-    var t=nowT(), sp=span(k,t); if(!sp || !(sp[1]>sp[0])) return Math.min(page, pg.length-1);
+    var t=nowT();
+    /* V1.89: Teilwechsel langer Strophen am Ende der letzten Zeile des ersten Teils (v189.js, Medienzeit) */
+    if(typeof window.bppPageSwitchAt==="function"){ try{ var ps=window.bppPageSwitchAt(k, pg[0].lines.length, t); if(typeof ps==="number") return t>=ps?1:0; }catch(e){} }
+    var sp=span(k,t); if(!sp || !(sp[1]>sp[0])) return Math.min(page, pg.length-1);
     return ((t-sp[0])/(sp[1]-sp[0])>=pg[0].share)?1:0;
   }
   function draw(force){
@@ -223,7 +238,7 @@ window.BPP_BUILD="1.83";
     /* App-Ansicht mitziehen */
     try{ if(line!==g.start && g.idx.indexOf(line)<0){ line=g.start; } }catch(e){}
   }
-  function syncPlay(){ if(!bPlay) return; var on=playing(), c=on?"pa":"pl"; var ic=bPlay.firstChild; if(!ic || ic.className!==c) bPlay.innerHTML="<i class='"+c+"'></i>"; bPlay.title=on?"Pause":"Play"; bPlay.setAttribute("aria-label", bPlay.title); }
+  function syncPlay(){ if(!bPlay) return; var on=playing(), c=on?"pa":"pl"; bPlay.classList.toggle("on", on); var ic=bPlay.firstChild; if(!ic || ic.className!==c) bPlay.innerHTML="<i class='"+c+"'></i>"; bPlay.title=on?"Pause":"Play"; bPlay.setAttribute("aria-label", bPlay.title); }
   function doToggle(){ try{ togglePlay(); }catch(e){} holdUntil=0; syncPlay(); [150,400,900].forEach(function(t){ setTimeout(function(){ syncPlay(); draw(); }, t); }); }
   function showBar(){ bar.classList.remove("hid"); clearTimeout(hideT); if(endIs) return; hideT=setTimeout(function(){ if(!endIs) bar.classList.add("hid"); }, 3000); }
   function go(d){
@@ -250,9 +265,9 @@ window.BPP_BUILD="1.83";
     var r1=document.createElement("div"), r2=document.createElement("div"); r1.className=r2.className="row"; bar.appendChild(r1); bar.appendChild(r2); var tgt=r1;
     function B(txt, fn, id){ var b=document.createElement("button"); b.type="button"; b.textContent=txt; if(id) b.id=id; b.onclick=function(e){ e.stopPropagation(); fn(); showBar(); }; tgt.appendChild(b); return b; }
     tgt=r0;
-    bPP=B("⏮︎", function(){ window.bppPrayerNav.prev(); }, "bppFsPPrev"); bPP.className="pn";
-    bRep=B("🔁", cycleRep, "bppFsRep"); bRep.classList.add("rep");
-    bNP=B("⏭︎", function(){ window.bppPrayerNav.next(); }, "bppFsPNext"); bNP.className="pn";
+    bPP=B("", function(){ window.bppPrayerNav.prev(); }, "bppFsPPrev"); bPP.className="pn";
+    bRep=B("", cycleRep, "bppFsRep"); bRep.classList.add("rep");
+    bNP=B("", function(){ window.bppPrayerNav.next(); }, "bppFsPNext"); bNP.className="pn";
     tgt=r1;
     B("‹", function(){ go(-1); }, "bppFsPrev").className="str";
     B("−10", function(){ seekTo(nowT()-10); holdUntil=0; });
@@ -297,7 +312,7 @@ window.BPP_BUILD="1.83";
     if(!fromEvent){ try{ if(document.fullscreenElement && document.exitFullscreen) document.exitFullscreen(); }catch(e){} }
     try{ persistNow(); paintLyrics(); }catch(e){}
   }
-  window.bppFsOpen=open; window.bppFsClose=close; window.bppFsState=function(){ return {on:isOn, k:curK, page:page, pages:curK>=0?pages(curK).length:0, fs:box?parseFloat(box.style.fontSize):0, timed:!!timed()}; };
+  window.bppFsOpen=open; window.bppFsClose=close; window.bppFsState=function(){ return {on:isOn, k:curK, page:page, pages:curK>=0?pages(curK).length:0, fs:box?parseFloat(box.style.fontSize):0, timed:!!timed(), cut:(curK>=0 && pages(curK).length>1)?pages(curK)[0].lines.length:0}; };
   function addBtn(){
     var ba=document.getElementById("btnAuto"); if(!ba || document.getElementById("btnFs")) return;
     var b=document.createElement("button"); b.type="button"; b.id="btnFs"; b.onclick=open; ba.parentNode.insertBefore(b, ba.nextSibling);
@@ -306,9 +321,9 @@ window.BPP_BUILD="1.83";
   function addMain(){
     var bp=document.getElementById("btnPlay"); if(!bp || document.getElementById("btnPPrev")) return;
     function mk(id, txt, fn, cls){ var b=document.createElement("button"); b.type="button"; b.id=id; b.textContent=txt; b.className=cls; b.onclick=fn; return b; }
-    mPrev=mk("btnPPrev","⏮︎",function(){ window.bppPrayerNav.prev(); },"bppPn");
-    mNext=mk("btnPNext","⏭︎",function(){ window.bppPrayerNav.next(); },"bppPn");
-    mRep=mk("btnRep","🔁",cycleRep,"bppRep");
+    mPrev=mk("btnPPrev","",function(){ window.bppPrayerNav.prev(); },"bppPn");
+    mNext=mk("btnPNext","",function(){ window.bppPrayerNav.next(); },"bppPn");
+    mRep=mk("btnRep","",cycleRep,"bppRep");
     bp.parentNode.insertBefore(mPrev, bp); bp.parentNode.insertBefore(mNext, bp.nextSibling); mNext.parentNode.insertBefore(mRep, mNext.nextSibling);
     syncNav();
   }
