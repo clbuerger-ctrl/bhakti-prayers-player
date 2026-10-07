@@ -105,3 +105,5 @@ if(document.readyState==="loading"){ document.write('<script src="v196.js?v=196"
 if(document.readyState==="loading"){ document.write('<script src="v198.js?v=198"><\/script>'); }
 /* [Grok-Bot] V1.99: Hanuman Chalisa - Zeitmarken der neuen MP3 (Pandita Bhavani) gemessen, feste Abfolge mit Refrain, Pausentabelle (v199.js). */
 if(document.readyState==="loading"){ document.write('<script src="v199.js?v=199"><\/script>'); }
+/* [Grok-Bot] V2.00: Hanuman Chalisa - Refrain "ramaji se rama rama kahiyo" (2x) als eigene Strophe nach jeder 2. Strophe, letzte Zeile jeder 2. Strophe 2x, Abfolge angepasst (v200.js). */
+if(document.readyState==="loading"){ document.write('<script src="v200.js?v=200"><\/script>'); }
