@@ -3,6 +3,7 @@
    dauerhaften Speicher (persist). Geaenderte MP3 (anderes ETag/Groesse) werden neu geladen. Auf mobilen Daten / Datensparen wird nicht
    geladen (Anzeige "wartet auf WLAN"). Ohne Netz: Prayers mit MP3 spielen die MP3, YouTube geht nur online. */
 /* V2.05: Laden auch ueber mobile Daten (keine WLAN-Sperre mehr), Anzeige "Offline gespeichert: n/20 - laedt ...", Fehlerzahl). */
+/* V2.07: Ladefehler mit Datei-Kurznamen ("Fehler: govinda, kavacham-b"), Liste in bppOfflineState.errFiles. */
 window.BPP_BUILD="2.03";
 window.BPP_SW="sw.js?v=203";
 (function(){
@@ -61,19 +62,26 @@ window.BPP_SW="sw.js?v=203";
           S.n=n; if(!need.length){ S.done=true; show("Offline gespeichert: "+n+"/"+L.length+" \u2713", true); return; }
           return estimate(need.length).then(function(ok){
             if(!ok){ show("Offline gespeichert: "+n+"/"+L.length+" \u00b7 zu wenig Speicher"); return; }
-            show("Offline gespeichert: "+n+"/"+L.length+" \u00b7 l\u00e4dt \u2026");
+            S.err=0; S.errFiles=[];
+            /* V2.07: Fehler mit Datei-Kurznamen, z. B. "Fehler: govinda, kavacham-b" */
+            var lab=function(end){ var t="Offline gespeichert: "+n+"/"+L.length, ef=S.errFiles||[];
+              if(n>=L.length) return t+" \u2713";
+              if(!end) t+=" \u00b7 l\u00e4dt \u2026";
+              if(ef.length) t+=" \u00b7 Fehler: "+ef.join(", ")+(end?" (neuer Versuch beim n\u00e4chsten Start)":"");
+              return t; };
+            show(lab());
             return need.reduce(function(p, u){ return p.then(function(){
               if(!navigator.onLine) return;
               S.cur=u.replace(/^.*\//,"").replace(/\.mp3$/i,"");
               return fetch(u+"?bppdl=1", {cache:"no-store"}).then(function(r){
-                if(!r.ok){ S.err=(S.err||0)+1; return; }
+                if(!r.ok){ S.err=(S.err||0)+1; (S.errFiles=S.errFiles||[]).push(S.cur); show(lab()); return; }
                 return r.blob().then(function(b){
                   var h=new Headers(); h.set("Content-Type", r.headers.get("Content-Type")||"audio/mpeg"); h.set("Content-Length", String(b.size));
                   h.set("X-BPP-Sig", sig(r.headers)); h.set("X-BPP-Time", new Date().toISOString());
                   return c.put(u, new Response(b, {status:200, headers:h}));
-                }).then(function(){ n++; S.n=n; show("Offline gespeichert: "+n+"/"+L.length+(n<L.length?" \u00b7 l\u00e4dt \u2026":"")); });
-              }).catch(function(){ S.err=(S.err||0)+1; show("Offline gespeichert: "+n+"/"+L.length+" \u00b7 "+S.err+" Fehler"); });
-            }); }, Promise.resolve()).then(function(){ S.cur=""; S.done=(n>=L.length); show("Offline gespeichert: "+n+"/"+L.length+(S.done?" \u2713":(S.err?" \u00b7 "+S.err+" Fehler, neuer Versuch beim n\u00e4chsten Start":"")), S.done); });
+                }).then(function(){ n++; S.n=n; show(lab()); });
+              }).catch(function(){ S.err=(S.err||0)+1; (S.errFiles=S.errFiles||[]).push(S.cur); show(lab()); });
+            }); }, Promise.resolve()).then(function(){ S.cur=""; S.done=(n>=L.length); show(lab(true), S.done); });
           });
         });
       });
