@@ -76,7 +76,7 @@ if(document.readyState==="loading"){ document.write('<script src="v179.js?v=179"
 /* [Grok-Bot] V1.80: Giridhari Arati mit den Mira-Strophen der Aufnahme, Uebersetzung und Abfolge (v180.js). */
 if(document.readyState==="loading"){ document.write('<script src="v180.js?v=180"><\/script>'); }
 /* [Grok-Bot] V1.81-V1.83: Ganzseiten-Modus zum Mitlesen (v183.js ersetzt v181/v182: Ende-Bildschirm, voriges/naechstes Prayer, Wiederholen). */
-if(document.readyState==="loading"){ document.write('<script src="v183.js?v=190"><\/script>'); }
+if(document.readyState==="loading"){ document.write('<script src="v183.js?v=206"><\/script>'); }
 /* [Grok-Bot] V1.84: Govinda-MP3 (CD, gleiche Melodie wie YouTube) und voriges/naechstes Prayer im Vollbild immer sichtbar (v184.js). */
 if(document.readyState==="loading"){ document.write('<script src="v184.js?v=184"><\/script>'); }
 /* [Grok-Bot] V1.85-V1.87: Mitlesen (Ashtotram Name fuer Name, geschaetzte Marken je Quelle, alte Strophen-Tipps entschaerft), Vollbild-Menue nur nach Tippen,
@@ -117,3 +117,5 @@ if(document.readyState==="loading"){ document.write('<script src="v203.js?v=205"
 if(document.readyState==="loading"){ document.write('<script src="v204.js?v=204"><\/script>'); }
 /* [Grok-Bot] V2.05: Android-Benachrichtigung/Sperrbildschirm: Media Session mit PNG-Artwork, Status, Position, Handlern, laufend aktualisiert (v205.js). */
 if(document.readyState==="loading"){ document.write('<script src="v205.js?v=205"><\/script>'); }
+/* [Grok-Bot] V2.06: Wiederholen ganze Liste und Ende-Angebot "Naechstes" laufen durch alle Gebete (v183.js?v=206, v206.js). */
+if(document.readyState==="loading"){ document.write('<script src="v206.js?v=206"><\/script>'); }
