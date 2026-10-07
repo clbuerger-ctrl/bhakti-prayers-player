@@ -4,6 +4,7 @@
    geladen (Anzeige "wartet auf WLAN"). Ohne Netz: Prayers mit MP3 spielen die MP3, YouTube geht nur online. */
 /* V2.05: Laden auch ueber mobile Daten (keine WLAN-Sperre mehr), Anzeige "Offline gespeichert: n/20 - laedt ...", Fehlerzahl). */
 /* V2.07: Ladefehler mit Datei-Kurznamen ("Fehler: govinda, kavacham-b"), Liste in bppOfflineState.errFiles. */
+/* V2.08: Neustart laedt nur fehlende/geaenderte MP3 (Groessenvergleich per HEAD statt ETag), Stand sofort aus dem Cache. */
 window.BPP_BUILD="2.03";
 window.BPP_SW="sw.js?v=203";
 (function(){
@@ -39,7 +40,7 @@ window.BPP_SW="sw.js?v=203";
   function sig(h){ return (h.get("ETag")||"")+"|"+(h.get("Content-Length")||""); }
   function run(){
     if(!("caches" in window) || !navigator.serviceWorker) return;
-    if(!navigator.onLine){ show("Offline-Modus"); return; }
+    if(!navigator.onLine){ quick(); return; }
     /* App-Dateien dieser Seite einmal ueber den Service Worker holen, damit sie im App-Cache liegen (erster Besuch lief ohne SW) */
     try{
       var R=[location.href].concat(performance.getEntriesByType("resource").map(function(x){ return x.name; }));
@@ -49,17 +50,19 @@ window.BPP_SW="sw.js?v=203";
     var L=list(), S=window.bppOfflineState; S.total=L.length;
     caches.open(AUD).then(function(c){
       return c.keys().then(function(ks){
-        var have={}; ks.forEach(function(q){ have[q.url.replace(/[?#].*$/,"")]=1; });
+        var have={}; ks.forEach(function(q){ have[q.url.replace(/[?#].*$/,"")]=q; });
         /* Dateien, die nicht mehr in der Liste stehen, entfernen */
         ks.forEach(function(q){ var k=q.url.replace(/[?#].*$/,""); if(L.indexOf(k)<0) c.delete(q); });
-        var n=0, need=[];
-        return L.reduce(function(p, u){ return p.then(function(){
-          if(!have[u]){ need.push(u); return; }
+        /* V2.08: nur fehlende oder auf dem Server geaenderte MP3 laden. Aenderung = andere Groesse (HEAD Content-Length gegen gespeicherte Groesse).
+           Das ETag von GitHub Pages enthaelt die Deploy-Zeit und aendert sich bei jedem Push - deshalb nicht mehr verwenden (sonst 126 MB nach jedem Update). */
+        var n=0, need=[], todo=L.filter(function(u){ if(!have[u]){ need.push(u); return false; } return true; }), q=todo.slice();
+        function one(){ var u=q.shift(); if(!u) return Promise.resolve();
           return Promise.all([c.match(u), head(u)]).then(function(v){
-            if(v[0] && v[1] && v[0].headers.get("X-BPP-Sig") && v[0].headers.get("X-BPP-Sig")!==sig(v[1].headers)) need.push(u); else n++;
-          });
-        }); }, Promise.resolve()).then(function(){
-          S.n=n; if(!need.length){ S.done=true; show("Offline gespeichert: "+n+"/"+L.length+" \u2713", true); return; }
+            var a=v[0] && +(v[0].headers.get("Content-Length")||0), b=v[1] && +(v[1].headers.get("Content-Length")||0);
+            if(!v[0]) need.push(u); else if(a && b && a!==b) need.push(u); else n++;
+          }).then(one); }
+        return Promise.all([one(), one(), one(), one()]).then(function(){
+          S.n=n; if(!need.length){ S.done=true; if(!S.quick) show("Offline gespeichert: "+n+"/"+L.length+" \u2713", true); return; }
           return estimate(need.length).then(function(ok){
             if(!ok){ show("Offline gespeichert: "+n+"/"+L.length+" \u00b7 zu wenig Speicher"); return; }
             S.err=0; S.errFiles=[];
@@ -77,7 +80,7 @@ window.BPP_SW="sw.js?v=203";
                 if(!r.ok){ S.err=(S.err||0)+1; (S.errFiles=S.errFiles||[]).push(S.cur); show(lab()); return; }
                 return r.blob().then(function(b){
                   var h=new Headers(); h.set("Content-Type", r.headers.get("Content-Type")||"audio/mpeg"); h.set("Content-Length", String(b.size));
-                  h.set("X-BPP-Sig", sig(r.headers)); h.set("X-BPP-Time", new Date().toISOString());
+                  h.set("X-BPP-Sig", String(b.size)); h.set("X-BPP-Time", new Date().toISOString());
                   return c.put(u, new Response(b, {status:200, headers:h}));
                 }).then(function(){ n++; S.n=n; show(lab()); });
               }).catch(function(){ S.err=(S.err||0)+1; (S.errFiles=S.errFiles||[]).push(S.cur); show(lab()); });
@@ -95,11 +98,25 @@ window.BPP_SW="sw.js?v=203";
       window.bppOfflineState.free=free; return !q.quota || free>want;
     }).catch(function(){ return true; });
   }
+  /* V2.08: Stand sofort beim Start aus dem Cache anzeigen (z. B. gleich "20/20 \u2713"), Pruefung laeuft danach still im Hintergrund */
+  function quick(){
+    if(!("caches" in window)) return;
+    var L=list(), S=window.bppOfflineState;
+    caches.open(AUD).then(function(c){ return c.keys(); }).then(function(ks){
+      if(S.cur) return;
+      var have={}; ks.forEach(function(q){ have[q.url.replace(/[?#].*$/,"")]=1; });
+      var n=L.filter(function(u){ return have[u]; }).length; S.total=L.length; S.n=n; S.quick=true;
+      if(!navigator.onLine) show("Offline-Modus \u00b7 gespeichert "+n+"/"+L.length);
+      else show("Offline gespeichert: "+n+"/"+L.length+(n>=L.length?" \u2713":""), n>=L.length);
+    }).catch(function(){});
+  }
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", quick); else quick();
+  window.bppOfflineQuick=quick;
   /* ohne Netz: MP3 statt YouTube */
   function offlinePrefs(){ if(navigator.onLine) return; try{ PRAYERS.forEach(function(P){ if(P.audio) P.preferFile=true; }); }catch(e){} }
   offlinePrefs();
   window.addEventListener("online", function(){ setTimeout(run, 2000); });
-  window.addEventListener("offline", function(){ offlinePrefs(); show("Offline-Modus"); });
+  window.addEventListener("offline", function(){ offlinePrefs(); quick(); });
   window.addEventListener("load", function(){ setTimeout(function(){
     if(navigator.serviceWorker.controller) run();
     else navigator.serviceWorker.ready.then(function(){ setTimeout(run, 1500); });
