@@ -125,3 +125,5 @@ if(document.readyState==="loading"){ document.write('<script src="v207.js?v=207"
 if(document.readyState==="loading"){ document.write('<script src="v208.js?v=208"><\/script>'); }
 /* [Grok-Bot] V2.09: Strophentasten (Leiste und Grossbild) und Tastatur V/N entfernt, keine manuellen Strophen-Overrides mehr (v209.js). */
 if(document.readyState==="loading"){ document.write('<script src="v209.js?v=209"><\/script>'); }
+/* [Grok.com] V2.10: Guru Stotram Abend, Om am Anfang ist keine Strophe, Autotiming neu (v210.js). */
+if(document.readyState==="loading"){ document.write('<script src="v210.js?v=210"><\/script>'); }
