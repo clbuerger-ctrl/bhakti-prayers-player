@@ -4,6 +4,8 @@
 <!-- [Grok.com] V1.98: Hanuman Chalisa spielt die Dropbox-Datei 2_5278459603569355214.mp3 (Pandita Bhavani, Telegram), nicht mehr Prabhu und nicht mehr das YouTube-Video -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- [Grok.com] Startbild -->
+<meta property="og:image" content="start.jpg">
 <title>Bhakti Prayers Player V1.98</title>
 <!-- [Grok-Bot] V1.56: Hanuman Chalisa: Strophenanfaenge im YouTube-Video eingemessen, Autoscroll folgt dem Video (hanuman-yt.js); Taste Analyse entfernt, da fast alle Gebete per YouTube laufen -->
 <!-- [Grok-Bot] V1.55: Hanuman Chalisa spielt das YouTube-Video der Prabhus (fBw-BSoZGgM), MP3 bleibt als Ersatz (hanuman-yt.js) -->
@@ -108,6 +110,10 @@ audio{height:30px}
 .rowline .rch{display:none;font-family:"Source Sans 3",Consolas,sans-serif;color:#e8c57a;opacity:.75;font-size:.72rem;letter-spacing:.05em;font-weight:500;white-space:pre;line-height:1.1;font-style:normal}
 body.show-ch .rowline .rch{display:block}
 .rowline .x2{color:var(--gold);font-size:.7em;font-style:normal;font-weight:600;opacity:.85}
+/* [Grok.com] Startbild, sichtbar bis ein Gebet gewaehlt ist */
+.startpic{margin:8px 12px 0;text-align:center}
+.startpic img{width:min(100%,760px);height:auto;border-radius:12px;border:1px solid #6b5340;display:block;margin:0 auto}
+body.has-song .startpic{display:none}
 </style>
 </head>
 <body tabindex="0">
@@ -146,6 +152,8 @@ body.show-ch .rowline .rch{display:block}
     </div>
   </div>
 </div>
+<!-- [Grok.com] Startbild: Jukebox, bis ein Gebet gewaehlt ist -->
+<figure class="startpic" id="startPic"><img src="start.jpg?v=1" alt="Bhakti Prayers Player"></figure>
 <div class="list" id="list"></div>
 <p class="hint" id="hint"></p>
 <div class="stage" id="stage">
@@ -439,6 +447,7 @@ function togglePlay(){
   else { a.pause(); persistNow(); syncPlayBtn(); }
 }
 function play(idx, resume){
+  document.body.classList.add("has-song"); /* [Grok.com] Startbild aus */
   persistNow();
   i=idx;
   var P=PRAYERS[i];
