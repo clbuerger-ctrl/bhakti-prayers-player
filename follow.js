@@ -108,6 +108,10 @@ if(document.readyState==="loading"){ document.write('<script src="v199.js?v=199"
 /* [Grok-Bot] V2.00: Hanuman Chalisa - Refrain "ramaji se rama rama kahiyo" (2x) als eigene Strophe nach jeder 2. Strophe, letzte Zeile jeder 2. Strophe 2x, Abfolge angepasst (v200.js). */
 if(document.readyState==="loading"){ document.write('<script src="v200.js?v=200"><\/script>'); }
 /* [Grok-Bot] V2.01: App-Installation (manifest.json, sw.js, Symbole), Media Session fuer Benachrichtigung/Sperrbildschirm, Play-Tasten oben in der Leiste (v201.js). */
-if(document.readyState==="loading"){ document.write('<script src="v201.js?v=201"><\/script>'); }
+if(document.readyState==="loading"){ document.write('<script src="v201.js?v=203"><\/script>'); }
 /* [Grok-Bot] V2.02: Grossbild-Tippmenue blendet schneller aus: 4 s nach letzter Beruehrung, 1,5 s nach Tastendruck (v194.js?v=202, v202.js). */
 if(document.readyState==="loading"){ document.write('<script src="v202.js?v=202"><\/script>'); }
+/* [Grok-Bot] V2.03: Offline - App-Dateien und alle MP3 aus audio/ im Cache (Service Worker sw.js?v=203, Range fuer Spulen), Fortschritt "Offline: n/N" (v203.js). */
+if(document.readyState==="loading"){ document.write('<script src="v203.js?v=203"><\/script>'); }
+/* [Grok-Bot] V2.04: Statistik wie im Tadatmya-Vedanta-Player (Aufrufe, Hoerzeit, Orte, aktiv in TOP 10), Namensraum bpp-clbuerger- (v204.js). */
+if(document.readyState==="loading"){ document.write('<script src="v204.js?v=204"><\/script>'); }

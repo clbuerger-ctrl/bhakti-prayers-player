@@ -1,15 +1,56 @@
-/* [Grok-Bot] V2.01: Service Worker fuer die App-Installation (BPPlayer). Immer zuerst Netz, Cache nur als Ersatz ohne Verbindung.
-   Audio, YouTube und fremde Server laufen unveraendert am Service Worker vorbei. */
-var CACHE="bpp-v201";
-self.addEventListener("install", function(e){ self.skipWaiting(); });
-self.addEventListener("activate", function(e){
-  e.waitUntil(caches.keys().then(function(ks){ return Promise.all(ks.filter(function(k){ return k!==CACHE; }).map(function(k){ return caches.delete(k); })); }).then(function(){ return self.clients.claim(); }));
+/* [Grok-Bot] V2.03: Service Worker fuer BPPlayer, offline-faehig.
+   App-Dateien (HTML/JS/CSS/JSON/Symbole): immer zuerst Netz (neue Version kommt sofort), Kopie im Cache "bpp-app-<Version>";
+   ohne Netz aus dem Cache. Alte App-Caches werden beim Aktivieren geloescht.
+   MP3 aus audio/: liegen im Cache "bpp-audio-v1" (laedt v203.js im Hintergrund). Abspielen aus dem Cache mit Range-Antworten (206),
+   damit Spulen geht. Nicht im Cache: direkt aus dem Netz. YouTube und fremde Server laufen am Service Worker vorbei. */
+var VER="203", APP="bpp-app-"+VER, AUD="bpp-audio-v1";
+var CORE=["./","index.html","follow.js","manifest.json","icon-192.svg","icon-512.svg","version.json"];
+self.addEventListener("install", function(e){
+  e.waitUntil(caches.open(APP).then(function(c){ return Promise.all(CORE.map(function(u){ return fetch(u, {cache:"no-store"}).then(function(r){ if(r.ok) return c.put(u, r); }).catch(function(){}); })); }).then(function(){ return self.skipWaiting(); }));
 });
+self.addEventListener("activate", function(e){
+  e.waitUntil(caches.keys().then(function(ks){ return Promise.all(ks.filter(function(k){ return k!==APP && k!==AUD; }).map(function(k){ return caches.delete(k); })); }).then(function(){ return self.clients.claim(); }));
+});
+function isAudio(u){ return /\/audio\/[^\/]+\.(mp3|m4a|ogg|wav)$/i.test(u.pathname); }
+function audioKey(u){ return u.origin+u.pathname; }
+function ranged(req, res){
+  return res.blob().then(function(b){
+    var size=b.size, type=res.headers.get("Content-Type")||"audio/mpeg", h=req.headers.get("range");
+    var m=h && /bytes=(\d*)-(\d*)/.exec(h);
+    if(!m) return new Response(b, {status:200, headers:{"Content-Type":type, "Content-Length":String(size), "Accept-Ranges":"bytes"}});
+    var s=m[1]===""?NaN:+m[1], en=m[2]===""?NaN:+m[2];
+    if(isNaN(s)){ s=Math.max(0, size-(isNaN(en)?0:en)); en=size-1; }
+    if(isNaN(en) || en>=size) en=size-1;
+    if(s>=size || s>en) return new Response("", {status:416, headers:{"Content-Range":"bytes */"+size}});
+    return new Response(b.slice(s, en+1, type), {status:206, headers:{"Content-Type":type, "Content-Length":String(en-s+1),
+      "Content-Range":"bytes "+s+"-"+en+"/"+size, "Accept-Ranges":"bytes"}});
+  });
+}
 self.addEventListener("fetch", function(e){
   var r=e.request, u=new URL(r.url);
-  if(r.method!=="GET" || u.origin!==self.location.origin || r.headers.has("range") || /\.(mp3|m4a|ogg|wav)$/i.test(u.pathname)) return;
+  if(r.method!=="GET" || u.origin!==self.location.origin) return;
+  if(isAudio(u)){
+    if(u.searchParams.has("bppdl")) return; /* Hintergrund-Download: direkt Netz */
+    e.respondWith(caches.open(AUD).then(function(c){ return c.match(audioKey(u)); }).then(function(hit){
+      if(hit) return ranged(r, hit);
+      return fetch(r);
+    }));
+    return;
+  }
+  var nav=(r.mode==="navigate");
+  var noStore=/\/version\.json$/.test(u.pathname) || u.searchParams.has("t");
   e.respondWith(fetch(r).then(function(res){
-    if(res && res.ok && res.type==="basic"){ var c=res.clone(); caches.open(CACHE).then(function(ca){ ca.put(r, c); }); }
+    if(res && res.ok && res.type==="basic"){
+      var c=res.clone(), key=noStore?u.pathname:(nav?"./":r);
+      caches.open(APP).then(function(ca){ ca.put(key, c); });
+    }
     return res;
-  }).catch(function(){ return caches.match(r).then(function(m){ return m || caches.match("./"); }); }));
+  }).catch(function(){
+    return caches.open(APP).then(function(ca){
+      if(nav) return ca.match("./").then(function(m){ return m || ca.match("index.html"); });
+      if(noStore) return ca.match(u.pathname).then(function(m){ return m || ca.match("version.json"); });
+      return ca.match(r).then(function(m){ return m || ca.match(r, {ignoreSearch:true}); });
+    }).then(function(m){ return m || Response.error(); });
+  }));
 });
+self.addEventListener("message", function(e){ if(e.data==="bpp-ver" && e.source) e.source.postMessage({bppSw:VER}); });

@@ -1,6 +1,7 @@
 /* [Grok-Bot] V2.01: BPPlayer als App installierbar (manifest.json, Symbole, Service Worker sw.js), Steuerung ueber Benachrichtigung und
    Sperrbildschirm (Media Session: Play/Pause, Strophe vor/zurueck, 10 s spulen). Abspielzeile (Play-Tasten) oben in der Leiste,
    ueber dem Audio-Balken, in Listen- und Normalansicht; Grossbild unveraendert. */
+/* V2.03: Adresse des Service Workers aus window.BPP_SW (spaetere Versionen setzen sie). */
 window.BPP_BUILD="2.01";
 (function(){
   if(window.bppV201) return; window.bppV201=1;
@@ -15,7 +16,7 @@ window.BPP_BUILD="2.01";
     add("meta", {name:"application-name", content:"BPPlayer"});
   }
   if("serviceWorker" in navigator && location.protocol!=="file:"){
-    window.addEventListener("load", function(){ navigator.serviceWorker.register("sw.js?v=201", {scope:"./"}).catch(function(){}); });
+    window.addEventListener("load", function(){ navigator.serviceWorker.register(window.BPP_SW||"sw.js?v=201", {scope:"./"}).catch(function(){}); });
   }
   /* Abspielzeile nach oben */
   function moveRow(){
