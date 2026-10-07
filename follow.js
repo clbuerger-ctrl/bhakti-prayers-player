@@ -123,3 +123,5 @@ if(document.readyState==="loading"){ document.write('<script src="v206.js?v=206"
 if(document.readyState==="loading"){ document.write('<script src="v207.js?v=207"><\/script>'); }
 /* [Grok-Bot] V2.08: Neustart laedt nur fehlende/geaenderte MP3 (Groesse per HEAD statt ETag), Offline-Stand sofort sichtbar (v203.js?v=208, v208.js). */
 if(document.readyState==="loading"){ document.write('<script src="v208.js?v=208"><\/script>'); }
+/* [Grok-Bot] V2.09: Strophentasten (Leiste und Grossbild) und Tastatur V/N entfernt, keine manuellen Strophen-Overrides mehr (v209.js). */
+if(document.readyState==="loading"){ document.write('<script src="v209.js?v=209"><\/script>'); }
