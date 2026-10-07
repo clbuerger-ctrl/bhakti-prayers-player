@@ -77,6 +77,8 @@ window.BPP_BUILD="1.83";
     return (ss.length>1 && new Date().getHours()>=14)?ss[1]:ss[0];
   }
   function neighbor(d, wrap){
+    /* V2.06: Vor/Zurueck, Wiederholen ganze Liste und Ende-Angebot laufen durch ALLE Gebete (v205.js: bppAllNb, Ansicht "Alle", ohne Doppelte, ohne Ton uebersprungen) */
+    if(typeof window.bppAllNb==="function"){ try{ return window.bppAllNb(d, wrap, hasSound); }catch(e){} }
     if(typeof i==="undefined" || i<0) return null; var s=curSec(), pos=s.items.indexOf(i); if(pos<0) return null;
     var n=pos+d; if(n<0 || n>=s.items.length){ if(!wrap || s.items.length<2) return null; n=(n+s.items.length)%s.items.length; }
     return {idx:s.items[n], head:s.head};
@@ -125,7 +127,7 @@ window.BPP_BUILD="1.83";
   }
   function endOn(){
     if(!isOn || !endBox) return; endIs=true; ov.classList.add("end");
-    var nn=neighbor(1, false), p=P();
+    var nn=neighbor(1, true), p=P();
     var h="<div class='et'>"+esc(T(13))+" · "+esc(p?p.titel:"")+"</div>";
     if(nn) h+="<button type='button' class='en' id='bppFsEndNext'><small>"+esc(T(7))+"</small>"+esc(ttl(nn))+" "+ICO.next+"</button>";
     h+="<button type='button' class='ea' id='bppFsEndAgain'>↺ "+esc(T(14))+"</button>";
