@@ -8,6 +8,7 @@
    Taste: Klick verworfen, stattdessen Play/Pause wie beim Doppeltippen. Waehrend die Leiste ausblendet (0,4 s, noch sichtbar),
    bleiben ihre Tasten bedienbar (vorher schon gesperrt), und die Leiste bleibt 6 s nach der letzten Beruehrung stehen
    (vorher 3 s), damit man in Ruhe tippen kann. Abschaltbar: localStorage "bpp-noguard"="1". */
+/* [Grok-Bot] V2.02: Leiste bleibt 4 s nach der letzten Beruehrung (vorher 6 s); nach einem Tastendruck in der Leiste nur noch 1,5 s. Das eigene Wiedereinblenden zaehlt nicht mehr als Beruehrung (verlaengerte vorher um ca. 3 s). Tasten-Schutz unveraendert. */
 window.BPP_BUILD="1.94";
 (function(){
   if(window.bppV194) return; window.bppV194=1;
@@ -24,16 +25,17 @@ window.BPP_BUILD="1.94";
       var was=/(^|\s)hid(\s|$)/.test(r.oldValue||""), now=b.classList.contains("hid");
       if(!was && now){
         /* v183 blendet 3 s nach dem Einblenden aus; wir halten die Leiste 6 s nach der letzten Beruehrung sichtbar */
-        if(Date.now()-lastAct<KEEP-50 && active()){ b.classList.remove("hid"); keepLater(); return; }
+        if(Date.now()-lastAct<lim()-50 && active()){ selfRm=true; b.classList.remove("hid"); keepLater(); return; }
         b.classList.add("bppFade"); clearTimeout(fadeT); fadeT=setTimeout(function(){ b.classList.remove("bppFade"); }, 400); }
-      else if(was && !now && !b.classList.contains("bppFade")){ lastAct=Math.max(lastAct, Date.now()); }
+      else if(was && !now && !b.classList.contains("bppFade")){ if(selfRm) selfRm=false; else lastAct=Math.max(lastAct, Date.now()); }
       else if(was && !now && b.classList.contains("bppFade")){ clearTimeout(fadeT); b.classList.remove("bppFade"); } }); })
       .observe(b,{attributes:true, attributeFilter:["class"], attributeOldValue:true});
   }
-  var KEEP=6000, lastAct=0, keepT=null;
+  var selfRm=false, KEEP=4000, BTN=1500, lastAct=0, lastBtn=-1e9, keepT=null;
+  function lim(){ return lastBtn>=lastAct-150 ? BTN : KEEP; }
   function keepLater(){ clearTimeout(keepT); keepT=setTimeout(function(){ var b=document.getElementById("bppFsBar");
     if(!b || b.classList.contains("hid") || !active()) return;
-    if(Date.now()-lastAct>=KEEP-50) b.classList.add("hid"); else keepLater(); }, Math.max(50, lastAct+KEEP-Date.now())); }
+    if(Date.now()-lastAct>=lim()-50) b.classList.add("hid"); else keepLater(); }, Math.max(50, lastAct+lim()-Date.now())); }
   setInterval(watch, 500);
   function bar(){ return document.getElementById("bppFsBar"); }
   function ov(){ return document.getElementById("bppFs"); }
@@ -86,5 +88,7 @@ window.BPP_BUILD="1.94";
   window.addEventListener("pointerup", onRelease, o); window.addEventListener("touchend", onRelease, o);
   window.addEventListener("pointercancel", function(){ gDbl=false; }, o); window.addEventListener("touchcancel", function(){ gDbl=false; }, o);
   window.addEventListener("click", onClick, true);
+  /* V2.02: echter Tastendruck in der Leiste (nicht der verworfene Oeffnungs-Klick) -> 1,5 s danach ausblenden */
+  window.addEventListener("click", function(e){ if(!active() || hidden() || !inBar(e.target) || !(e.target.closest && e.target.closest("button,select"))) return; var now=Date.now(); lastBtn=now; lastAct=now; keepLater(); }, true);
   window.bppTapGuard=function(){ return {pend:pend, sw2:sw2, dbl:dbl, log:log.slice()}; };
 })();

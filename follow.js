@@ -95,7 +95,7 @@ if(document.readyState==="loading"){ document.write('<script src="v190.js?v=190"
 if(document.readyState==="loading"){ document.write('<script src="v193.js?v=193"><\/script>'); }
 /* [Grok-Bot] V1.94: Grossbild-Menue: nur der Klick des Oeffnungs-Tipps wird verworfen, keine Sperre/pointer-events, Leiste bleibt 6 s nach letzter Beruehrung (v194.js; v192.js bleibt aus).
    Vorschauzeile 88 % statt 65 % Deckkraft (v191.js?v=194). */
-if(document.readyState==="loading"){ document.write('<script src="v194.js?v=194"><\/script>'); }
+if(document.readyState==="loading"){ document.write('<script src="v194.js?v=202"><\/script>'); }
 /* [Grok-Bot] V1.95: Grossbild – die ganze naechste Strophe faehrt waehrend der letzten Zeile von unten hoch, nahtloser Wechsel (v195.js ersetzt v191.js);
    Quellenwahl als Zweier-Auswahl "YT | MP3". Laufband (v189) und Tastenschutz (v194) unveraendert. */
 if(document.readyState==="loading"){ document.write('<script src="v195.js?v=195"><\/script>'); }
@@ -109,3 +109,5 @@ if(document.readyState==="loading"){ document.write('<script src="v199.js?v=199"
 if(document.readyState==="loading"){ document.write('<script src="v200.js?v=200"><\/script>'); }
 /* [Grok-Bot] V2.01: App-Installation (manifest.json, sw.js, Symbole), Media Session fuer Benachrichtigung/Sperrbildschirm, Play-Tasten oben in der Leiste (v201.js). */
 if(document.readyState==="loading"){ document.write('<script src="v201.js?v=201"><\/script>'); }
+/* [Grok-Bot] V2.02: Grossbild-Tippmenue blendet schneller aus: 4 s nach letzter Beruehrung, 1,5 s nach Tastendruck (v194.js?v=202, v202.js). */
+if(document.readyState==="loading"){ document.write('<script src="v202.js?v=202"><\/script>'); }
