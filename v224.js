@@ -16,7 +16,8 @@
     h.seqYt=seq; h.seqFile=seq;
     var m=[]; seq.forEach(function(e){ if(m[e[1]]==null) m[e[1]]=e[0]; });
     h.marksYt=m; h.marksFile=m;
-    h.zeilen.forEach(function(z,i){ z.nr=String(i+1); }); /* [Grok.com] Strophen durchzaehlen */
+    h.zeilen=h.zeilen.filter(function(z){ return !/rāmaji se rāma/.test(z.sa||""); });
+    h.zeilen.forEach(function(z,i){ z.nr=String(i+1); z.x2=false; }); /* [Grok.com] Kanakadas ohne Ramaji-Refrain */
     try{
       var ch=JSON.parse(localStorage.getItem("bpp-src")||"{}")||{};
       ch.hanuman="file"; localStorage.setItem("bpp-src", JSON.stringify(ch));
