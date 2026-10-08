@@ -1,7 +1,7 @@
 /* [Grok.com] Reihenfolge wie im Prathana-Heft. Abspielen in dieser Folge.
    Morgen, dann Abend, dann Vedische Gesaenge (Inhaltsverzeichnis S. 51: Mukunda Mala ist im Player, die Sukten noch nicht). */
 (function(){
-  var ORDER=["guru-stotram","ashtotram","vaishnava-mantra","guruji-gayatri","gayatri","ganesha-mantra","suprabhatam","govinda","narasimha","ramanuja","vishnu-arati","lakshmi-arati","closing-morning","guru-stotram-abend","kavacham","narasimha-abend","hanuman","bhajare","guru-arati","giridhari-arati","closing-evening","mukunda"];
+  var ORDER=["guru-stotram","ashtotram","vaishnava-mantra","guruji-gayatri","gayatri","ganesha-mantra","suprabhatam","govinda","narasimha","ramanuja","vishnu-arati","lakshmi-arati","closing-morning","guru-stotram-abend","ashtotram-abend","kavacham","narasimha-abend","hanuman","bhajare","guru-arati","giridhari-arati","closing-evening","mukunda"];
   function apply(){
     if(typeof PRAYERS==="undefined") return;
     var rank={}; ORDER.forEach(function(id,n){ rank[id]=n; });

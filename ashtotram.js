@@ -121,4 +121,16 @@
   }
   P.audio=P.audio||"audio/ashtotram.mp3";
   P.preferFile=true;
+  /* [Grok.com] Abend: dieselben 108 Namen, eigene Folge nach dem Abend-Guru-Stotram */
+  var E=PRAYERS.find(function(p){ return p.id==="ashtotram-abend"; });
+  if(!E){
+    E=JSON.parse(JSON.stringify(P));
+    E.id="ashtotram-abend";
+    E.titel="Paramahamsa Śrī Svāmī Vishwananda Aṣṭottaram (Abend)";
+    E.autor="Abendgebet · Sri Vitthal Dham · Heft S. 14–17";
+    PRAYERS.push(E);
+  }
+  E.zeilen=P.zeilen;
+  E.audio=P.audio;
+  E.preferFile=true;
 })();

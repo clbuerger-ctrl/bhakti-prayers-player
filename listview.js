@@ -48,7 +48,7 @@
     else m=m.concat(["kavacham","narasimha","hanuman","ramanuja","vishnu-arati","closing-arati"]);
     var e;
     if(d===6) e=["~ghalin","~saprem","closing-arati","~panduranga","~gita"];
-    else { e=["guru-stotram-abend","ashtotram","ganesha-mantra","gayatri","kavacham","narasimha-abend","hanuman"]; if(d===1) e.push("~durga"); if(d===3) e.push("~vchalisa"); e=e.concat(["bhajare","guru-arati","closing-evening","~gita","mukunda","~ghalin","~saprem","closing-arati","~panduranga"]); }
+    else { e=["guru-stotram-abend","ashtotram-abend", /* [Grok.com] Abend: 108 Namen */"ganesha-mantra","gayatri","kavacham","narasimha-abend","hanuman"]; if(d===1) e.push("~durga"); if(d===3) e.push("~vchalisa"); e=e.concat(["bhajare","guru-arati","closing-evening","~gita","mukunda","~ghalin","~saprem","closing-arati","~panduranga"]); }
     return [ { n:NM, ids:m }, { n:NE, ids:e, late:d===6 } ];
   }
   var day=(new Date().getDay()+6)%7, GROUPS=plan(day);
