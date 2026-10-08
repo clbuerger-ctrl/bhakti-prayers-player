@@ -476,6 +476,8 @@ function play(idx, resume){
   a.pause();
   a.removeAttribute("src");
   a.load();
+  try{ yt.src=""; ytOn=false; }catch(e){} /* [Grok.com] alter Ton darf nicht weiterlaufen */
+  a.setAttribute("data-prayer", P.id);
   if(P.preferFile && P.audio) showFile(P);
   else if(P.youtube) showYt(P, pendingSeek||P.youtubeStart);
   else if(P.audio) showFile(P);
@@ -576,7 +578,8 @@ layoutLyrics();
 <script src="v223.js?v=223"></script>
 <script src="v224.js?v=224"></script>
 <script src="v225.js?v=225"></script>
-<script src="v226.js?v=226"></script><!-- [Grok.com] Pfeile: 10 s und 30 s -->
+<script src="v226.js?v=226"></script>
+<script src="v227.js?v=227"></script><!-- [Grok.com] Ton muss zum angezeigten Gesang passen -->
 <script src="lang-multi.js?v=1"></script>
 </body>
 </html>
