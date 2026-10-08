@@ -23,8 +23,9 @@
     audio:"audio/hanuman.mp3",
     preferFile:true,
     quelle:"Ton: Mataji Bhavani (Russia)",
-    hinweis:"Mangala Murti ist die Dohā. Ramaji se Rama steht nicht in den Zeilen.",
-    zeilen:zeilen
+    hinweis:"Mangala Murti wird mehrmals gesungen, danach Sri Guru carana.",
+    zeilen:zeilen,
+    seqFile:[[8.7,0],[16,0],[24,0],[32,0],[44.2,1],[59.8,2]]
   });
   function strip(){
     var b=PRAYERS.find(function(p){ return p.id==="hanuman-bhavani"; });
