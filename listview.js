@@ -49,7 +49,7 @@
     var e;
     if(d===6) e=["~ghalin","saprem","closing-arati","~panduranga","~gita"];
     else { e=["guru-stotram-abend","ashtotram-abend","ganesha-mantra","gayatri","kavacham","narasimha-abend","hanuman","~sv-arati","closing-evening","saprem","closing-arati"]; }
-    var more=["vchalisa","~durga","~panduranga","~lakshmi-ashtakam","giridhari-arati","guru-arati","lakshmi-arati","~sayana"]; /* [Grok.com] Weitere und andere Aratis, Heft S. 33 und 43 */
+    var more=["vchalisa","~durga","~panduranga","~lakshmi-ashtakam","hanuman-bhavani","giridhari-arati","guru-arati","lakshmi-arati","~sayana"]; /* [Grok.com] Weitere und andere Aratis, Heft S. 33 und 43 */
     return [ { n:NM, ids:m }, { n:NE, ids:e, late:d===6 }, { n:["Weitere","More","Autres","Otros","Другие","अन्य"], ids:more } ];
   }
   var day=(new Date().getDay()+6)%7, GROUPS=plan(day);
@@ -78,7 +78,7 @@
     });
     GROUPS.forEach(function(G){ (G.skip||[]).forEach(function(id){ var k=PRAYERS.findIndex(function(p){ return p.id===id; }); if(k>=0) used[k]=true; }); });
     var rest=[]; PRAYERS.forEach(function(p, idx){ if(!used[idx]) rest.push(idx); });
-    rest=rest.filter(function(idx){ var id=PRAYERS[idx] && PRAYERS[idx].id; return id!=="ashtotram" && id!=="ashtotram-abend"; }); /* [Grok.com] nicht noch einmal unter Weitere */
+    rest=rest.filter(function(idx){ var id=PRAYERS[idx] && PRAYERS[idx].id; return id!=="ashtotram" && id!=="ashtotram-abend" && id!=="hanuman-bhavani"; }); /* [Grok.com] nicht noch einmal unter Weitere */
     if(rest.length){ head(tr(["Weitere","More","Autres","Otros","Другие","अन्य"])); rest.forEach(put); }
     list.innerHTML=""; list.appendChild(frag);
     dayLab(); title(); if(window.__ldPaint) window.__ldPaint();
