@@ -8,7 +8,7 @@
     h.youtube="fBw-BSoZGgM";
     h.preferFile=false;
     /* [Grok.com] Autoscroll am 8:55-Video. Anker sind die gemessenen Pausen, die Verse dazwischen gleichmaessig. */
-    var seq=[[0,0],[23.4,1],[47.4,2],[69.3,3]]; /* [Grok.com] erste Strophe nicht mehr an die zweiten Zeilen */
+    var seq=[[26,0],[47.4,1],[69.3,2]]; /* [Grok.com] bis 26 s nur Instrumental, Strophe 1 ab 26 */
     var a=69.3, b=452, n=20;
     for(var i=0;i<n;i++) seq.push([Math.round((a+(b-a)*i/n)*10)/10, 4+i]);
     seq.push([454.5,24],[508,25]);
