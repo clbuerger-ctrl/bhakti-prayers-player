@@ -14,12 +14,7 @@
     ue:"Dohā. Sohn des Windes, Bild des Segens, der alles Unheil an der Wurzel ausreißt.",
     en:"Doha. Son of the wind, embodiment of blessing, who uproots all misfortune."
   });
-  zeilen.splice(2, 0, {
-    nr:"3", ch:"D",
-    sa:"rāmaji se rāma rāma kahiyo kahiyo-ji hanumāna-ji",
-    ue:"Hanumanji, sag Ramaji für uns „Rama, Rama“.",
-    en:"Hanumanji, say Rama, Rama to Ramaji for us."
-  });
+  zeilen=zeilen.filter(function(z){ return !/rāmaji se rāma/.test(z.sa||""); });
   zeilen.forEach(function(z,i){ z.nr=String(i+1); z.x2=false; });
   PRAYERS.push({
     id:"hanuman-bhavani",
@@ -28,7 +23,7 @@
     audio:"audio/hanuman.mp3",
     preferFile:true,
     quelle:"Ton: Mataji Bhavani (Russia)",
-    hinweis:"Mangala Murti ist die Dohā. Ramaji se Rama nur nach der zweiten Strophe.",
+    hinweis:"Mangala Murti ist die Dohā. Ramaji se Rama steht nicht in den Zeilen.",
     zeilen:zeilen
   });
 })();

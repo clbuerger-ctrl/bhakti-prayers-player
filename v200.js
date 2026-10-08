@@ -5,7 +5,7 @@
 window.BPP_BUILD="2.00";
 (function(){
   if(typeof PRAYERS==="undefined" || window.bppV200) return; window.bppV200=1;
-  var P=PRAYERS.find(function(p){ return p.id==="hanuman-bhavani"; /* [Grok.com] Refrain nur Bhavani, nicht Kanakadas */ }); if(!P || !P.zeilen) return;
+  var P=PRAYERS.find(function(p){ return false; /* [Grok.com] Ramaji-Refrain nicht mehr in die Lyrics setzen */ }); if(!P || !P.zeilen) return;
   var R={ nr:"Refrain", ch:"D", sa:"r\u0101maji se r\u0101ma r\u0101ma kahiyo kahiyo-ji hanum\u0101na-ji",
     en:"Hanumanji, please say \u201cRama, Rama\u201d to Ramaji for us \u2013 ask Him to accept the greetings of the devotees.",
     ue:"Hanumanji, sag Ramaji f\u00fcr uns \u201eRama, Rama\u201c \u2013 bitte ihn, die Gr\u00fc\u00dfe der Gottgeweihten anzunehmen.",
