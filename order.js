@@ -41,3 +41,39 @@
   PRAYERS.length = 0;
   withPos.forEach(function(o){ PRAYERS.push(o.p); });
 })();
+
+/* [Grok.com] Abend-Aufnahme: gespeicherte Datei mit Om nicht abspielen.
+   Datei ueber 258 s ist die alte. Dann auf 10,7 s springen. Sonst die gekuerzte Datei. */
+(function(){
+  var FILE="audio/guru-stotram-abend3.mp3?v=219";
+  var CUT=10.7;
+  function point(){
+    if(typeof PRAYERS==="undefined") return;
+    var P=PRAYERS.find(function(x){ return x.id==="guru-stotram-abend"; });
+    if(!P) return;
+    P.audio=FILE;
+    P.audioAlt=[FILE];
+    P.preferFile=true;
+  }
+  function skip(){
+    point();
+    if(typeof i==="undefined" || i<0 || typeof PRAYERS==="undefined" || !PRAYERS[i] || PRAYERS[i].id!=="guru-stotram-abend") return;
+    if(typeof ytOn!=="undefined" && ytOn) return;
+    var el=document.getElementById("a"); if(!el) return;
+    var src=el.currentSrc||el.src||"";
+    if(/Guru-Stotram-Abend|guru-stotram-abend\.mp3/.test(src) && !/abend3/.test(src)){
+      try{ el.src=FILE; el.load(); }catch(e){}
+      return;
+    }
+    if(isFinite(el.duration) && el.duration>258 && (el.currentTime||0)<CUT-0.15){
+      try{ el.currentTime=CUT; }catch(e){}
+    }
+  }
+  point();
+  setInterval(skip, 300);
+  document.addEventListener("DOMContentLoaded", function(){
+    var el=document.getElementById("a");
+    if(!el) return;
+    ["loadedmetadata","play","playing","timeupdate","seeked"].forEach(function(ev){ el.addEventListener(ev, skip); });
+  });
+})();

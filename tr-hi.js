@@ -187,7 +187,7 @@ if(document.readyState==="loading"){ document.write('<script src="tr-v170-gov.js
    Wahl des Nutzers (Taste "MP3"/"YT") wird je Prayer in localStorage "bpp-src" gemerkt. */
 (function(){
   if(typeof PRAYERS==="undefined") return;
-  var MAP={"guru-stotram":"guru-stotram","guru-stotram-abend":"guru-stotram-abend","guruji-gayatri":"guruji-gayatri","gayatri":"gayatri","ganesha-mantra":"ganesha-mantra",
+  var MAP={"guru-stotram":"guru-stotram","guru-stotram-abend":"guru-stotram-abend3" /* [Grok.com] ohne Om */,"guruji-gayatri":"guruji-gayatri","gayatri":"gayatri","ganesha-mantra":"ganesha-mantra",
     "suprabhatam":"suprabhatam","govinda":"govinda","narasimha":"narasimha","ramanuja":"ramanuja","kavacham":"kavacham","hanuman":"hanuman","bhajare":"bhajare",
     "lakshmi-arati":"lakshmi-arati","mukunda":"mukunda","ashtotram":"ashtotram","vaishnava-mantra":"vaishnava-mantra","closing-morning":"closing-morning","vishnu-arati":"arati-cd13"};
   var YTFIRST={"kavacham":1,"narasimha":1,"govinda":1,"hanuman":1};
