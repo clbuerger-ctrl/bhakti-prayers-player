@@ -10,7 +10,7 @@ window.BPP_SW="sw.js?v=203";
 (function(){
   if(window.bppV203) return; window.bppV203=1;
   var AUD="bpp-audio-v1";
-  var FILES=["arati-cd13","ashtotram","bhajare","closing-morning","ganesha-mantra","gayatri","giridhari-arati","govinda","guru-stotram-abend",
+  var FILES=["arati-cd13","ashtotram","bhajare","closing-morning","ganesha-mantra","gayatri","giridhari-arati","govinda","guru-stotram-abend2" /* [Grok.com] ohne Om, ersetzt guru-stotram-abend */,
     "guru-stotram","guruji-gayatri","hanuman","kavacham-b","kavacham","lakshmi-arati","mukunda","narasimha","ramanuja","suprabhatam","vaishnava-mantra"]
     .map(function(n){ return "audio/"+n+".mp3"; });
   var base=location.href.replace(/[?#].*$/,"").replace(/[^\/]*$/,"");

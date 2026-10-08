@@ -112,7 +112,7 @@ if(document.readyState==="loading"){ document.write('<script src="v201.js?v=203"
 /* [Grok-Bot] V2.02: Grossbild-Tippmenue blendet schneller aus: 4 s nach letzter Beruehrung, 1,5 s nach Tastendruck (v194.js?v=202, v202.js). */
 if(document.readyState==="loading"){ document.write('<script src="v202.js?v=202"><\/script>'); }
 /* [Grok-Bot] V2.03: Offline - App-Dateien und alle MP3 aus audio/ im Cache (Service Worker sw.js?v=203, Range fuer Spulen), Fortschritt "Offline: n/N" (v203.js). */
-if(document.readyState==="loading"){ document.write('<script src="v203.js?v=208"><\/script>'); }
+if(document.readyState==="loading"){ document.write('<script src="v203.js?v=216"><\/script>'); }
 /* [Grok-Bot] V2.04: Statistik wie im Tadatmya-Vedanta-Player (Aufrufe, Hoerzeit, Orte, aktiv in TOP 10), Namensraum bpp-clbuerger- (v204.js). */
 if(document.readyState==="loading"){ document.write('<script src="v204.js?v=204"><\/script>'); }
 /* [Grok-Bot] V2.05: Android-Benachrichtigung/Sperrbildschirm: Media Session mit PNG-Artwork, Status, Position, Handlern, laufend aktualisiert (v205.js). */
