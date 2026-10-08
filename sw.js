@@ -3,7 +3,7 @@
    ohne Netz aus dem Cache. Alte App-Caches werden beim Aktivieren geloescht.
    MP3 aus audio/: liegen im Cache "bpp-audio-v1" (laedt v203.js im Hintergrund). Abspielen aus dem Cache mit Range-Antworten (206),
    damit Spulen geht. Nicht im Cache: direkt aus dem Netz. YouTube und fremde Server laufen am Service Worker vorbei. */
-var VER="218" /* [Grok.com] V2.18 bleibt */, APP="bpp-app-"+VER, AUD="bpp-audio-v1";
+var VER="219" /* [Grok.com] alte Abend-MP3 nicht aus dem Cache */, APP="bpp-app-"+VER, AUD="bpp-audio-v1";
 var CORE=["./","index.html","follow.js","v218.js","manifest.json","icon-192.svg","icon-512.svg","version.json","start.jpg"]; /* [Grok.com] */
 self.addEventListener("install", function(e){
   e.waitUntil(caches.open(APP).then(function(c){ return Promise.all(CORE.map(function(u){ return fetch(u, {cache:"no-store"}).then(function(r){ if(r.ok) return c.put(u, r); }).catch(function(){}); })); }).then(function(){ return self.skipWaiting(); }));
@@ -35,6 +35,11 @@ self.addEventListener("fetch", function(e){
   if(r.method!=="GET" || u.origin!==self.location.origin) return;
   if(isAudio(u)){
     if(u.searchParams.has("bppdl")) return; /* Hintergrund-Download: direkt Netz */
+    /* [Grok.com] alte Abend-Datei mit Om nie aus dem Cache */
+    if(/guru-stotram-abend\.mp3$/i.test(u.pathname)){
+      e.respondWith(fetch(r, {cache:"no-store"}).catch(function(){ return caches.open(AUD).then(function(c){ return c.match(audioKey(u)); }).then(function(hit){ return hit?ranged(r, hit):Response.error(); }); }));
+      return;
+    }
     e.respondWith(caches.open(AUD).then(function(c){ return c.match(audioKey(u)); }).then(function(hit){
       if(hit) return ranged(r, hit);
       return fetch(r);

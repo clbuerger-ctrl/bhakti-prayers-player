@@ -1,13 +1,13 @@
-/* [Grok.com] V2.18: Diese Datei wird vom aelteren Seitenstand schon geladen.
-   Versionsanzeige bleibt V2.18. Alte Abend-MP3 mit Om (ueber 258 s) springt auf 10,7 s. */
-window.BPP_BUILD="2.18";
+/* [Grok.com] V2.19: Diese Datei wird vom aelteren Seitenstand schon geladen.
+   Versionsanzeige bleibt V2.19. Alte Abend-MP3 mit Om (ueber 258 s) springt auf 10,7 s. */
+window.BPP_BUILD="2.19";
 window.BPP_SW="sw.js?v=218";
 (function(){
   if(window.bppV218) return; window.bppV218=1;
   function showV(){
     var v=document.querySelector("h1 .ver");
-    if(v && v.textContent!=="V2.18") v.textContent="V2.18";
-    if(document.title!=="Bhakti Prayers Player V2.18") document.title="Bhakti Prayers Player V2.18";
+    if(v && v.textContent!=="V2.19") v.textContent="V2.19";
+    if(document.title!=="Bhakti Prayers Player V2.19") document.title="Bhakti Prayers Player V2.19";
   }
   showV();
   setInterval(showV, 300);
