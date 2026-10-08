@@ -1,11 +1,11 @@
-/* [Grok.com] Hanuman Chalisa wieder die vorherige YouTube-Aufnahme rhSVddEZW88.
+/* [Grok.com] Hanuman Chalisa wieder die vorherige YouTube-Aufnahme fBw-BSoZGgM.
    Die Datei bleibt nur Ersatz. */
 (function(){
   function apply(){
     if(typeof PRAYERS==="undefined") return;
     var h=PRAYERS.find(function(p){ return p.id==="hanuman"; });
     if(!h) return;
-    h.youtube="rhSVddEZW88";
+    h.youtube="fBw-BSoZGgM";
     h.preferFile=false;
     try{
       var ch=JSON.parse(localStorage.getItem("bpp-src")||"{}")||{};
