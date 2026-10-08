@@ -106,7 +106,7 @@ if(document.readyState==="loading"){ document.write('<script src="v198.js?v=198"
 /* [Grok-Bot] V1.99: Hanuman Chalisa - Zeitmarken der neuen MP3 (Pandita Bhavani) gemessen, feste Abfolge mit Refrain, Pausentabelle (v199.js). */
 if(document.readyState==="loading"){ document.write('<script src="v199.js?v=199"><\/script>'); }
 /* [Grok-Bot] V2.00: Hanuman Chalisa - Refrain "ramaji se rama rama kahiyo" (2x) als eigene Strophe nach jeder 2. Strophe, letzte Zeile jeder 2. Strophe 2x, Abfolge angepasst (v200.js). */
-if(document.readyState==="loading"){ document.write('<script src="v200.js?v=200"><\/script>'); }
+if(document.readyState==="loading"){ document.write('<script src="v200.js?v=201"><\/script>'); }
 /* [Grok-Bot] V2.01: App-Installation (manifest.json, sw.js, Symbole), Media Session fuer Benachrichtigung/Sperrbildschirm, Play-Tasten oben in der Leiste (v201.js). */
 if(document.readyState==="loading"){ document.write('<script src="v201.js?v=203"><\/script>'); }
 /* [Grok-Bot] V2.02: Grossbild-Tippmenue blendet schneller aus: 4 s nach letzter Beruehrung, 1,5 s nach Tastendruck (v194.js?v=202, v202.js). */
