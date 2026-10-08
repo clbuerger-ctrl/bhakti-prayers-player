@@ -1,35 +1,32 @@
-/* [Grok.com] V2.16: Abend-Aufnahme ohne Om. Die alte Datei mit Om ist nicht das 21. Stueck.
-   Offline-Liste bleibt 20. Die alte Cache-Kopie wird geloescht. */
-window.BPP_BUILD="2.16";
-window.BPP_SW="sw.js?v=216";
+/* [Grok.com] V2.18: Diese Datei wird vom aelteren Seitenstand schon geladen.
+   Versionsanzeige bleibt V2.18. Alte Abend-MP3 mit Om (ueber 258 s) springt auf 10,7 s. */
+window.BPP_BUILD="2.18";
+window.BPP_SW="sw.js?v=218";
 (function(){
-  if(window.bppV216b) return; window.bppV216b=1;
-  var FILE="audio/guru-stotram-abend2.mp3";
+  if(window.bppV218) return; window.bppV218=1;
+  function showV(){
+    var v=document.querySelector("h1 .ver");
+    if(v && v.textContent!=="V2.18") v.textContent="V2.18";
+    if(document.title!=="Bhakti Prayers Player V2.18") document.title="Bhakti Prayers Player V2.18";
+  }
+  showV();
+  setInterval(showV, 300);
+  var FILE="audio/guru-stotram-abend2.mp3?v=218";
   function point(){
     if(typeof PRAYERS==="undefined") return;
     var P=PRAYERS.find(function(p){ return p.id==="guru-stotram-abend"; });
     if(!P) return;
-    P.audio=FILE;
-    P.audioAlt=[FILE];
-    P.preferFile=true;
+    P.audio=FILE; P.audioAlt=[FILE]; P.preferFile=true;
   }
-  function dropOld(){
-    if(!("caches" in window)) return;
-    caches.open("bpp-audio-v1").then(function(c){
-      return c.keys().then(function(ks){
-        ks.forEach(function(q){ if(/guru-stotram-abend\.mp3/.test(q.url)) c.delete(q); });
-      });
-    }).catch(function(){});
+  function skipOm(){
+    if(typeof i==="undefined" || i<0 || typeof PRAYERS==="undefined" || !PRAYERS[i] || PRAYERS[i].id!=="guru-stotram-abend") return;
+    if(typeof ytOn!=="undefined" && ytOn) return;
+    var el=document.getElementById("a"); if(!el) return;
+    if(isFinite(el.duration) && el.duration>258 && (el.currentTime||0)<10.5){ try{ el.currentTime=10.7; }catch(e){} }
   }
-  function recount(){
-    point(); dropOld();
-    try{ if(typeof window.bppOfflineRun==="function") window.bppOfflineRun(); }catch(e){}
-  }
-  point(); dropOld();
-  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", recount);
-  window.addEventListener("load", function(){ setTimeout(recount, 800); setTimeout(recount, 4000); });
-  setInterval(point, 1500);
-  try{ if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js?v=216", {scope:"./"}); }catch(e){}
-  function showV(){ var v=document.querySelector("h1 .ver"); if(v) v.textContent="V2.16"; document.title="Bhakti Prayers Player V2.16"; }
-  setTimeout(showV, 1800); setTimeout(showV, 3600);
+  point();
+  setInterval(function(){ point(); skipOm(); }, 400);
+  var el=document.getElementById("a");
+  if(el) ["loadedmetadata","play","playing"].forEach(function(ev){ el.addEventListener(ev, skipOm); });
+  try{ if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js?v=218", {scope:"./"}); }catch(e){}
 })();
