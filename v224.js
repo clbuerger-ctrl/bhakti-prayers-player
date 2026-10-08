@@ -16,6 +16,7 @@
     h.seqYt=seq; h.seqFile=seq;
     var m=[]; seq.forEach(function(e){ if(m[e[1]]==null) m[e[1]]=e[0]; });
     h.marksYt=m; h.marksFile=m;
+    h.zeilen.forEach(function(z,i){ z.nr=String(i+1); }); /* [Grok.com] Strophen durchzaehlen */
     try{
       var ch=JSON.parse(localStorage.getItem("bpp-src")||"{}")||{};
       ch.hanuman="file"; localStorage.setItem("bpp-src", JSON.stringify(ch));
