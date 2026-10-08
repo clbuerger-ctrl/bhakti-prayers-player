@@ -179,6 +179,7 @@ window.BPP_BUILD="1.83";
       if(z.ch) chs.push(typeof shiftChordLine==="function"?shiftChordLine(z.ch, steps):z.ch);
       var t=""; try{ t=(window.lineText||function(x){ return x.ue||x.en||""; })(z); }catch(e){} if(t) trs.push(t); });
     var ch=(typeof uniqueChords==="function"?uniqueChords(chs):chs).join("   ");
+    if(p && (p.id==="ashtotram" || p.id==="ashtotram-abend") && lines.length) lines[0]=(k+1)+".  "+lines[0]; /* [Grok.com] 108 Namen nummerieren */
     return {lines:lines, ch:ch, tr:trs.join(" ")};
   }
   function wlen(s){ return String(s).replace(/[\s()0-9·.,;:!?'"–—-]/g,"").length||1; }
@@ -235,7 +236,7 @@ window.BPP_BUILD="1.83";
     var k=autoK(); if(k!==curK){ if(!(Date.now()<holdUntil)) page=0; curK=k; manualK=k; }
     var pg=pages(k); page=autoPage(k, pg);
     var key=k+"/"+page+"/"+JSON.stringify(pg[page].fs)+"/"+opt.ch+opt.tr;
-    var p=P(); top1.textContent=p?p.titel:""; var g=gs[k]; var nr=(p.id==="mukunda")?String(k+1):(/^[\d]+$/.test(g.key)?g.key:String(p.zeilen[g.start].nr||"")); /* [Grok.com] MMS durchzaehlen */
+    var p=P(); top1.textContent=p?p.titel:""; var g=gs[k]; var nr=(p.id==="mukunda" || p.id==="ashtotram" || p.id==="ashtotram-abend")?String(k+1):(/^[\d]+$/.test(g.key)?g.key:String(p.zeilen[g.start].nr||"")); /* [Grok.com] MMS durchzaehlen */
     top2.textContent=nr+"  ·  "+(k+1)+"/"+gs.length+(pg.length>1?"  ·  "+(page+1)+"/2":"");
     syncPlay();
     if(key===lastKey && !force) return; lastKey=key;
