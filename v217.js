@@ -1,9 +1,9 @@
 /* [Grok.com] V2.17: Abend-Guru-Stotram. Liegt im Speicher noch die alte MP3 mit Om (etwa 263 s),
    wird das Om uebersprungen. Die neue Datei ohne Om (etwa 252 s) startet bei 0. */
-window.BPP_BUILD="2.17";
+window.BPP_BUILD=window.BPP_SHOW||"2.17"; /* [Grok-Bot] V2.20 */
 (function(){
   if(window.bppV217) return; window.bppV217=1;
-  var FILE="audio/guru-stotram-abend2.mp3?v=217";
+  var FILE="audio/guru-stotram-abend3.mp3?v=219"; /* [Grok-Bot] V2.20: gleiche Datei wie order.js */
   var CUT=10.7;
   function evening(){
     return typeof i!=="undefined" && i>=0 && typeof PRAYERS!=="undefined" && PRAYERS[i] && PRAYERS[i].id==="guru-stotram-abend";
@@ -41,6 +41,6 @@ window.BPP_BUILD="2.17";
     ["loadedmetadata","play","playing","seeked"].forEach(function(ev){ el.addEventListener(ev, skipOm); });
   }
   setInterval(function(){ point(); skipOm(); }, 500);
-  function showV(){ var v=document.querySelector("h1 .ver"); if(v) v.textContent="V2.17"; document.title="Bhakti Prayers Player V2.17"; }
+  function showV(){ var s="V"+(window.BPP_SHOW||"2.17"), v=document.querySelector("h1 .ver"); if(v) v.textContent=s; document.title="Bhakti Prayers Player "+s; } /* [Grok-Bot] V2.20 */
   setTimeout(showV, 1500); setTimeout(showV, 3200);
 })();

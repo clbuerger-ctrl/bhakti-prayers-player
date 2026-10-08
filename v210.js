@@ -22,8 +22,9 @@ window.BPP_BUILD="2.10";
   setTimeout(apply, 1500);
   function showV(){
     var v=document.querySelector("h1 .ver");
-    if(v) v.textContent="V2.10";
-    document.title="Bhakti Prayers Player V2.10";
+    var s="V"+(window.BPP_SHOW||"2.10"); /* [Grok-Bot] V2.20: Anzeige folgt BPP_SHOW */
+    if(v) v.textContent=s;
+    document.title="Bhakti Prayers Player "+s;
   }
   if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showV); else showV();
   setTimeout(showV, 1200); setTimeout(showV, 2600);

@@ -112,7 +112,7 @@ if(document.readyState==="loading"){ document.write('<script src="v201.js?v=203"
 /* [Grok-Bot] V2.02: Grossbild-Tippmenue blendet schneller aus: 4 s nach letzter Beruehrung, 1,5 s nach Tastendruck (v194.js?v=202, v202.js). */
 if(document.readyState==="loading"){ document.write('<script src="v202.js?v=202"><\/script>'); }
 /* [Grok-Bot] V2.03: Offline - App-Dateien und alle MP3 aus audio/ im Cache (Service Worker sw.js?v=203, Range fuer Spulen), Fortschritt "Offline: n/N" (v203.js). */
-if(document.readyState==="loading"){ document.write('<script src="v203.js?v=216"><\/script>'); }
+if(document.readyState==="loading"){ document.write('<script src="v203.js?v=220"><\/script>'); }
 /* [Grok-Bot] V2.04: Statistik wie im Tadatmya-Vedanta-Player (Aufrufe, Hoerzeit, Orte, aktiv in TOP 10), Namensraum bpp-clbuerger- (v204.js). */
 if(document.readyState==="loading"){ document.write('<script src="v204.js?v=204"><\/script>'); }
 /* [Grok-Bot] V2.05: Android-Benachrichtigung/Sperrbildschirm: Media Session mit PNG-Artwork, Status, Position, Handlern, laufend aktualisiert (v205.js). */
@@ -124,6 +124,8 @@ if(document.readyState==="loading"){ document.write('<script src="v207.js?v=207"
 /* [Grok-Bot] V2.08: Neustart laedt nur fehlende/geaenderte MP3 (Groesse per HEAD statt ETag), Offline-Stand sofort sichtbar (v203.js?v=208, v208.js). */
 if(document.readyState==="loading"){ document.write('<script src="v208.js?v=208"><\/script>'); }
 /* [Grok-Bot] V2.09: Strophentasten (Leiste und Grossbild) und Tastatur V/N entfernt, keine manuellen Strophen-Overrides mehr (v209.js). */
-if(document.readyState==="loading"){ document.write('<script src="v209.js?v=209"><\/script>'); }
+if(document.readyState==="loading"){ document.write('<script src="v209.js?v=220"><\/script>'); }
 /* [Grok.com] V2.10: Guru Stotram Abend, Om am Anfang ist keine Strophe, Autotiming neu (v210.js). */
-if(document.readyState==="loading"){ document.write('<script src="v210.js?v=210"><\/script>'); }
+if(document.readyState==="loading"){ document.write('<script src="v210.js?v=220"><\/script>'); }
+/* [Grok-Bot] V2.20: Guru Stotram Abend und Morgen - Om keine Strophe, Strophenzeiten gemessen (Abfolge + Pausentabelle), alte Tipps geloescht; Service Worker repariert (v220.js). */
+if(document.readyState==="loading"){ document.write('<script src="v220.js?v=220"><\/script>'); }

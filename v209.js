@@ -20,7 +20,7 @@ window.BPP_BUILD="2.09";
   }
   if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", fix); else fix();
   window.addEventListener("load", fix); setInterval(fix, 2000);
-  function showV(){ var v=document.querySelector("h1 .ver"); if(v) v.textContent="V2.09"; document.title="Bhakti Prayers Player V2.09"; }
+  function showV(){ var s="V"+(window.BPP_SHOW||"2.09"), v=document.querySelector("h1 .ver"); if(v) v.textContent=s; document.title="Bhakti Prayers Player "+s; } /* V2.20: folgt BPP_SHOW */
   if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showV); else showV();
   setTimeout(showV, 900); setTimeout(showV, 1500); setTimeout(showV, 2500);
 })();
