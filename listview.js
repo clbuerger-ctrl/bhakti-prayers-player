@@ -77,6 +77,7 @@
     });
     GROUPS.forEach(function(G){ (G.skip||[]).forEach(function(id){ var k=PRAYERS.findIndex(function(p){ return p.id===id; }); if(k>=0) used[k]=true; }); });
     var rest=[]; PRAYERS.forEach(function(p, idx){ if(!used[idx]) rest.push(idx); });
+    rest=rest.filter(function(idx){ var id=PRAYERS[idx] && PRAYERS[idx].id; return id!=="ashtotram" && id!=="ashtotram-abend"; }); /* [Grok.com] nicht noch einmal unter Weitere */
     if(rest.length){ head(tr(["Weitere","More","Autres","Otros","Другие","अन्य"])); rest.forEach(put); }
     list.innerHTML=""; list.appendChild(frag);
     dayLab(); title(); if(window.__ldPaint) window.__ldPaint();
