@@ -1,5 +1,5 @@
 /* [Grok.com] Mataji Bhavani (Russia): Mangala Murti ist die Doha.
-   Ramaji se Rama nur nach der 2. Strophe. Siya vara gibt es hier nicht. */
+   Beide Ramaji-Zeilen sind draussen. Siya vara gibt es hier nicht. */
 (function(){
   if(typeof PRAYERS==="undefined") return;
   var old=PRAYERS.findIndex(function(p){ return p.id==="hanuman-bhavani"; });
@@ -26,4 +26,11 @@
     hinweis:"Mangala Murti ist die Dohā. Ramaji se Rama steht nicht in den Zeilen.",
     zeilen:zeilen
   });
+  function strip(){
+    var b=PRAYERS.find(function(p){ return p.id==="hanuman-bhavani"; });
+    if(!b||!b.zeilen) return;
+    var n=b.zeilen.filter(function(z){ return !/rāmaji se rāma/.test(z.sa||""); });
+    if(n.length!==b.zeilen.length){ b.zeilen=n; b.zeilen.forEach(function(z,i){ z.nr=String(i+1); z.x2=false; }); }
+  }
+  strip(); setInterval(strip, 800);
 })();
