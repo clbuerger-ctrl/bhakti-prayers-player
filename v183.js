@@ -235,7 +235,7 @@ window.BPP_BUILD="1.83";
     var k=autoK(); if(k!==curK){ if(!(Date.now()<holdUntil)) page=0; curK=k; manualK=k; }
     var pg=pages(k); page=autoPage(k, pg);
     var key=k+"/"+page+"/"+JSON.stringify(pg[page].fs)+"/"+opt.ch+opt.tr;
-    var p=P(); top1.textContent=p?p.titel:""; var g=gs[k]; var nr=/^\d+$/.test(g.key)?g.key:String(p.zeilen[g.start].nr||"");
+    var p=P(); top1.textContent=p?p.titel:""; var g=gs[k]; var nr=(p.id==="mukunda")?String(k+1):(/^[\d]+$/.test(g.key)?g.key:String(p.zeilen[g.start].nr||"")); /* [Grok.com] MMS durchzaehlen */
     top2.textContent=nr+"  ·  "+(k+1)+"/"+gs.length+(pg.length>1?"  ·  "+(page+1)+"/2":"");
     syncPlay();
     if(key===lastKey && !force) return; lastKey=key;
