@@ -3,8 +3,8 @@
    ohne Netz aus dem Cache. Alte App-Caches werden beim Aktivieren geloescht.
    MP3 aus audio/: liegen im Cache "bpp-audio-v1" (laedt v203.js im Hintergrund). Abspielen aus dem Cache mit Range-Antworten (206),
    damit Spulen geht. Nicht im Cache: direkt aus dem Netz. YouTube und fremde Server laufen am Service Worker vorbei. */
-var VER="203", APP="bpp-app-"+VER, AUD="bpp-audio-v1";
-var CORE=["./","index.html","follow.js","manifest.json","icon-192.svg","icon-512.svg","version.json","start.jpg"]; /* [Grok.com] Startbild */
+var VER="212" /* [Grok.com] Seite neu, Ton-Cache bleibt */, APP="bpp-app-"+VER, AUD="bpp-audio-v1";
+var CORE=["./","index.html","follow.js","v212.js","manifest.json","icon-192.svg","icon-512.svg","version.json","start.jpg"]; /* [Grok.com] */
 self.addEventListener("install", function(e){
   e.waitUntil(caches.open(APP).then(function(c){ return Promise.all(CORE.map(function(u){ return fetch(u, {cache:"no-store"}).then(function(r){ if(r.ok) return c.put(u, r); }).catch(function(){}); })); }).then(function(){ return self.skipWaiting(); }));
 });
