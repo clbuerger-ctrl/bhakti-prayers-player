@@ -1,9 +1,9 @@
-/* [Grok.com] V2.16: Abend-Aufnahme ohne Om unter neuem Namen, damit der Offline-Speicher
-   die alte Datei mit Om nicht weiter ausliefert. Die alte Cache-Kopie wird geloescht. */
+/* [Grok.com] V2.16: Abend-Aufnahme ohne Om. Die alte Datei mit Om ist nicht das 21. Stueck.
+   Offline-Liste bleibt 20. Die alte Cache-Kopie wird geloescht. */
 window.BPP_BUILD="2.16";
 window.BPP_SW="sw.js?v=216";
 (function(){
-  if(window.bppV216) return; window.bppV216=1;
+  if(window.bppV216b) return; window.bppV216b=1;
   var FILE="audio/guru-stotram-abend2.mp3";
   function point(){
     if(typeof PRAYERS==="undefined") return;
@@ -21,13 +21,15 @@ window.BPP_SW="sw.js?v=216";
       });
     }).catch(function(){});
   }
+  function recount(){
+    point(); dropOld();
+    try{ if(typeof window.bppOfflineRun==="function") window.bppOfflineRun(); }catch(e){}
+  }
   point(); dropOld();
-  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", function(){ point(); dropOld(); });
-  window.addEventListener("load", function(){ point(); dropOld(); });
-  setInterval(point, 1000);
-  try{
-    if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js?v=216", {scope:"./"});
-  }catch(e){}
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", recount);
+  window.addEventListener("load", function(){ setTimeout(recount, 800); setTimeout(recount, 4000); });
+  setInterval(point, 1500);
+  try{ if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js?v=216", {scope:"./"}); }catch(e){}
   function showV(){ var v=document.querySelector("h1 .ver"); if(v) v.textContent="V2.16"; document.title="Bhakti Prayers Player V2.16"; }
   setTimeout(showV, 1800); setTimeout(showV, 3600);
 })();
