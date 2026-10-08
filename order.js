@@ -19,6 +19,10 @@
     ev.zeilen.forEach(function(z){ var k = String(z.nr).slice(-1); if(EV[k]) z.ch = EV[k]; });
     ev.hinweis = ev.hinweisDe = "Abendgebet, Musikerheft Seite 17: Am G / F G / Am G / F E.";
     ev.hinweisEn = "Evening prayers, musicians booklet page 17: Am G / F G / Am G / F E.";
+    /* [Grok.com] Abend-Aufnahme beginnt mit Om Om Om. Keine Strophennummer, akhanda bleibt Strophe 1. */
+    if(!(ev.zeilen[0] && ev.zeilen[0].nr==="Om")){
+      ev.zeilen = [{nr:"Om", ch:"", sa:"oṃ", ue:"Om", en:"Om"}, {nr:"Om", ch:"", sa:"oṃ", ue:"Om", en:"Om"}, {nr:"Om", ch:"", sa:"oṃ", ue:"Om", en:"Om"}].concat(ev.zeilen);
+    }
     if(!g.audio){
       g.audio = DBX + "AHxwpU6Xttm9wzQ47RfwNiM/Guru-Stotram.mp3" + RL;
       g.preferFile = true;
