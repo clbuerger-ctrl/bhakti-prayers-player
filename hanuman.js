@@ -17,9 +17,6 @@
     hinweisDe: "Text und Akkorde wie im Heft, vier Zeilen je Strophe. Ton von den Prabhus. Übersetzung sinngemäß.",
     hinweisEn: "Lyrics and chords as in the booklet, four lines per verse. Recording by the Prabhus. Translation approximate.",
     zeilen: [
-      v("Intro", "D     C     G     D", "maṅgala mūrti maruta nandana\nsakala amaṅgala mula nikandana",
-        "Sohn des Windes, Bild des Segens, der alles Unheil an der Wurzel ausreißt.",
-        "Son of the wind, embodiment of blessing, who uproots all misfortune."),
       v("Dohā 1", C4, "śrī guru caraṇa saroja raja\nnija manu mukura sudhāri\nbaranaūṁ raghuvara vimala jasu\njo dāyaka phala cāri",
         "Mit dem Staub der Lotusfüße des Gurus reinige ich den Spiegel meines Geistes. Dann besinge ich den reinen Ruhm Ramas, der die vier Früchte des Lebens schenkt.",
         "With the dust of the Guru's lotus feet I cleanse the mirror of my mind. Then I sing the pure glory of Rama, who grants the four fruits of life."),
