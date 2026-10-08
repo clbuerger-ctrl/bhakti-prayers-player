@@ -23,7 +23,7 @@
       v("2", C4, "buddhi hīna tanu jāni-ke\nsumirauṁ pavana kumara\nbala buddhi vidyā dehu mohi\nharahu kaleśa vikāra",
         "Ich weiß, wie wenig Verstand ich habe, und denke an dich, Sohn des Windes. Gib mir Kraft, Einsicht und Wissen, nimm Kummer und Unreinheit von mir.",
         "Knowing how little understanding I have, I remember you, son of the wind. Give me strength, wisdom and knowledge, and remove my sorrows and flaws."),
-      v("3", "D     C     G     D", "siyā vara rāmacandra pada jai śaraṇam\n(rāmaji se rāma rāma kahiyo kahiyo-ji hanumāna-ji)",
+      v("3", "D     C     G     D", "siyā vara rāmacandra pada jai śaraṇam",
         "Zuflucht zu den Füßen Ramachandras, des Gemahls von Sita. Hanuman, sag Rama unser „Rama, Rama“.",
         "Refuge at the feet of Ramachandra, Sita's beloved. Hanuman, carry our \"Rama, Rama\" to Rama."),
       v("4", C4, "jaya hanumān jñāna guna sāgara\njaya kapīsa tihum̐ loka ujāgara\nrāma dūta atulita bala dhāmā\nañjani putra pavana suta nāmā",
