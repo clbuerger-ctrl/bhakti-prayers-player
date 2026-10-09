@@ -9,8 +9,8 @@
     h.audio="audio/hanuman-kanaka.mp3?v=234";
     h.preferFile=true;
     /* [Grok.com] Autoscroll am 8:55-Video. Anker sind die gemessenen Pausen, die Verse dazwischen gleichmaessig. */
-    var seq=[[26,0],[47.4,1],[69.3,2]]; /* [Grok.com] Mangala Murti weg, Strophe 1 ab 26 */
-    var a=69.3, b=452, n=20;
+    var seq=[[26,0],[47.4,1],[69.3,2]]; /* [Grok.com] Siya vara bleibt, nicht sofort weiter */
+    var a=96, b=452, n=20;
     for(var i=0;i<n;i++) seq.push([Math.round((a+(b-a)*i/n)*10)/10, 3+i]);
     seq.push([454.5,23],[508,24]);
     h.seqYt=seq; h.seqFile=seq;
