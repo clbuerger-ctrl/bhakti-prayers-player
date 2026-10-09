@@ -161,6 +161,7 @@ function isPlaying(){
   return !!(au && au.src && !au.paused && !au.ended);
 }
 function pinStanza(){
+  if(!isPlaying()) return; /* [Grok.com] ohne Play kein Scrollen */
   var panel=document.getElementById("lyrics");
   if(!panel) return;
   var on=panel.querySelector(".stanza.on");
