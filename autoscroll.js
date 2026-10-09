@@ -164,8 +164,10 @@ function pinStanza(){
   var r=on.getBoundingClientRect();
   var cs=getComputedStyle(panel);
   var pl=parseFloat(cs.paddingLeft||0), pt=parseFloat(cs.paddingTop||0);
-  /* [Grok.com] Mitsingen: Strophe nach Strophe, die aktuelle oben ins Lyrics-Fenster */
+  /* [Grok.com] Mitsingen: Lyrics-Fenster und aktuelle Strophe sichtbar */
   if(typeof autoScroll!=="undefined" && autoScroll){
+    var vr=panel.getBoundingClientRect();
+    if(vr.top<0 || vr.bottom>window.innerHeight-8) panel.scrollIntoView({block:"start", behavior:"smooth"});
     var top=panel.scrollTop+(r.top-pr.top-pt);
     var left=panel.scrollLeft+(r.left-pr.left-pl);
     panel.scrollTo({top:Math.max(0, top), left:Math.max(0, left), behavior:"smooth"});
@@ -189,7 +191,7 @@ function autoLineFromTime(){
   if(k<0) k=0;
   if(k>p.n-1) k=p.n-1;
   var start=p.gs[k]?p.gs[k].start:0;
-  if(start!==line){ line=start; paintLyrics(); requestAnimationFrame(function(){ pinStanza(); }); }
+  if(start!==line){ line=start; paintLyrics(); bppPinAt=Date.now(); requestAnimationFrame(function(){ pinStanza(); }); }
 }
 window.addEventListener("message", function(e){
   var d=e.data;
@@ -209,3 +211,10 @@ setInterval(function(){
   askYtTime();
   autoLineFromTime();
 }, 400);
+var bppPinAt=0;
+setInterval(function(){
+  if(!bppReady() || !autoScroll || !isPlaying()) return;
+  if(Date.now()-bppPinAt<5000) return;
+  bppPinAt=Date.now();
+  pinStanza();
+}, 1000);
