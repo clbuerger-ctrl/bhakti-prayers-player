@@ -303,7 +303,7 @@ function setLang(l){
   applyUI(); paintList(); paintLyrics();
 }
 function layoutLyrics(){
-  /* [Grok-Bot] V1.37: Spalten nur so viele, wie die längste Verszeile ganz hineinpasst */
+  /* [Grok.com] Standard: Schrift so gross wie moeglich, laengste Zeile fuellt das Fenster, Ende bleibt sichtbar */
   var box=document.getElementById("lyrics");
   if(!box) return;
   var cs=getComputedStyle(box);
@@ -316,19 +316,10 @@ function layoutLyrics(){
   box.querySelectorAll(".rowline .sa .ln").forEach(function(el){ var x=el.getBoundingClientRect().width; if(x>L) L=x; });
   box.classList.remove("measure");
   if(!L) return;
-  var PAD=24, GAP=16, cols=1, sc=1, found=false;
-  [3,2].forEach(function(c){
-    if(found) return;
-    [1,0.92,0.86].forEach(function(k){
-      if(!found && c*(L*k+PAD)+(c-1)*GAP<=w){ cols=c; sc=k; found=true; }
-    });
-  });
-  if(!found){
-    sc=Math.min(1,(w-PAD)/L);
-    if(sc<0.66){ sc=0.66; box.classList.add("fitwrap"); }
-  }
+  var PAD=16, sc=(w-PAD)/L;
+  if(sc>2.4) sc=2.4;
+  if(sc<0.72){ sc=0.72; box.classList.add("fitwrap"); }
   box.style.setProperty("--sc",String(Math.floor(sc*1000)/1000));
-  if(cols===3) box.classList.add("cols-3"); else if(cols===2) box.classList.add("cols-2");
 }
 function lineText(z){
   if(lang==="en") return z.en||z.ue||"";
