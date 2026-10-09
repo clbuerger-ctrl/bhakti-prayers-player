@@ -40,7 +40,7 @@ function markPlayOrigin(){
 }
 function toggleAuto(){
   autoScroll=!autoScroll;
-  if(autoScroll){ markPlayOrigin(); setTimeout(pinStanza, 200); }
+  if(autoScroll && isPlaying()){ markPlayOrigin(); setTimeout(pinStanza, 200); }
   rememberTempo();
   persistNow(); applyUI();
 }
@@ -167,7 +167,7 @@ function pinStanza(){
   var cs=getComputedStyle(panel);
   var pl=parseFloat(cs.paddingLeft||0), pt=parseFloat(cs.paddingTop||0);
   /* [Grok.com] Mitlesen: Lyrics-Bereich unter die Leiste, aktuelle Strophe oben */
-  if(typeof autoScroll!=="undefined" && autoScroll){
+  if(typeof autoScroll!=="undefined" && autoScroll && isPlaying()){ /* [Grok.com] nur bei Play */
     var stage=document.getElementById("stage")||panel;
     var bar=document.querySelector(".controls")||document.querySelector("header");
     var gap=bar?bar.getBoundingClientRect().bottom+6:8;
@@ -223,7 +223,7 @@ setInterval(function(){
 }, 400);
 var bppPinAt=0;
 setInterval(function(){
-  if(!bppReady() || !autoScroll) return;
+  if(!bppReady() || !autoScroll || !isPlaying()) return;
   if(Date.now()-bppPinAt<5000) return;
   bppPinAt=Date.now();
   pinStanza();
