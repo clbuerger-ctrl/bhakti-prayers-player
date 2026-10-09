@@ -130,6 +130,11 @@
     E.autor="Abendgebet · Sri Vitthal Dham · Heft S. 14–17";
     PRAYERS.push(E);
   }
+  zeilen.forEach(function(z){
+    var n=+z.nr;
+    if(n>=100) z.ch="E";
+    else if(n>=54) z.ch="D";
+  }); /* [Grok.com] ab 54 einen Ton höher D, ab 100 E */
   E.zeilen=P.zeilen;
   E.audio=P.audio;
   E.preferFile=true;

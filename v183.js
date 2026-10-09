@@ -179,7 +179,7 @@ window.BPP_BUILD="1.83";
       if(z.ch) chs.push(typeof shiftChordLine==="function"?shiftChordLine(z.ch, steps):z.ch);
       var t=""; try{ t=(window.lineText||function(x){ return x.ue||x.en||""; })(z); }catch(e){} if(t) trs.push(t); });
     var ch=(typeof uniqueChords==="function"?uniqueChords(chs):chs).join("   ");
-    if(p && (p.id==="ashtotram" || p.id==="ashtotram-abend") && lines.length) lines[0]=(k+1)+".  "+lines[0]; /* [Grok.com] 108 Namen nummerieren */
+    if(p && (p.id==="ashtotram" || p.id==="ashtotram-abend") && lines.length){ var nn=k+1, ton=nn>=100?"E":(nn>=54?"D":""); lines[0]=nn+".  "+lines[0]+(ton?"   "+ton:""); } /* [Grok.com] Nummer, ab 54 D, ab 100 E */
     return {lines:lines, ch:ch, tr:trs.join(" ")};
   }
   function wlen(s){ return String(s).replace(/[\s()0-9·.,;:!?'"–—-]/g,"").length||1; }
