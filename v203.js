@@ -115,13 +115,42 @@ window.BPP_SW="sw.js?v=203";
   /* ohne Netz: MP3 statt YouTube */
   function offlinePrefs(){ if(navigator.onLine) return; try{ PRAYERS.forEach(function(P){ if(P.audio) P.preferFile=true; }); }catch(e){} }
   offlinePrefs();
-  window.addEventListener("online", function(){ setTimeout(run, 2000); });
   window.addEventListener("offline", function(){ offlinePrefs(); quick(); });
-  window.addEventListener("load", function(){ setTimeout(function(){
-    if(navigator.serviceWorker.controller) run();
-    else navigator.serviceWorker.ready.then(function(){ setTimeout(run, 1500); });
-  }, 3000); });
+  /* [Grok.com] nicht mehr alles beim Start. Nur der laufende Gesang, alle auf den Knopf. */
   window.bppOfflineRun=run;
+  function cacheOne(url){
+    if(!url || !navigator.onLine || !("caches" in window)) return;
+    var u; try{ u=abs(url); }catch(e){ return; }
+    if(u.origin!==location.origin || !/\/audio\/[^/]+\.mp3$/i.test(u.pathname)) return;
+    var key=u.origin+u.pathname;
+    caches.open(AUD).then(function(c){ return c.match(key).then(function(hit){
+      if(hit) return;
+      return fetch(key+"?bppdl=1", {cache:"no-store"}).then(function(r){
+        if(!r.ok) return;
+        return r.blob().then(function(b){
+          var h=new Headers(); h.set("Content-Type", r.headers.get("Content-Type")||"audio/mpeg"); h.set("Content-Length", String(b.size));
+          return c.put(key, new Response(b, {status:200, headers:h}));
+        });
+      }).then(function(){ quick(); });
+    }); }).catch(function(){});
+  }
+  window.bppCacheSong=cacheOne;
+  var oldPlay=window.play;
+  if(typeof oldPlay==="function" && !oldPlay._bppOff){
+    var w=function(idx){ var r=oldPlay.apply(this, arguments); try{ var P=PRAYERS[idx]; if(P && P.audio) cacheOne(P.audio); }catch(e){} return r; };
+    w._bppOff=1; window.play=w;
+  }
+  function btn(){
+    if(document.getElementById("btnOffAll")) return;
+    var b=document.createElement("button");
+    b.id="btnOffAll"; b.type="button"; b.textContent="Alle offline";
+    b.title="Alle Gesänge für offline laden";
+    b.style.cssText="margin-left:8px;font:12px system-ui,sans-serif;color:#1a120c;background:#e6c07b;border:0;border-radius:8px;padding:4px 8px;cursor:pointer";
+    b.onclick=function(){ run(); };
+    var foot=document.getElementById("foot");
+    if(foot) foot.appendChild(b); else document.body.appendChild(b);
+  }
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", btn); else btn();
   function showV(){ var s="V"+(window.BPP_SHOW||"2.03"), v=document.querySelector("h1 .ver"); if(v) v.textContent=s; document.title="Bhakti Prayers Player "+s; } /* V2.20: folgt BPP_SHOW */
   if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showV); else showV();
   setTimeout(showV, 900); setTimeout(showV, 1500);
