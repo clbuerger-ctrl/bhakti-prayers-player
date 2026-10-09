@@ -201,7 +201,7 @@ function autoLineFromTime(){
   if(k<0) k=0;
   if(k>p.n-1) k=p.n-1;
   var start=p.gs[k]?p.gs[k].start:0;
-  if(start!==line){ line=start; paintLyrics(); bppPinAt=Date.now(); requestAnimationFrame(function(){ pinStanza(); }); }
+  if(start!==line){ line=start; paintLyrics(); requestAnimationFrame(function(){ pinStanza(); }); }
 }
 window.addEventListener("message", function(e){
   var d=e.data;
@@ -221,10 +221,4 @@ setInterval(function(){
   askYtTime();
   autoLineFromTime();
 }, 400);
-var bppPinAt=0;
-setInterval(function(){
-  if(!bppReady() || !autoScroll || !isPlaying()) return;
-  if(Date.now()-bppPinAt<5000) return;
-  bppPinAt=Date.now();
-  pinStanza();
-}, 1000);
+/* [Grok.com] Lyrics-Fenster nur beim Strophenanschlag, nicht alle 5 Sekunden */
