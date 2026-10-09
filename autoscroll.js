@@ -40,7 +40,7 @@ function markPlayOrigin(){
 }
 function toggleAuto(){
   autoScroll=!autoScroll;
-  if(autoScroll) markPlayOrigin();
+  if(autoScroll){ markPlayOrigin(); setTimeout(pinStanza, 200); }
   rememberTempo();
   persistNow(); applyUI();
 }
@@ -155,24 +155,34 @@ function stanzaFromProgress(p){
   return k;
 }
 /* [Grok-Bot] V1.44: aktuelle Strophe bleibt immer sichtbar; bei Spalten nebeneinander wird nicht mehr zur nächsten Spalte vorgesprungen */
+function isPlaying(){
+  if(typeof ytOn!=="undefined" && ytOn) return !!ytPlaying;
+  var au=document.getElementById("a");
+  return !!(au && au.src && !au.paused && !au.ended);
+}
 function pinStanza(){
   var panel=document.getElementById("lyrics");
   if(!panel) return;
   var on=panel.querySelector(".stanza.on");
+  var cs=getComputedStyle(panel);
+  var pl=parseFloat(cs.paddingLeft||0), pt=parseFloat(cs.paddingTop||0);
+  /* [Grok.com] Mitlesen: Lyrics-Bereich unter die Leiste, aktuelle Strophe oben */
+  if(typeof autoScroll!=="undefined" && autoScroll){
+    var stage=document.getElementById("stage")||panel;
+    var bar=document.querySelector(".controls")||document.querySelector("header");
+    var gap=bar?bar.getBoundingClientRect().bottom+6:8;
+    var sc=document.scrollingElement||document.documentElement;
+    var y=stage.getBoundingClientRect().top+sc.scrollTop-gap;
+    sc.scrollTo({top:Math.max(0, y), behavior:"smooth"});
+    if(on){
+      var pr=panel.getBoundingClientRect(), r=on.getBoundingClientRect();
+      panel.scrollTo({top:Math.max(0, panel.scrollTop+(r.top-pr.top-pt)), left:Math.max(0, panel.scrollLeft+(r.left-pr.left-pl)), behavior:"smooth"});
+    }
+    return;
+  }
   if(!on) return;
   var pr=panel.getBoundingClientRect();
   var r=on.getBoundingClientRect();
-  var cs=getComputedStyle(panel);
-  var pl=parseFloat(cs.paddingLeft||0), pt=parseFloat(cs.paddingTop||0);
-  /* [Grok.com] Mitsingen: Lyrics-Fenster und aktuelle Strophe sichtbar */
-  if(typeof autoScroll!=="undefined" && autoScroll){
-    var vr=panel.getBoundingClientRect();
-    if(vr.top<0 || vr.bottom>window.innerHeight-8) panel.scrollIntoView({block:"start", behavior:"smooth"});
-    var top=panel.scrollTop+(r.top-pr.top-pt);
-    var left=panel.scrollLeft+(r.left-pr.left-pl);
-    panel.scrollTo({top:Math.max(0, top), left:Math.max(0, left), behavior:"smooth"});
-    return;
-  }
   if(panel.scrollWidth>panel.clientWidth+4){
     if(r.left<pr.left+pl-2 || r.right>pr.left+panel.clientWidth+2){
       panel.scrollTo({left:panel.scrollLeft+(r.left-pr.left-pl), behavior:"smooth"});
@@ -213,7 +223,7 @@ setInterval(function(){
 }, 400);
 var bppPinAt=0;
 setInterval(function(){
-  if(!bppReady() || !autoScroll || !isPlaying()) return;
+  if(!bppReady() || !autoScroll) return;
   if(Date.now()-bppPinAt<5000) return;
   bppPinAt=Date.now();
   pinStanza();
