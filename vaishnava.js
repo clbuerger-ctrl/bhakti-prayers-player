@@ -1,6 +1,8 @@
-/* [Grok.com] Vaishnava Mantra, Heft S. 8: sechs Strophen und om shantih. Ton audio/vaishnava-mantra.mp3 */
+/* [Grok.com] Vaishnava Mantra wie Heft S. 10: sechs Strophen, je zwei Zeilen. Capo 0 bis +2. */
 (function(){
-  if(typeof PRAYERS==="undefined" || PRAYERS.some(function(p){ return p.id==="vaishnava-mantra"; })) return;
+  if(typeof PRAYERS==="undefined") return;
+  var alt=PRAYERS.findIndex(function(p){ return p.id==="vaishnava-mantra"; });
+  if(alt>=0) PRAYERS.splice(alt, 1);
   function v(n, sa, ue, en){ return {nr:String(n), ch:"", sa:sa, ue:ue, en:en}; }
   PRAYERS.push({
     id:"vaishnava-mantra",
@@ -9,27 +11,27 @@
     audio:"audio/vaishnava-mantra.mp3",
     preferFile:true,
     youtube:"QjYfK3u6rbs",
-    quelle:"Prathana with chords · Sri Vitthal Dham · S. 8",
-    hinweis:"Sechs Strophen und om śāntiḥ. Ton aus der Morgengebet-Aufnahme.",
+    quelle:"Prathana with chords · Sri Vitthal Dham · S. 10",
+    hinweis:"Capo 0 bis +2. Sechs Strophen zu zwei Zeilen wie im Heft.",
     zeilen:[
-      v(1, "ato devā avantu no\nyato viṣṇur vicakrame\npṛthivyāḥ sapta dhāmabhiḥ",
-        "Mögen die Halbgötter uns auf der Erde beschützen, von wo aus Viṣṇu, von den sieben Versmaßen unterstützt, Seine Schritte tat.",
-        "May the demigods preserve us on the Earth whence Vishnu, aided by the seven metres, stepped."),
-      v(2, "idaṃ viṣṇur vi cakrame\ntredhā ni dadhe padam\nsamūḷham asya pāṃsure",
-        "Viṣṇu durchschritt diese ganze Welt. Dreimal setzte Er Seinen Fuß, und die ganze Welt wurde im Staub Seines Fußabdrucks gesammelt.",
-        "Vishnu walked across this whole world; three times He planted His foot, and the whole world was collected in the dust of His footstep."),
-      v(3, "trīṇi padā vi cakrame\nviṣṇur gopā adābhyaḥ\nato dharmāṇi dhārayan",
-        "Viṣṇu, der Erhalter, der Unbesiegbare, tat drei Schritte und hielt dadurch die rechtschaffenen Handlungen aufrecht.",
-        "Vishnu, the Preserver, the invincible, stepped three steps, thereby upholding righteous acts."),
-      v(4, "viṣṇoḥ karmāṇi paśyata\nyato vratāni paspaśe\nindrasya yujyaḥ sakhā",
-        "Seht die Spiele Viṣṇus, durch die der Gottgeweihte fromme Taten vollbringt. Er ist der würdige Freund Indras.",
-        "Behold the pastimes of Lord Vishnu, through which the devotee accomplishes pious activities. That devotee is the worthy friend of Indra."),
-      v(5, "tad viṣṇoḥ paramaṃ padaṃ\nsadā paśyanti sūrayaḥ\ndivīva cakṣur ātatam",
-        "So wie die Strahlen der Sonne am Himmel sichtbar sind, sehen die Weisen stets das Reich Viṣṇus.",
-        "Just as the sun's rays in the sky are visible, the wise always see the abode of Lord Vishnu."),
-      v(6, "tad viprāso vipanyavo\njāgṛvāṃsaḥ sam indhate\nviṣṇor yat paramaṃ padam",
-        "Weil diese wachen Gottgeweihten die spirituelle Welt sehen, können sie das höchste Reich Viṣṇus offenbaren.",
-        "Because those awake devotees can see the spiritual world, they reveal that supreme abode of Lord Vishnu."),
+      v(1, "ato devā avantu no yato viṣṇur vicakrame\npṛthivyāḥ sapta dhāmabhiḥ",
+        "Mögen die Halbgötter uns auf der Erde beschützen, von wo aus Viṣṇu Seine Schritte tat.",
+        "May the demigods preserve us on the Earth whence Vishnu stepped."),
+      v(2, "idaṃ viṣṇur vicakrame tredhā nidadhe padam\nsamūḷham asya pāṃsure",
+        "Viṣṇu durchschritt diese Welt. Dreimal setzte Er Seinen Fuß.",
+        "Vishnu walked this world and planted His foot three times."),
+      v(3, "trīṇi padā vicakrame viṣṇur gopā adābhyaḥ\nato dharmāṇi dhārayane",
+        "Der unbesiegbare Hirte tat drei Schritte und hielt die rechtschaffenen Handlungen.",
+        "The invincible protector stepped three steps, upholding righteous acts."),
+      v(4, "viṣṇoḥ karmāṇi paśyata yato vratāni paspaśe\nindrasya yujyaḥ sakhā",
+        "Seht die Taten Viṣṇus. Er ist der würdige Freund Indras.",
+        "Behold the deeds of Vishnu. He is the worthy friend of Indra."),
+      v(5, "tad viṣṇoḥ paramaṃ padaṃ sadā paśyanti sūrayaḥ\ndivīva cakṣur ātatam",
+        "Die Weisen sehen stets das höchste Reich Viṣṇus, wie das Auge am Himmel.",
+        "The wise always see Vishnu's supreme abode, like the eye stretched across the sky."),
+      v(6, "tad viprāso vipanyavo jāgṛvāṃ saḥ samindhate\nviṣṇor yat paramaṃ padam",
+        "Die wachen Gottgeweihten offenbaren das höchste Reich Viṣṇus.",
+        "The awake devotees reveal the supreme abode of Vishnu."),
       v(7, "oṃ śāntiḥ śāntiḥ śāntiḥ",
         "OM, Frieden, Frieden, Frieden.",
         "OM, peace, peace, peace.")
