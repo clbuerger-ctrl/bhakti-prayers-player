@@ -164,6 +164,11 @@ function pinStanza(){
   var r=on.getBoundingClientRect();
   var cs=getComputedStyle(panel);
   var pl=parseFloat(cs.paddingLeft||0), pt=parseFloat(cs.paddingTop||0);
+  /* [Grok.com] Mitsingen: jede Strophe oben ins Lyrics-Fenster */
+  if(typeof autoScroll!=="undefined" && autoScroll){
+    panel.scrollTo({top:Math.max(0, panel.scrollTop+(r.top-pr.top-pt)), left:Math.max(0, panel.scrollLeft+(r.left-pr.left-pl)), behavior:"smooth"});
+    return;
+  }
   if(panel.scrollWidth>panel.clientWidth+4){
     if(r.left<pr.left+pl-2 || r.right>pr.left+panel.clientWidth+2){
       panel.scrollTo({left:panel.scrollLeft+(r.left-pr.left-pl), behavior:"smooth"});
@@ -182,7 +187,7 @@ function autoLineFromTime(){
   if(k<0) k=0;
   if(k>p.n-1) k=p.n-1;
   var start=p.gs[k]?p.gs[k].start:0;
-  if(start!==line){ line=start; paintLyrics(); }
+  if(start!==line){ line=start; paintLyrics(); pinStanza(); }
 }
 window.addEventListener("message", function(e){
   var d=e.data;
