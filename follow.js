@@ -7,7 +7,7 @@
   if(typeof sp==="function"){ window.songProgress=function(){ var p=sp.apply(this, arguments); if(p && inAuto){ p.t=Math.min(p.t+LEAD, Math.max(0, p.dur-0.1)); } return p; }; }
   if(typeof al==="function"){ window.autoLineFromTime=function(){ inAuto=true; try{ return al.apply(this, arguments); } finally { inAuto=false; } }; }
   if(typeof sy==="function"){
-    window.showYt=function(){ ytTime=null; ytDur=null; var r=sy.apply(this, arguments); ytPlaying=false; syncPlayBtn(); return r; };
+    window.showYt=function(){ ytTime=null; ytDur=null; var r=sy.apply(this, arguments); syncPlayBtn(); return r; }; /* [Grok.com] nicht auf Pause zwingen */
   }
   function setState(s){
     if(typeof s!=="number" || typeof ytOn==="undefined" || !ytOn) return;

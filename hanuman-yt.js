@@ -25,14 +25,14 @@
     } else if(lastT!==null){
       still++;
       if(still>=2) moving=false;
-      if(still>=3 && ytPlaying){ ytPlaying=false; try{ syncPlayBtn(); }catch(e){} }
+      if(still>=8 && ytPlaying){ ytPlaying=false; try{ syncPlayBtn(); }catch(e){} } /* [Grok.com] nicht zu frueh Pause */
     }
     lastT=ytTime;
   }, 700);
   window.addEventListener("message", function(e){
     var d=e.data; if(typeof d==="string"){ try{ d=JSON.parse(d); }catch(err){ return; } }
     if(!d || typeof ytOn==="undefined" || !ytOn) return;
-    if((d.event==="initialDelivery" || d.event==="onReady") && !moving && ytPlaying){ ytPlaying=false; try{ syncPlayBtn(); }catch(err){} }
+    /* [Grok.com] onReady nicht als Pause werten */
   });
   var tp=window.togglePlay;
   window.togglePlay=function(){
