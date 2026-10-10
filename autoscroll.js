@@ -161,41 +161,18 @@ function isPlaying(){
   return !!(au && au.src && !au.paused && !au.ended);
 }
 function pinStanza(){
-  if(!isPlaying()) return; /* [Grok.com] ohne Play kein Scrollen */
+  if(document.getElementById("bppFs") && document.getElementById("bppFs").classList.contains("on")) return;
   var panel=document.getElementById("lyrics");
-  if(!panel) return;
-  var on=panel.querySelector(".stanza.on");
-  var cs=getComputedStyle(panel);
-  var pl=parseFloat(cs.paddingLeft||0), pt=parseFloat(cs.paddingTop||0);
-  /* [Grok.com] Mitlesen: Lyrics-Bereich unter die Leiste, aktuelle Strophe oben */
-  if(typeof autoScroll!=="undefined" && autoScroll && isPlaying()){ /* [Grok.com] Titel und ganze Strophe sichtbar */
-    var title=document.getElementById("now");
-    var bar=document.querySelector(".bar");
-    var sc=document.scrollingElement||document.documentElement;
-    var gap=bar?bar.getBoundingClientRect().bottom+4:8;
-    if(title){
-      var y=title.getBoundingClientRect().top+sc.scrollTop-4;
-      if(title.getBoundingClientRect().top<4) sc.scrollTo({top:Math.max(0, y), behavior:"smooth"});
-    }
-    if(on){
-      var pr=panel.getBoundingClientRect(), r=on.getBoundingClientRect();
-      var bt=parseFloat(cs.borderTopWidth||0);
-      var top=panel.scrollTop+(r.top-pr.top-bt-pt-10);
-      panel.scrollTo({top:Math.max(0, top), left:0, behavior:"smooth"}); /* [Grok.com] immer zur markierten Strophe */
-    }
-    return;
-  }
-  if(!on) return;
-  var pr=panel.getBoundingClientRect();
-  var r=on.getBoundingClientRect();
-  /* [Grok.com] AkkZe macht Zeilen breiter. Nur echte Spalten seitlich, sonst immer senkrecht zur Strophe. */
-  if(panel.classList.contains("cols-2") || panel.classList.contains("cols-3")){
-    if(r.left<pr.left+pl-2 || r.right>pr.left+panel.clientWidth+2){
-      panel.scrollTo({left:panel.scrollLeft+(r.left-pr.left-pl), behavior:"smooth"});
-    }
-    return;
-  }
-  panel.scrollTo({top:Math.max(0, panel.scrollTop+(r.top-pr.top-pt)-8), behavior:"smooth"});
+  var on=panel&&panel.querySelector(".stanza.on");
+  if(!panel||!on) return;
+  /* [Grok.com] markierte Strophe oben ins Lyrics-Fenster, sofort */
+  var pr=panel.getBoundingClientRect(), r=on.getBoundingClientRect();
+  panel.scrollTop=Math.max(0, panel.scrollTop+(r.top-pr.top)-12);
+  var bar=document.querySelector(".bar");
+  var gap=bar?bar.getBoundingClientRect().bottom+6:8;
+  r=on.getBoundingClientRect();
+  var sc=document.scrollingElement||document.documentElement;
+  if(r.top<gap || r.bottom>window.innerHeight-8) sc.scrollTop=Math.max(0, sc.scrollTop+(r.top-gap));
 }
 function autoLineFromTime(){
   if(!autoScroll || i<0) return;
@@ -207,7 +184,7 @@ function autoLineFromTime(){
   if(k<0) k=0;
   if(k>p.n-1) k=p.n-1;
   var start=p.gs[k]?p.gs[k].start:0;
-  if(start!==line){ line=start; paintLyrics(); requestAnimationFrame(function(){ pinStanza(); }); }
+  if(start!==line){ line=start; paintLyrics(); setTimeout(pinStanza, 30); setTimeout(pinStanza, 200); }
 }
 window.addEventListener("message", function(e){
   var d=e.data;
