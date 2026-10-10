@@ -18,7 +18,7 @@
     return i===0?(z.ch||""):"";
   });
   PRAYERS.forEach(function(P){
-    if(P.id==="hanuman") return;
+    if(P.id==="hanuman" || P.id==="govinda") return; /* [Grok.com] Govinda hat die Akkorde von Strophe 1 */
     if(P.id==="govinda"){
       P.zeilen.forEach(function(z){
         if(/^Refrain/i.test(z.nr)) return;
