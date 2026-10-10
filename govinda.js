@@ -55,22 +55,22 @@
       v("Refrain", Rch, Rsa, "Govinda, den ersten Purusha, verehre ich.", "I worship Govinda, the original Person."), /* [Grok-Bot] V1.33: fehlte nach Strophe 4 */
       v("5a","D","aṅgāni yasya sakalendriya-vṛttimanti","Jedes Glied sieht, hütet, offenbart die Welten. Gestalt aus Licht und Glück.","Each limb sees, guards and manifests the worlds. A form of light and bliss."),
       v("5b","D7+","paśyanti pānti kalayanti ciraṃ jaganti","",""),
-      v("5c","D7","ānanda-cinmaya-sad-ujjvala-vigrahasya","",""),
+      v("5c","G","ānanda-cinmaya-sad-ujjvala-vigrahasya","",""),
       
       v("Refrain", Rch, Rsa, "Govinda, den ersten Purusha, verehre ich.", "I worship Govinda, the original Person."),
       v("6a","D","advaitam acyutam anādim ananta-rūpam","Nicht-zwei, unfallen, anfangslos, immer jung. Den Veden schwer, der Bhakti nah.","Non-dual, unfallen, beginningless, ever young. Rare in the Vedas, near to devotion."),
       v("6b","D7+","ādyaṃ purāṇa-puruṣaṃ nava-yauvanaṃ ca","",""),
-      v("6c","D7","vedeṣu durlabham adurlabham ātma-bhaktau","",""),
+      v("6c","G","vedeṣu durlabham adurlabham ātma-bhaktau","",""),
       
       v("Refrain", Rch, Rsa, "Govinda, den ersten Purusha, verehre ich.", "I worship Govinda, the original Person."),
       v("7a","D","premāñjana-cchurita-bhakti-vilocanena","Mit dem Salbe der Liebe sehen die Heiligen ihn stets im Herzen: Shyamasundara.","With the salve of love the saints always see him in the heart: Shyamasundara."),
       v("7b","D7+","santaḥ sadaiva hṛdayeṣu vilokayanti","",""),
-      v("7c","D7","yaṃ śyāmasundaram acintya-guṇa-svarūpam","",""),
+      v("7c","G","yaṃ śyāmasundaram acintya-guṇa-svarūpam","",""),
       
       v("Refrain", Rch, Rsa, "Govinda, den ersten Purusha, verehre ich.", "I worship Govinda, the original Person."),
       v("8a","D","rāmādi-mūrtiṣu kalā-niyamena tiṣṭhan","In Rama und anderen als Teil — Krishna selbst ist die höchste Person.","In Rama and others as a portion — Krishna himself is the Supreme Person."),
       v("8b","D7+","nānāvatāram akarod bhuvaneṣu kintu","",""),
-      v("8c","D7","kṛṣṇaḥ svayaṃ samabhavat paramaḥ pumān yaḥ","",""),
+      v("8c","G","kṛṣṇaḥ svayaṃ samabhavat paramaḥ pumān yaḥ","",""),
       
       v("Refrain", Rch, Rsa, "Govinda, den ersten Purusha, verehre ich.", "I worship Govinda, the original Person."),
       v("9", "D    D7+    D7    G", "goloka-nāmni nija-dhāmni tale ca tasya devī-maheśa-hari-dhāmasu teṣu teṣu | te te prabhāva-nicayā vihitāś ca yena", "Unter Goloka liegen die Wohnsitze von Devi, Shiva und Hari — durch ihn.", "Beneath Goloka lie the abodes of Devi, Shiva and Hari — by him."),
