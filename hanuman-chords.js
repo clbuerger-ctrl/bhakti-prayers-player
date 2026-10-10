@@ -19,10 +19,16 @@
   });
   PRAYERS.forEach(function(P){
     if(P.id==="hanuman") return;
+    P.zeilen.forEach(function(z){
+      if(String(z.sa||"").indexOf(" | ")<0) return;
+      var bits=String(z.sa).split(" | ");
+      if(bits.length<2) return;
+      z.sa=bits.join("\n");
+    });
     mark(P, function(z,i,lines){
-      var parts=String(z.ch||"").trim().split(/\s{2,}/).filter(Boolean);
+      var parts=String(z.ch||"").trim().split(/\s+/).filter(Boolean);
       if(parts.length===lines.length) return parts[i];
-      if(parts.length>1 && i<parts.length) return parts[i];
+      if(parts.length>1) return parts[Math.min(i, parts.length-1)];
       return i===0?(z.ch||""):"";
     });
   });

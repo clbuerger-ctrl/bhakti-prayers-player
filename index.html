@@ -173,7 +173,7 @@ body.show-ch .rowline .rch{display:block}
 <script src="ramanuja.js?v=1"></script>
 <script src="bhajare.js?v=1"></script>
 <script src="hanuman.js?v=5"></script>
-<script src="hanuman-chords.js?v=3"></script><!-- [Grok.com] Akkorde ueber jeder Zeile -->
+<script src="hanuman-chords.js?v=4"></script><!-- [Grok.com] Akkorde ueber jeder Zeile -->
 <script src="hanuman-yt.js?v=99"></script>
 <script src="hanuman2.js?v=6"></script><!-- [Grok.com] Hanuman Pandita Bhavani unter Weitere -->
 <script src="verses.js?v=38"></script>
@@ -406,9 +406,9 @@ function paintLyrics(){
       var isL=cLast && k0===g.idx.length-1;
       var saLines=String(z.sa).split("\n");
       var lch=zeile&&z.lineCh&&z.lineCh.length===saLines.length?z.lineCh:null;
-      var topCh=!zeile&&!lch&&z.ch?"<span class='lch'>"+shiftChordLine(z.ch, steps)+"</span>":"";
+      var one=zeile&&!lch&&z.ch&&saLines.length===1?"<span class='lch'>"+shiftChordLine(z.ch, steps)+"</span>":""; /* [Grok.com] AkkZe auch bei einzelner Zeile */
       var rch=((isR||isL)&&z.ch&&!lch)?"<span class='rch'>"+shiftChordLine(z.ch, steps)+"</span>":"";
-      return "<div class='rowline"+(isR?" refrain":"")+"' data-n='"+n+"'>"+topCh+rch+"<span class='sa'>"+saLines.map(function(t,k,arr){ var c=lch&&lch[k]?shiftChordLine(lch[k], steps):""; return (c?"<span class='lch'>"+c+"</span>":"")+"<span class='ln'>"+t+((isR||z.x2)&&k===arr.length-1?"<span class='x2'> 2x</span>":"")+"</span>"; }).join("")+"</span></div>";
+      return "<div class='rowline"+(isR?" refrain":"")+"' data-n='"+n+"'>"+one+rch+"<span class='sa'>"+saLines.map(function(t,k,arr){ var c=lch&&lch[k]?shiftChordLine(lch[k], steps):""; return (c?"<span class='lch'>"+c+"</span>":"")+"<span class='ln'>"+t+((isR||z.x2)&&k===arr.length-1?"<span class='x2'> 2x</span>":"")+"</span>"; }).join("")+"</span></div>";
     }).join("");
     var tr=g.idx.map(function(n){ return lineText(P.zeilen[n]); }).filter(Boolean).join(" ");
     return "<div class='stanza"+(on?" on":"")+"' data-start='"+g.start+"'>"+head+rows+(tr?"<div class='de'>"+tr+"</div>":"")+"</div>";
