@@ -135,7 +135,7 @@ body.show-ch .rowline .rch{display:block}
     <span id="scLab" style="min-width:3.2em;text-align:center;color:#e8c57a;font-size:.85rem"></span>
     <button type="button" id="btnScUp" onclick="shiftScroll(0.05)">+</button>
     <span class="sep"></span>
-    <button type="button" id="btnDe" onclick="toggleDe()"></button>
+    <button type="button" id="btnDe" onclick="event.stopPropagation(); toggleDe();"></button>
     <button type="button" id="btnCh" onclick="toggleCh()"></button>
     <span id="xpBox" style="display:flex;gap:4px;align-items:center">
       <button type="button" id="btnXpDown" onclick="shiftSteps(-1)">♭</button>
@@ -413,7 +413,7 @@ function paintLyrics(){
     var tr=g.idx.map(function(n){ return lineText(P.zeilen[n]); }).filter(Boolean).join(" ");
     return "<div class='stanza"+(on?" on":"")+"' data-start='"+g.start+"'>"+head+rows+(tr?"<div class='de'>"+tr+"</div>":"")+"</div>";
   }).join("");
-  layoutLyrics(); pinStanza();
+  layoutLyrics(); pinStanza(); applyDe();
   box.querySelectorAll(".stanza").forEach(function(el){
     el.onclick=function(){ line=parseInt(el.getAttribute("data-start"),10); persistNow(); paintLyrics(); syncAutoFromLine(); };
   });
@@ -509,9 +509,13 @@ function shiftSteps(d, reset){
   if(!showCh){ showCh=true; document.body.classList.add("show-ch"); }
   persistNow(); applyUI(); paintLyrics();
 }
+function applyDe(){
+  document.body.classList.toggle("show-de", showDe);
+  document.querySelectorAll("#lyrics .de").forEach(function(el){ el.style.display=showDe?"block":"none"; }); /* [Grok.com] auch waehrend Play */
+}
 function toggleDe(){
   showDe=!showDe;
-  document.body.classList.toggle("show-de", showDe);
+  applyDe();
   applyUI();
   try{ localStorage.setItem("bpp-de", showDe?"1":"0"); }catch(e){}
   persistNow();
