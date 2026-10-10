@@ -180,21 +180,22 @@ function pinStanza(){
     if(on){
       var pr=panel.getBoundingClientRect(), r=on.getBoundingClientRect();
       var bt=parseFloat(cs.borderTopWidth||0);
-      var top=panel.scrollTop+(r.top-pr.top-bt-pt-10); /* [Grok.com] 10 px Luft, erste Zeile nicht abschneiden */
-      if(r.top<pr.top+bt+pt+8 || r.bottom>pr.bottom-4) panel.scrollTo({top:Math.max(0, top), left:0, behavior:"smooth"});
+      var top=panel.scrollTop+(r.top-pr.top-bt-pt-10);
+      panel.scrollTo({top:Math.max(0, top), left:0, behavior:"smooth"}); /* [Grok.com] immer zur markierten Strophe */
     }
     return;
   }
   if(!on) return;
   var pr=panel.getBoundingClientRect();
   var r=on.getBoundingClientRect();
-  if(panel.scrollWidth>panel.clientWidth+4){
+  /* [Grok.com] AkkZe macht Zeilen breiter. Nur echte Spalten seitlich, sonst immer senkrecht zur Strophe. */
+  if(panel.classList.contains("cols-2") || panel.classList.contains("cols-3")){
     if(r.left<pr.left+pl-2 || r.right>pr.left+panel.clientWidth+2){
       panel.scrollTo({left:panel.scrollLeft+(r.left-pr.left-pl), behavior:"smooth"});
     }
     return;
   }
-  panel.scrollTo({top:panel.scrollTop+(r.top-pr.top-pt), behavior:"smooth"});
+  panel.scrollTo({top:Math.max(0, panel.scrollTop+(r.top-pr.top-pt)-8), behavior:"smooth"});
 }
 function autoLineFromTime(){
   if(!autoScroll || i<0) return;
