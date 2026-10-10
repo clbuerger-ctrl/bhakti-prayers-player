@@ -164,20 +164,15 @@ function pinStanza(){
   var panel=document.getElementById("lyrics");
   if(!panel) return;
   var on=panel.querySelector(".stanza.on");
-  var cs=getComputedStyle(panel);
-  var pl=parseFloat(cs.paddingLeft||0), pt=parseFloat(cs.paddingTop||0);
-  /* [Grok.com] bei Play: Lyrics-Fenster und aktuelle Strophe ins Bild */
+  /* [Grok.com] Markierte Strophe direkt oben ins Lyrics-Fenster, ohne smooth */
   if(typeof autoScroll!=="undefined" && autoScroll){
     var stage=document.getElementById("stage")||panel;
     var sc=document.scrollingElement||document.documentElement;
     var y=stage.getBoundingClientRect().top+sc.scrollTop-8;
-    sc.scrollTo({top:Math.max(0, y), behavior:"smooth"});
+    if(Math.abs(sc.scrollTop-y)>12) sc.scrollTop=Math.max(0, y);
     if(on){
-      try{ on.scrollIntoView({block:"start", inline:"nearest", behavior:"smooth"}); }catch(e){
-        var pr=panel.getBoundingClientRect(), r=on.getBoundingClientRect();
-        var bt=parseFloat(cs.borderTopWidth||0);
-        panel.scrollTo({top:Math.max(0, panel.scrollTop+(r.top-pr.top-bt-pt-10)), left:0, behavior:"smooth"});
-      }
+      var pr=panel.getBoundingClientRect(), r=on.getBoundingClientRect();
+      panel.scrollTop=Math.max(0, panel.scrollTop+(r.top-pr.top)-12);
     }
     return;
   }
