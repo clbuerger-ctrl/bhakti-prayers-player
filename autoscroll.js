@@ -168,16 +168,19 @@ function pinStanza(){
   var cs=getComputedStyle(panel);
   var pl=parseFloat(cs.paddingLeft||0), pt=parseFloat(cs.paddingTop||0);
   /* [Grok.com] Mitlesen: Lyrics-Bereich unter die Leiste, aktuelle Strophe oben */
-  if(typeof autoScroll!=="undefined" && autoScroll && isPlaying()){ /* [Grok.com] nur bei Play */
-    var stage=document.getElementById("stage")||panel;
-    var bar=document.querySelector(".controls")||document.querySelector("header");
-    var gap=bar?bar.getBoundingClientRect().bottom+6:8;
+  if(typeof autoScroll!=="undefined" && autoScroll && isPlaying()){ /* [Grok.com] Titel und ganze Strophe sichtbar */
+    var title=document.getElementById("now");
+    var bar=document.querySelector(".bar");
     var sc=document.scrollingElement||document.documentElement;
-    var y=stage.getBoundingClientRect().top+sc.scrollTop-gap;
-    sc.scrollTo({top:Math.max(0, y), behavior:"smooth"});
+    var gap=bar?bar.getBoundingClientRect().bottom+4:8;
+    if(title){
+      var y=title.getBoundingClientRect().top+sc.scrollTop-4;
+      if(title.getBoundingClientRect().top<4) sc.scrollTo({top:Math.max(0, y), behavior:"smooth"});
+    }
     if(on){
       var pr=panel.getBoundingClientRect(), r=on.getBoundingClientRect();
-      panel.scrollTo({top:Math.max(0, panel.scrollTop+(r.top-pr.top-pt)), left:Math.max(0, panel.scrollLeft+(r.left-pr.left-pl)), behavior:"smooth"});
+      var top=panel.scrollTop+(r.top-pr.top-pt);
+      if(r.top<pr.top+pt-2 || r.bottom>pr.bottom-2) panel.scrollTo({top:Math.max(0, top), left:0, behavior:"smooth"});
     }
     return;
   }
