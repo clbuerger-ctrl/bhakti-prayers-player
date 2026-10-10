@@ -1,4 +1,4 @@
-/* [Grok.com] Vaishnava Mantra wie Heft S. 10: sechs Strophen, je zwei Zeilen. Capo 0 bis +2. */
+/* [Grok.com] Vaishnava Mantra wortgleich aus der Heftvorlage, mit (g) wie pa(g)m sure. */
 (function(){
   if(typeof PRAYERS==="undefined") return;
   var alt=PRAYERS.findIndex(function(p){ return p.id==="vaishnava-mantra"; });
@@ -6,33 +6,33 @@
   function v(n, sa, ue, en){ return {nr:String(n), ch:"", sa:sa, ue:ue, en:en}; }
   PRAYERS.push({
     id:"vaishnava-mantra",
-    titel:"Vaiṣṇava Mantra",
-    autor:"Ṛgveda 1.22.16–21 · Bhakti Marga Prayers",
+    titel:"Vai\u1e63\u1e47ava Mantra",
+    autor:"\u1e5agveda 1.22.16\u201321 \u00b7 Bhakti Marga Prayers",
     audio:"audio/vaishnava-mantra.mp3",
     preferFile:true,
     youtube:"QjYfK3u6rbs",
-    quelle:"Prathana with chords · Sri Vitthal Dham · S. 10",
-    hinweis:"Capo 0 bis +2. Sechs Strophen zu zwei Zeilen wie im Heft.",
+    quelle:"Prathana with chords \u00b7 Sri Vitthal Dham \u00b7 S. 10",
+    hinweis:"Capo 0 bis +2. Zeilen und (g) wie in der Heftvorlage.",
     zeilen:[
-      v(1, "ato devā avantu no yato viṣṇur vicakrame\npṛthivyāḥ sapta dhāmabhiḥ",
-        "Mögen die Halbgötter uns auf der Erde beschützen, von wo aus Viṣṇu Seine Schritte tat.",
+      v(1, "ato dev\u0101 avantu no yato vi\u1e63\u1e47ur vicakrame\np\u1e5bthivy\u0101\u1e25 sapta dh\u0101mabhi\u1e25",
+        "M\u00f6gen die Halbg\u00f6tter uns auf der Erde besch\u00fctzen, von wo aus Vi\u1e63\u1e47u Seine Schritte tat.",
         "May the demigods preserve us on the Earth whence Vishnu stepped."),
-      v(2, "idaṃ viṣṇur vicakrame tredhā nidadhe padam\nsamūḷham asya pāṃsure",
-        "Viṣṇu durchschritt diese Welt. Dreimal setzte Er Seinen Fuß.",
-        "Vishnu walked this world and planted His foot three times."),
-      v(3, "trīṇi padā vicakrame viṣṇur gopā adābhyaḥ\nato dharmāṇi dhārayane",
+      v(2, "ida\u1e43 vi\u1e63\u1e47ur vicakrame tredh\u0101 nidadhe padam\nsam\u016b\u1e37ham asya p\u0101(g)\u1e43 sure",
+        "Vi\u1e63\u1e47u durchschritt diese Welt. Dreimal setzte Er Seinen Fu\u00df, und die Welt wurde im Staub Seines Fu\u00dfabdrucks gesammelt.",
+        "Vishnu walked this world; three times He planted His foot, and the world was collected in the dust of His footstep."),
+      v(3, "tr\u012b\u1e47i pad\u0101 vicakrame vi\u1e63\u1e47ur gop\u0101 ad\u0101bhya\u1e25\nato dharm\u0101\u1e47i dh\u0101rayane",
         "Der unbesiegbare Hirte tat drei Schritte und hielt die rechtschaffenen Handlungen.",
         "The invincible protector stepped three steps, upholding righteous acts."),
-      v(4, "viṣṇoḥ karmāṇi paśyata yato vratāni paspaśe\nindrasya yujyaḥ sakhā",
-        "Seht die Taten Viṣṇus. Er ist der würdige Freund Indras.",
+      v(4, "vi\u1e63\u1e47o\u1e25 karm\u0101\u1e47i pa\u015byata yato vrat\u0101ni paspa\u015be\nindrasya yujya\u1e25 sakh\u0101",
+        "Seht die Taten Vi\u1e63\u1e47us. Er ist der w\u00fcrdige Freund Indras.",
         "Behold the deeds of Vishnu. He is the worthy friend of Indra."),
-      v(5, "tad viṣṇoḥ paramaṃ padaṃ sadā paśyanti sūrayaḥ\ndivīva cakṣur ātatam",
-        "Die Weisen sehen stets das höchste Reich Viṣṇus, wie das Auge am Himmel.",
+      v(5, "tad vi\u1e63\u1e47o\u1e25 parama\u1e43 pada(g)\u1e43 sad\u0101 pa\u015byanti s\u016braya\u1e25\ndiv\u012bva cak\u1e63ur \u0101tatam",
+        "Die Weisen sehen stets das h\u00f6chste Reich Vi\u1e63\u1e47us, wie das Auge am Himmel.",
         "The wise always see Vishnu's supreme abode, like the eye stretched across the sky."),
-      v(6, "tad viprāso vipanyavo jāgṛvāṃ saḥ samindhate\nviṣṇor yat paramaṃ padam",
-        "Die wachen Gottgeweihten offenbaren das höchste Reich Viṣṇus.",
+      v(6, "tad vipr\u0101so vipanyavo j\u0101g\u1e5bv\u0101(g)\u1e43 sa\u1e25 samindhate\nvi\u1e63\u1e47or yat parama\u1e43 padam",
+        "Die wachen Gottgeweihten offenbaren das h\u00f6chste Reich Vi\u1e63\u1e47us.",
         "The awake devotees reveal the supreme abode of Vishnu."),
-      v(7, "oṃ śāntiḥ śāntiḥ śāntiḥ",
+      v(7, "o\u1e43 \u015b\u0101nti\u1e25 \u015b\u0101nti\u1e25 \u015b\u0101nti\u1e25",
         "OM, Frieden, Frieden, Frieden.",
         "OM, peace, peace, peace.")
     ],
