@@ -173,10 +173,11 @@ function pinStanza(){
     var y=stage.getBoundingClientRect().top+sc.scrollTop-8;
     sc.scrollTo({top:Math.max(0, y), behavior:"smooth"});
     if(on){
-      var pr=panel.getBoundingClientRect(), r=on.getBoundingClientRect();
-      var bt=parseFloat(cs.borderTopWidth||0);
-      var top=panel.scrollTop+(r.top-pr.top-bt-pt-10);
-      panel.scrollTo({top:Math.max(0, top), left:0, behavior:"smooth"});
+      try{ on.scrollIntoView({block:"start", inline:"nearest", behavior:"smooth"}); }catch(e){
+        var pr=panel.getBoundingClientRect(), r=on.getBoundingClientRect();
+        var bt=parseFloat(cs.borderTopWidth||0);
+        panel.scrollTo({top:Math.max(0, panel.scrollTop+(r.top-pr.top-bt-pt-10)), left:0, behavior:"smooth"});
+      }
     }
     return;
   }
@@ -201,7 +202,7 @@ function autoLineFromTime(){
   if(k<0) k=0;
   if(k>p.n-1) k=p.n-1;
   var start=p.gs[k]?p.gs[k].start:0;
-  if(start!==line){ line=start; paintLyrics(); requestAnimationFrame(function(){ pinStanza(); }); }
+  if(start!==line){ line=start; paintLyrics(); setTimeout(pinStanza, 60); setTimeout(pinStanza, 280); } /* [Grok.com] Strophenwechsel scrollt */
 }
 window.addEventListener("message", function(e){
   var d=e.data;
