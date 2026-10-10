@@ -1,9 +1,9 @@
-/* [Grok.com] Vaishnava Mantra wortgleich aus der Heftvorlage, mit (g) wie pa(g)m sure. */
+/* [Grok.com] Vaishnava Mantra nach der besseren Heftaufnahme, Capo 0 bis +2, Akkord C. */
 (function(){
   if(typeof PRAYERS==="undefined") return;
   var alt=PRAYERS.findIndex(function(p){ return p.id==="vaishnava-mantra"; });
   if(alt>=0) PRAYERS.splice(alt, 1);
-  function v(n, sa, ue, en){ return {nr:String(n), ch:"", sa:sa, ue:ue, en:en}; }
+  function v(n, sa, ue, en, ch){ return {nr:String(n), ch:ch||"", sa:sa, ue:ue, en:en}; }
   PRAYERS.push({
     id:"vaishnava-mantra",
     titel:"Vai\u1e63\u1e47ava Mantra",
@@ -12,11 +12,11 @@
     preferFile:true,
     youtube:"QjYfK3u6rbs",
     quelle:"Prathana with chords \u00b7 Sri Vitthal Dham \u00b7 S. 10",
-    hinweis:"Capo 0 bis +2. Zeilen und (g) wie in der Heftvorlage.",
+    hinweis:"Capo 0 bis +2. Zeilen wie in der Heftvorlage.",
     zeilen:[
       v(1, "ato dev\u0101 avantu no yato vi\u1e63\u1e47ur vicakrame\np\u1e5bthivy\u0101\u1e25 sapta dh\u0101mabhi\u1e25",
         "M\u00f6gen die Halbg\u00f6tter uns auf der Erde besch\u00fctzen, von wo aus Vi\u1e63\u1e47u Seine Schritte tat.",
-        "May the demigods preserve us on the Earth whence Vishnu stepped."),
+        "May the demigods preserve us on the Earth whence Vishnu stepped.", "C"),
       v(2, "ida\u1e43 vi\u1e63\u1e47ur vicakrame tredh\u0101 nidadhe padam\nsamudham asya p\u0101(g)\u1e43 sure",
         "Vi\u1e63\u1e47u durchschritt diese Welt. Dreimal setzte Er Seinen Fu\u00df, und die Welt wurde im Staub Seines Fu\u00dfabdrucks gesammelt.",
         "Vishnu walked this world; three times He planted His foot, and the world was collected in the dust of His footstep."),
