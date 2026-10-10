@@ -161,6 +161,7 @@ function isPlaying(){
   return !!(au && au.src && !au.paused && !au.ended);
 }
 function pinStanza(){
+  if(document.getElementById("bppFs") && document.getElementById("bppFs").classList.contains("on")) return; /* [Grok.com] nur Normalansicht */
   var panel=document.getElementById("lyrics");
   if(!panel) return;
   var on=panel.querySelector(".stanza.on");
