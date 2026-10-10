@@ -177,9 +177,11 @@ window.BPP_BUILD="1.83";
     g.idx.forEach(function(n){ var z=p.zeilen[n];
       var isR=/^Refrain/i.test(z.nr||"");
       var sa=String(z.sa||"").split("\n").map(function(s){ return s.trim(); }).filter(Boolean);
-      if(isR && z.ch){ var rc=typeof shiftChordLine==="function"?shiftChordLine(z.ch, steps):z.ch; lines.push(rc); } /* [Grok.com] Refrain-Akkorde direkt darueber */
+      var ze=document.body.classList.contains("ch-line");
+      if(ze && z.ch){ lines.push(typeof shiftChordLine==="function"?shiftChordLine(z.ch, steps):z.ch); }
+      else if(isR && z.ch && document.body.classList.contains("show-ch")){ lines.push(typeof shiftChordLine==="function"?shiftChordLine(z.ch, steps):z.ch); }
       sa.forEach(function(s){ lines.push(s); });
-      if(z.ch && !isR) chs.push(typeof shiftChordLine==="function"?shiftChordLine(z.ch, steps):z.ch);
+      if(z.ch && !isR && !ze) chs.push(typeof shiftChordLine==="function"?shiftChordLine(z.ch, steps):z.ch);
       var t=""; try{ t=(window.lineText||function(x){ return x.ue||x.en||""; })(z); }catch(e){} if(t) trs.push(t); });
     var ch=(typeof uniqueChords==="function"?uniqueChords(chs):chs).join("   ");
     if(p && (p.id==="ashtotram" || p.id==="ashtotram-abend") && lines.length){ var nn=k+1, ton=nn>=100?"E":(nn>=54?"D":""); lines[0]=nn+".  "+lines[0]+(ton?"   "+ton:""); } /* [Grok.com] Nummer, ab 54 D, ab 100 E */
