@@ -178,7 +178,7 @@ body.show-ch .rowline .rch{display:block}
 <script src="hanuman2.js?v=6"></script><!-- [Grok.com] Hanuman Pandita Bhavani unter Weitere -->
 <script src="verses.js?v=38"></script>
 <script src="transpose.js"></script>
-<script src="autoscroll.js?v=50"></script>
+<script src="autoscroll.js?v=51"></script>
 <script src="marks.js?v=42"></script>
 <script src="order.js?v=9"></script>
 <script src="ashtotram.js?v=3"></script>
@@ -442,7 +442,7 @@ function showFile(P){
   a.onerror=function(){ if(P.youtube) showYt(P, pendingSeek||P.youtubeStart); };
   a.src=P.audio;
   markPlayOrigin();
-  a.play().then(function(){ syncPlayBtn(); setTimeout(pinStanza, 120); }).catch(function(){ syncPlayBtn(); }); /* [Grok.com] bei Play zum Lyrics-Fenster */
+  a.play().then(syncPlayBtn).catch(function(){ syncPlayBtn(); });
   setTimeout(layoutLyrics, 50);
 }
 function togglePlay(){
@@ -453,7 +453,7 @@ function togglePlay(){
     syncPlayBtn(); return;
   }
   if(!a.src){ var P=PRAYERS[i]; if(P && P.audio){ showFile(P); return; } }
-  if(a.paused){ markPlayOrigin(); a.play().then(function(){ syncPlayBtn(); setTimeout(pinStanza, 120); }).catch(function(){ syncPlayBtn(); }); /* [Grok.com] bei Play zum Lyrics-Fenster */ }
+  if(a.paused){ markPlayOrigin(); a.play().then(syncPlayBtn).catch(function(){ syncPlayBtn(); }); }
   else { a.pause(); persistNow(); syncPlayBtn(); }
 }
 function play(idx, resume){

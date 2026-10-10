@@ -161,23 +161,30 @@ function isPlaying(){
   return !!(au && au.src && !au.paused && !au.ended);
 }
 function pinStanza(){
-  if(document.getElementById("bppFs") && document.getElementById("bppFs").classList.contains("on")) return;
-  if(typeof autoScroll==="undefined" || !autoScroll) return;
+  if(!isPlaying()) return; /* [Grok.com] ohne Play kein Scrollen */
   var panel=document.getElementById("lyrics");
-  var on=panel&&panel.querySelector(".stanza.on");
-  if(!panel||!on) return;
-  /* [Grok.com] Normalansicht: markierte Strophe oben ins Lyrics-Fenster und ins Bild */
-  var pr=panel.getBoundingClientRect(), r=on.getBoundingClientRect();
-  var next=panel.scrollTop+(r.top-pr.top)-14;
-  panel.scrollTop=Math.max(0, next);
-  var bar=document.querySelector(".bar");
-  var gap=bar?bar.getBoundingClientRect().bottom+6:8;
-  r=on.getBoundingClientRect();
-  if(r.top<gap-2 || r.top>window.innerHeight*0.45){
+  if(!panel) return;
+  var on=panel.querySelector(".stanza.on");
+  var cs=getComputedStyle(panel);
+  var pl=parseFloat(cs.paddingLeft||0), pt=parseFloat(cs.paddingTop||0);
+  /* [Grok.com] Mitlesen: Lyrics-Bereich unter die Leiste, aktuelle Strophe oben */
+  if(typeof autoScroll!=="undefined" && autoScroll && isPlaying()){ /* [Grok.com] Titel und ganze Strophe sichtbar */
+    var title=document.getElementById("now");
+    var bar=document.querySelector(".bar");
     var sc=document.scrollingElement||document.documentElement;
-    sc.scrollTop=Math.max(0, sc.scrollTop+(r.top-gap));
+    var gap=bar?bar.getBoundingClientRect().bottom+4:8;
+    if(title){
+      var y=title.getBoundingClientRect().top+sc.scrollTop-4;
+      if(title.getBoundingClientRect().top<4) sc.scrollTo({top:Math.max(0, y), behavior:"smooth"});
+    }
+    if(on){
+      var pr=panel.getBoundingClientRect(), r=on.getBoundingClientRect();
+      var bt=parseFloat(cs.borderTopWidth||0);
+      var top=panel.scrollTop+(r.top-pr.top-bt-pt-10); /* [Grok.com] 10 px Luft, erste Zeile nicht abschneiden */
+      if(r.top<pr.top+bt+pt+8 || r.bottom>pr.bottom-4) panel.scrollTo({top:Math.max(0, top), left:0, behavior:"smooth"});
+    }
+    return;
   }
-  return;
   if(!on) return;
   var pr=panel.getBoundingClientRect();
   var r=on.getBoundingClientRect();
@@ -199,7 +206,7 @@ function autoLineFromTime(){
   if(k<0) k=0;
   if(k>p.n-1) k=p.n-1;
   var start=p.gs[k]?p.gs[k].start:0;
-  if(start!==line){ line=start; paintLyrics(); requestAnimationFrame(function(){ pinStanza(); requestAnimationFrame(pinStanza); }); setTimeout(pinStanza, 80); setTimeout(pinStanza, 240); }
+  if(start!==line){ line=start; paintLyrics(); requestAnimationFrame(function(){ pinStanza(); }); }
 }
 window.addEventListener("message", function(e){
   var d=e.data;
