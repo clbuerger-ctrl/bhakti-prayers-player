@@ -161,22 +161,23 @@ function isPlaying(){
   return !!(au && au.src && !au.paused && !au.ended);
 }
 function pinStanza(){
-  if(document.getElementById("bppFs") && document.getElementById("bppFs").classList.contains("on")) return; /* [Grok.com] nur Normalansicht */
+  if(document.getElementById("bppFs") && document.getElementById("bppFs").classList.contains("on")) return;
+  if(typeof autoScroll==="undefined" || !autoScroll) return;
   var panel=document.getElementById("lyrics");
-  if(!panel) return;
-  var on=panel.querySelector(".stanza.on");
-  /* [Grok.com] Markierte Strophe direkt oben ins Lyrics-Fenster, ohne smooth */
-  if(typeof autoScroll!=="undefined" && autoScroll){
-    var stage=document.getElementById("stage")||panel;
+  var on=panel&&panel.querySelector(".stanza.on");
+  if(!panel||!on) return;
+  /* [Grok.com] Normalansicht: markierte Strophe oben ins Lyrics-Fenster und ins Bild */
+  var pr=panel.getBoundingClientRect(), r=on.getBoundingClientRect();
+  var next=panel.scrollTop+(r.top-pr.top)-14;
+  panel.scrollTop=Math.max(0, next);
+  var bar=document.querySelector(".bar");
+  var gap=bar?bar.getBoundingClientRect().bottom+6:8;
+  r=on.getBoundingClientRect();
+  if(r.top<gap-2 || r.top>window.innerHeight*0.45){
     var sc=document.scrollingElement||document.documentElement;
-    var y=stage.getBoundingClientRect().top+sc.scrollTop-8;
-    if(Math.abs(sc.scrollTop-y)>12) sc.scrollTop=Math.max(0, y);
-    if(on){
-      var pr=panel.getBoundingClientRect(), r=on.getBoundingClientRect();
-      panel.scrollTop=Math.max(0, panel.scrollTop+(r.top-pr.top)-12);
-    }
-    return;
+    sc.scrollTop=Math.max(0, sc.scrollTop+(r.top-gap));
   }
+  return;
   if(!on) return;
   var pr=panel.getBoundingClientRect();
   var r=on.getBoundingClientRect();
@@ -198,7 +199,7 @@ function autoLineFromTime(){
   if(k<0) k=0;
   if(k>p.n-1) k=p.n-1;
   var start=p.gs[k]?p.gs[k].start:0;
-  if(start!==line){ line=start; paintLyrics(); setTimeout(pinStanza, 60); setTimeout(pinStanza, 280); } /* [Grok.com] Strophenwechsel scrollt */
+  if(start!==line){ line=start; paintLyrics(); requestAnimationFrame(function(){ pinStanza(); requestAnimationFrame(pinStanza); }); setTimeout(pinStanza, 80); setTimeout(pinStanza, 240); }
 }
 window.addEventListener("message", function(e){
   var d=e.data;
