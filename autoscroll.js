@@ -179,8 +179,9 @@ function pinStanza(){
     }
     if(on){
       var pr=panel.getBoundingClientRect(), r=on.getBoundingClientRect();
-      var top=panel.scrollTop+(r.top-pr.top-pt);
-      if(r.top<pr.top+pt-2 || r.bottom>pr.bottom-2) panel.scrollTo({top:Math.max(0, top), left:0, behavior:"smooth"});
+      var bt=parseFloat(cs.borderTopWidth||0);
+      var top=panel.scrollTop+(r.top-pr.top-bt-pt-10); /* [Grok.com] 10 px Luft, erste Zeile nicht abschneiden */
+      if(r.top<pr.top+bt+pt+8 || r.bottom>pr.bottom-4) panel.scrollTo({top:Math.max(0, top), left:0, behavior:"smooth"});
     }
     return;
   }
