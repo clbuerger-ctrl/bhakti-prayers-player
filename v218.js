@@ -1,11 +1,11 @@
 /* [Grok.com] V2.19: Versionsanzeige bleibt stehen. Aeltere Skripte haben V2.16 wieder ueberschrieben.
    Abend-Guru-Stotram: alte MP3 mit Om (ueber 258 s) springt auf 10,7 s. */
-window.BPP_BUILD=window.BPP_SHOW||"2.19"; /* [Grok-Bot] V2.20: kein Rueckschritt hinter neuere Version */
+window.BPP_SHOW="2.21"; window.BPP_BUILD="2.21"; /* [Grok.com] */ /* [Grok-Bot] V2.20: kein Rueckschritt hinter neuere Version */
 window.BPP_SW="sw.js?v=218";
 (function(){
   if(window.bppV218) return; window.bppV218=1;
   function showV(){ /* [Grok-Bot] V2.20: Anzeige folgt window.BPP_SHOW (neuester Stand), sonst V2.19 */
-    var s="V"+(window.BPP_SHOW||"2.19"), v=document.querySelector("h1 .ver");
+    var s="V"+(window.BPP_SHOW||"2.21"), v=document.querySelector("h1 .ver");
     if(v && v.textContent!==s) v.textContent=s;
     if(document.title!=="Bhakti Prayers Player "+s) document.title="Bhakti Prayers Player "+s;
   }
