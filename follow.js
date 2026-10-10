@@ -76,7 +76,7 @@ if(document.readyState==="loading"){ document.write('<script src="v179.js?v=179"
 /* [Grok-Bot] V1.80: Giridhari Arati mit den Mira-Strophen der Aufnahme, Uebersetzung und Abfolge (v180.js). */
 if(document.readyState==="loading"){ document.write('<script src="v180.js?v=180"><\/script>'); }
 /* [Grok-Bot] V1.81-V1.83: Ganzseiten-Modus zum Mitlesen (v183.js ersetzt v181/v182: Ende-Bildschirm, voriges/naechstes Prayer, Wiederholen). */
-if(document.readyState==="loading"){ document.write('<script src="v183.js?v=211"><\/script>'); }
+if(document.readyState==="loading"){ document.write('<script src="v183.js?v=212"><\/script>'); }
 /* [Grok-Bot] V1.84: Govinda-MP3 (CD, gleiche Melodie wie YouTube) und voriges/naechstes Prayer im Vollbild immer sichtbar (v184.js). */
 if(document.readyState==="loading"){ document.write('<script src="v184.js?v=184"><\/script>'); }
 /* [Grok-Bot] V1.85-V1.87: Mitlesen (Ashtotram Name fuer Name, geschaetzte Marken je Quelle, alte Strophen-Tipps entschaerft), Vollbild-Menue nur nach Tippen,
@@ -98,7 +98,7 @@ if(document.readyState==="loading"){ document.write('<script src="v193.js?v=193"
 if(document.readyState==="loading"){ document.write('<script src="v194.js?v=202"><\/script>'); }
 /* [Grok-Bot] V1.95: Grossbild – die ganze naechste Strophe faehrt waehrend der letzten Zeile von unten hoch, nahtloser Wechsel (v195.js ersetzt v191.js);
    Quellenwahl als Zweier-Auswahl "YT | MP3". Laufband (v189) und Tastenschutz (v194) unveraendert. */
-if(document.readyState==="loading"){ document.write('<script src="v195.js?v=195"><\/script>'); }
+if(document.readyState==="loading"){ document.write('<script src="v195.js?v=196"><\/script>'); }
 /* [Grok-Bot] V1.96: Kavaca Stotram - Strophenzeiten MP3 und YouTube neu gemessen (Abfolge + Pausentabelle), alte Strophen-Tipps ohne Wirkung. */
 if(document.readyState==="loading"){ document.write('<script src="v196.js?v=196"><\/script>'); }
 /* [Grok.com] V1.98: Hanuman Chalisa spielt die Bhavani-Datei. BPP_BUILD muss nach v196 stehen, sonst setzt v177 die Anzeige wieder auf 1.96. */
@@ -117,7 +117,7 @@ if(document.readyState==="loading"){ document.write('<script src="v203.js?v=232"
 if(document.readyState==="loading"){ document.write('<script src="v204.js?v=204"><\/script>'); }
 /* [Grok-Bot] V2.05: Android-Benachrichtigung/Sperrbildschirm: Media Session mit PNG-Artwork, Status, Position, Handlern, laufend aktualisiert (v205.js). */
 if(document.readyState==="loading"){ document.write('<script src="v205.js?v=205"><\/script>'); }
-/* [Grok-Bot] V2.06: Wiederholen ganze Liste und Ende-Angebot "Naechstes" laufen durch alle Gebete (v183.js?v=211, v206.js). */
+/* [Grok-Bot] V2.06: Wiederholen ganze Liste und Ende-Angebot "Naechstes" laufen durch alle Gebete (v183.js?v=212, v206.js). */
 if(document.readyState==="loading"){ document.write('<script src="v206.js?v=206"><\/script>'); }
 /* [Grok-Bot] V2.07: Spultasten -30 -10 +10 +30 auch im Grossbild, Strophe zurueck/vor mit eigenen Symbolen, Offline-Fehler mit Dateinamen (v207.js, v203.js?v=207). */
 if(document.readyState==="loading"){ document.write('<script src="v207.js?v=207"><\/script>'); }

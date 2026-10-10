@@ -17,7 +17,7 @@ window.bppPv191=1; /* schaltet die alte Vorschau in v189.js ab */
   css.textContent="#bppFsBox{transition:none!important;transform-origin:50% 0}"+
     "#bppNx195{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;opacity:0;visibility:hidden;will-change:transform,opacity;z-index:1}"+
     "#bppNx195 .nbox{display:inline-block;text-align:center;line-height:1.22;max-width:100%}#bppNx195 .vl{white-space:nowrap}"+
-    "#bppNx195 .fch{white-space:nowrap;color:#e0b45a;font-size:.42em;margin-bottom:.25em;letter-spacing:.04em}"+
+    "#bppNx195 .fch{white-space:nowrap;color:#f0d24a;font-size:.42em;margin-bottom:.25em;letter-spacing:.04em}"+
     "#bppNx195 .ftr{white-space:normal;color:#a9a39a;font-size:.36em;line-height:1.3;margin:.7em auto 0;font-style:italic}"+
     "#bppFs.end #bppNx195,#bppFs.scr #bppNx195{display:none}"+
     ".bppG195 .gbox{transform-origin:50% 0}";
@@ -96,7 +96,7 @@ window.bppPv191=1; /* schaltet die alte Vorschau in v189.js ab */
   function renderNext(pp){
     var fs=pp.fs, h="", chOn=optOn("bppFsCh"), trOn=optOn("bppFsTr");
     if(chOn && pp.ch) h+="<div class='fch'>"+esc(pp.ch)+"</div>";
-    h+=pp.lines.map(function(s){ return "<div class='vl'>"+esc(s)+"</div>"; }).join("");
+    h+=pp.lines.map(function(s){ var c=String(s).charAt(0)==="\u00a7"; return "<div class='"+(c?"fch vl":"vl")+"'>"+esc(c?String(s).slice(1):s)+"</div>"; }).join("");
     if(trOn && pp.tr) h+="<div class='ftr'>"+esc(pp.tr)+"</div>";
     nbox.innerHTML=h; nbox.style.fontSize=fs+"px";
     var tE=nbox.querySelector(".ftr"); if(tE){ tE.style.maxWidth=Math.max(200, stage.clientWidth*0.92)+"px"; tE.style.fontSize=Math.max(14, Math.min(fs*0.36, 34))+"px"; }

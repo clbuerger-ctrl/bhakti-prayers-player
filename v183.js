@@ -36,7 +36,7 @@ window.BPP_BUILD="1.83";
   css.textContent="#bppFs{position:fixed;inset:0;z-index:2147483000;background:#0b0b0d;color:#f3eee2;display:none;overflow:hidden;font-family:inherit;touch-action:manipulation;user-select:none;-webkit-user-select:none}"+
     "#bppFs.on{display:block}#bppFsStage{position:absolute;left:3vw;right:3vw;top:5vh;bottom:4vh;display:flex;align-items:center;justify-content:center}"+
     "#bppFsBox{display:inline-block;text-align:center;line-height:1.22;max-width:100%}#bppFsBox .vl{white-space:nowrap}"+
-    "#bppFsBox .fch{white-space:nowrap;color:#e0b45a;font-size:.42em;margin-bottom:.25em;letter-spacing:.04em}"+
+    "#bppFsBox .fch{white-space:nowrap;color:#f0d24a; /* [Grok.com] Akkorde immer gelb */font-size:.42em;margin-bottom:.25em;letter-spacing:.04em}"+
     "#bppFsBox .ftr{white-space:normal;color:#a9a39a;font-size:.36em;line-height:1.3;margin:.7em auto 0;font-style:italic}"+
     "#bppFsTop{position:absolute;left:10px;right:10px;top:6px;font-size:13px;color:#8d877c;display:flex;justify-content:space-between;pointer-events:none}"+
     "#bppFsBar{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;width:max-content;background:rgba(40,38,34,.92);padding:7px 9px;border-radius:12px;transition:opacity .4s;max-width:96vw}"+
@@ -178,13 +178,13 @@ window.BPP_BUILD="1.83";
       var isR=/^Refrain/i.test(z.nr||"");
       var sa=String(z.sa||"").split("\n").map(function(s){ return s.trim(); }).filter(Boolean);
       var ze=document.body.classList.contains("ch-line");
-      if(ze && z.ch){ lines.push(typeof shiftChordLine==="function"?shiftChordLine(z.ch, steps):z.ch); }
-      else if(isR && z.ch && document.body.classList.contains("show-ch")){ lines.push(typeof shiftChordLine==="function"?shiftChordLine(z.ch, steps):z.ch); }
+      if(ze && z.ch){ lines.push("\u00a7"+(typeof shiftChordLine==="function"?shiftChordLine(z.ch, steps):z.ch)); }
+      else if(isR && z.ch && document.body.classList.contains("show-ch")){ lines.push("\u00a7"+(typeof shiftChordLine==="function"?shiftChordLine(z.ch, steps):z.ch)); }
       sa.forEach(function(s){ lines.push(s); });
       if(z.ch && !isR && !ze) chs.push(typeof shiftChordLine==="function"?shiftChordLine(z.ch, steps):z.ch);
       var t=""; try{ t=(window.lineText||function(x){ return x.ue||x.en||""; })(z); }catch(e){} if(t) trs.push(t); });
     var ch=(typeof uniqueChords==="function"?uniqueChords(chs):chs).join("   ");
-    if(p && (p.id==="ashtotram" || p.id==="ashtotram-abend") && lines.length){ var nn=k+1, ton=nn>=100?"E":(nn>=54?"D":""); lines[0]=nn+".  "+lines[0]+(ton?"   "+ton:""); } /* [Grok.com] Nummer, ab 54 D, ab 100 E */
+    if(p && (p.id==="ashtotram" || p.id==="ashtotram-abend") && lines.length){ var nn=k+1, ton=nn>=100?"E":(nn>=54?"D":""), ix=0; while(ix<lines.length && String(lines[ix]).charAt(0)==="\u00a7") ix++; if(lines[ix]) lines[ix]=nn+".  "+lines[ix]+(ton?"   "+ton:""); } /* [Grok.com] Nummer, ab 54 D, ab 100 E */
     return {lines:lines, ch:ch, tr:trs.join(" ")};
   }
   function wlen(s){ return String(s).replace(/[\s()0-9·.,;:!?'"–—-]/g,"").length||1; }
@@ -192,7 +192,7 @@ window.BPP_BUILD="1.83";
   function render(lines, ch, tr, fs){
     var h="";
     if(opt.ch && ch) h+="<div class='fch'>"+esc(ch)+"</div>";
-    h+=lines.map(function(s){ return "<div class='vl'>"+esc(s)+"</div>"; }).join("");
+    h+=lines.map(function(s){ var c=String(s).charAt(0)==="\u00a7"; return "<div class='"+(c?"fch vl":"vl")+"'>"+esc(c?String(s).slice(1):s)+"</div>"; }).join("");
     if(opt.tr && tr) h+="<div class='ftr'>"+esc(tr)+"</div>";
     box.innerHTML=h; box.style.fontSize=fs+"px";
     var tE=box.querySelector(".ftr"); if(tE){ tE.style.maxWidth=Math.max(200, stage.clientWidth*0.92)+"px"; var tf=Math.max(14, Math.min(fs*0.36, 34)); tE.style.fontSize=tf+"px"; }
