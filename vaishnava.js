@@ -31,11 +31,8 @@
         "The wise always see Vishnu's supreme abode, like the eye stretched across the sky."),
       v(6, "tad vipr\u0101so vipanyavo j\u0101g\u1e5bv\u0101(g)\u1e41 sa\u1e25 samindhate\nvi\u1e63\u1e47or yat parama\u1e43 padam",
         "Die wachen Gottgeweihten offenbaren das h\u00f6chste Reich Vi\u1e63\u1e47us.",
-        "The awake devotees reveal the supreme abode of Vishnu."),
-      v(7, "o\u1e43 \u015b\u0101nti\u1e25 \u015b\u0101nti\u1e25 \u015b\u0101nti\u1e25",
-        "OM, Frieden, Frieden, Frieden.",
-        "OM, peace, peace, peace.")
+        "The awake devotees reveal the supreme abode of Vishnu.")
     ],
-    seqFile:[[1.7,0],[11.0,1],[19.8,2],[29.1,3],[38.6,4],[48.6,5],[58.5,6]]
+    seqFile:[[1.7,0],[11.0,1],[19.8,2],[29.1,3],[38.6,4],[48.6,5]]
   });
 })();
