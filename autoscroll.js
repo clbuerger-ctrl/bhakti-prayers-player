@@ -161,27 +161,22 @@ function isPlaying(){
   return !!(au && au.src && !au.paused && !au.ended);
 }
 function pinStanza(){
-  if(!isPlaying()) return; /* [Grok.com] ohne Play kein Scrollen */
   var panel=document.getElementById("lyrics");
   if(!panel) return;
   var on=panel.querySelector(".stanza.on");
   var cs=getComputedStyle(panel);
   var pl=parseFloat(cs.paddingLeft||0), pt=parseFloat(cs.paddingTop||0);
-  /* [Grok.com] Mitlesen: Lyrics-Bereich unter die Leiste, aktuelle Strophe oben */
-  if(typeof autoScroll!=="undefined" && autoScroll && isPlaying()){ /* [Grok.com] Titel und ganze Strophe sichtbar */
-    var title=document.getElementById("now");
-    var bar=document.querySelector(".bar");
+  /* [Grok.com] bei Play: Lyrics-Fenster und aktuelle Strophe ins Bild */
+  if(typeof autoScroll!=="undefined" && autoScroll){
+    var stage=document.getElementById("stage")||panel;
     var sc=document.scrollingElement||document.documentElement;
-    var gap=bar?bar.getBoundingClientRect().bottom+4:8;
-    if(title){
-      var y=title.getBoundingClientRect().top+sc.scrollTop-4;
-      if(title.getBoundingClientRect().top<4) sc.scrollTo({top:Math.max(0, y), behavior:"smooth"});
-    }
+    var y=stage.getBoundingClientRect().top+sc.scrollTop-8;
+    sc.scrollTo({top:Math.max(0, y), behavior:"smooth"});
     if(on){
       var pr=panel.getBoundingClientRect(), r=on.getBoundingClientRect();
       var bt=parseFloat(cs.borderTopWidth||0);
-      var top=panel.scrollTop+(r.top-pr.top-bt-pt-10); /* [Grok.com] 10 px Luft, erste Zeile nicht abschneiden */
-      if(r.top<pr.top+bt+pt+8 || r.bottom>pr.bottom-4) panel.scrollTo({top:Math.max(0, top), left:0, behavior:"smooth"});
+      var top=panel.scrollTop+(r.top-pr.top-bt-pt-10);
+      panel.scrollTo({top:Math.max(0, top), left:0, behavior:"smooth"});
     }
     return;
   }
