@@ -17,7 +17,7 @@
       v(1, "ato dev\u0101 avantu no yato vi\u1e63\u1e47ur vicakrame\np\u1e5bthivy\u0101\u1e25 sapta dh\u0101mabhi\u1e25",
         "M\u00f6gen die Halbg\u00f6tter uns auf der Erde besch\u00fctzen, von wo aus Vi\u1e63\u1e47u Seine Schritte tat.",
         "May the demigods preserve us on the Earth whence Vishnu stepped.", "C"),
-      v(2, "ida\u1e43 vi\u1e63\u1e47ur vicakrame tredh\u0101 nidadhe padam\nsamudham asya p\u0101(g)\u1e43 sure",
+      v(2, "ida\u1e43 vi\u1e63\u1e47ur vicakrame tredh\u0101 nidadhe padam\nsamudham asya pa(g)m sure",
         "Vi\u1e63\u1e47u durchschritt diese Welt. Dreimal setzte Er Seinen Fu\u00df, und die Welt wurde im Staub Seines Fu\u00dfabdrucks gesammelt.",
         "Vishnu walked this world; three times He planted His foot, and the world was collected in the dust of His footstep."),
       v(3, "tr\u012b\u1e47i pad\u0101 vicakrame vi\u1e63\u1e47ur gop\u0101 ad\u0101bhya\u1e25\nato dharm\u0101\u1e47i dh\u0101rayane",
