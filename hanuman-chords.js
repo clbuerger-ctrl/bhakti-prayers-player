@@ -19,7 +19,26 @@
   });
   PRAYERS.forEach(function(P){
     if(P.id==="hanuman") return;
+    if(P.id==="govinda"){
+      P.zeilen.forEach(function(z){
+        if(/^Refrain/i.test(z.nr)) return;
+        var s=String(z.sa||"");
+        if(s.indexOf(" | ")<0 && s.indexOf("\n")<0) return;
+        var bits=s.split(" | ");
+        var lines=[];
+        bits.forEach(function(b){
+          b=b.trim();
+          var w=b.split(/\s+/);
+          if(w.length>6){ var mid=Math.ceil(w.length/2); lines.push(w.slice(0,mid).join(" ")); lines.push(w.slice(mid).join(" ")); }
+          else if(b) lines.push(b);
+        });
+        if(lines.length>1) z.sa=lines.join("\n");
+        var parts=String(z.ch||"").trim().split(/\s+/).filter(Boolean);
+        if(parts.length) z.lineCh=lines.map(function(_,i){ return parts[Math.min(i, parts.length-1)]; });
+      });
+    }
     P.zeilen.forEach(function(z){
+      if(P.id==="govinda") return;
       if(String(z.sa||"").indexOf(" | ")<0) return;
       var bits=String(z.sa).split(" | ");
       if(bits.length<2) return;
