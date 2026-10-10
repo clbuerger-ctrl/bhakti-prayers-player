@@ -73,6 +73,7 @@ body.show-ch .head .ch{display:inline}
 .rowline .lch{display:none;font-family:"Source Sans 3",Consolas,sans-serif;color:#f0d24a;font-size:.78rem;letter-spacing:.04em;font-weight:600;white-space:pre;line-height:1.1;margin:2px 0 0}
 body.ch-line .rowline .lch{display:block}
 body.ch-line .head .ch{display:none!important}
+body.show-ch .rowline .lch{display:none}
 .rowline{margin:0}
 .rowline .sa{display:block;font-family:"Gentium Book Plus","Noto Serif",Georgia,serif;font-size:1.18rem;line-height:1.28;letter-spacing:.01em;font-weight:600;color:var(--lyric);white-space:pre-wrap}
 .rowline .de{display:none;color:#ead9c0;font-size:.88rem;margin:0 0 4px;line-height:1.3;font-weight:400}
@@ -172,7 +173,7 @@ body.show-ch .rowline .rch{display:block}
 <script src="ramanuja.js?v=1"></script>
 <script src="bhajare.js?v=1"></script>
 <script src="hanuman.js?v=5"></script>
-<script src="hanuman-chords.js?v=2"></script><!-- [Grok.com] Akkorde ueber jeder Zeile -->
+<script src="hanuman-chords.js?v=3"></script><!-- [Grok.com] Akkorde ueber jeder Zeile -->
 <script src="hanuman-yt.js?v=99"></script>
 <script src="hanuman2.js?v=6"></script><!-- [Grok.com] Hanuman Pandita Bhavani unter Weitere -->
 <script src="verses.js?v=38"></script>
@@ -398,15 +399,19 @@ function paintLyrics(){
     if(verse || chs.length){
       head="<div class='head'>"+(verse?"<span class='vn'>"+verse+"</span>":"")+(chs.length?"<span class='ch'>"+chs.join("   ")+"</span>":"")+"</div>";
     }
+    var zeile=chMode==="zeile"; /* [Grok.com] Akk: Akkorde gesamt ueber der Strophe. AkkZe: ueber jeder Zeile. Uebersetzung unter der Strophe. */
     var rows=g.idx.map(function(n,k0){
       var z=P.zeilen[n];
-      var isR=/^Refrain/i.test(z.nr); /* [Grok-Bot] V1.42: dezente Akkordzeile über dem Refrain, dahinter 2x */
+      var isR=/^Refrain/i.test(z.nr);
       var isL=cLast && k0===g.idx.length-1;
       var saLines=String(z.sa).split("\n");
-      var lch=(z.lineCh&&z.lineCh.length===saLines.length)?z.lineCh:null;
-      return "<div class='rowline"+(isR?" refrain":"")+"' data-n='"+n+"'>"+(lch?"":(z.ch?"<span class='lch'>"+shiftChordLine(z.ch, steps)+"</span>":""))+((isR||isL)&&z.ch&&!lch?"<span class='rch'>"+shiftChordLine(z.ch, steps)+"</span>":"")+"<span class='sa'>"+saLines.map(function(t,k,arr){ var c=lch&&lch[k]?shiftChordLine(lch[k], steps):""; return (c?"<span class='lch'>"+c+"</span>":"")+"<span class='ln'>"+t+((isR||z.x2)&&k===arr.length-1?"<span class='x2'> 2x</span>":"")+"</span>"; }).join("")+"</span><span class='de'>"+lineText(z)+"</span></div>";
+      var lch=zeile&&z.lineCh&&z.lineCh.length===saLines.length?z.lineCh:null;
+      var topCh=!zeile&&!lch&&z.ch?"<span class='lch'>"+shiftChordLine(z.ch, steps)+"</span>":"";
+      var rch=((isR||isL)&&z.ch&&!lch)?"<span class='rch'>"+shiftChordLine(z.ch, steps)+"</span>":"";
+      return "<div class='rowline"+(isR?" refrain":"")+"' data-n='"+n+"'>"+topCh+rch+"<span class='sa'>"+saLines.map(function(t,k,arr){ var c=lch&&lch[k]?shiftChordLine(lch[k], steps):""; return (c?"<span class='lch'>"+c+"</span>":"")+"<span class='ln'>"+t+((isR||z.x2)&&k===arr.length-1?"<span class='x2'> 2x</span>":"")+"</span>"; }).join("")+"</span></div>";
     }).join("");
-    return "<div class='stanza"+(on?" on":"")+"' data-start='"+g.start+"'>"+head+rows+"</div>";
+    var tr=g.idx.map(function(n){ return lineText(P.zeilen[n]); }).filter(Boolean).join(" ");
+    return "<div class='stanza"+(on?" on":"")+"' data-start='"+g.start+"'>"+head+rows+(tr?"<div class='de'>"+tr+"</div>":"")+"</div>";
   }).join("");
   layoutLyrics(); pinStanza();
   box.querySelectorAll(".stanza").forEach(function(el){
